@@ -10,6 +10,7 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
 import profiles.ProfileLoader;
 import views.ViewManager;
@@ -20,6 +21,8 @@ public class ProfileController {
 	
 	@FXML
 	private AnchorPane root;
+	@FXML
+	private Label header;
 	@FXML
 	private JFXButton btnBack;
 	@FXML
@@ -34,7 +37,6 @@ public class ProfileController {
 	private JFXListView<ProfileListItem> profileList;
 	
 	public void initialize() {
-		new ProfileLoader().refreshProfileList();
 		profileList.setCellFactory(lv -> new JFXListCell<ProfileListItem>() {
             @Override
             public void updateItem(ProfileListItem item, boolean empty)
@@ -47,6 +49,7 @@ public class ProfileController {
                 }
             }
 		});
+		new ProfileLoader().refreshProfileList();
 		displayProfileList();
 	}
 	
@@ -107,6 +110,14 @@ public class ProfileController {
 		btnConfirm.toBack();
 		for (ProfileListItem item : profileList.getItems()) {
 			item.hideDeleteCheckbox();
+		}
+	}
+	
+	public void updateControllerBeforeAssessment() {
+		root.getChildren().removeAll(btnDelete, btnCancel, btnConfirm);
+		header.setText("选择或新建一个档案");
+		for (ProfileListItem item : profileList.getItems()) {
+			item.setHandleSelectForAssessment();
 		}
 	}
 

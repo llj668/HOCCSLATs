@@ -59,4 +59,9 @@ public class ProfileLoader {
         } 
 		return new Profile(name, ages, gender, fileName);
 	}
+	
+	public void writeProfileToFile() {
+		
+	}
+
 }

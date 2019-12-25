@@ -12,7 +12,7 @@
    <children>
       <JFXButton fx:id="btnConfirm" layoutX="186.0" layoutY="99.0" onAction="#onClickConfirmDelete" prefHeight="45.0" prefWidth="103.0" ripplerFill="#ff4343" style="-fx-background-color: #FFE4E1;" text="确认" />
       <JFXButton fx:id="btnCancel" layoutX="64.0" layoutY="99.0" onAction="#onClickCancelDelete" prefHeight="45.0" prefWidth="103.0" ripplerFill="#6baeff" style="-fx-background-color: #E1FFFF;" text="取消" />
-      <Label alignment="CENTER_RIGHT" prefHeight="90.0" prefWidth="1280.0" style="-fx-background-color: #87CEFA;" text="受试者档案" AnchorPane.rightAnchor="0.0">
+      <Label fx:id="header" alignment="CENTER_RIGHT" prefHeight="90.0" prefWidth="1280.0" style="-fx-background-color: #87CEFA;" text="受试者档案" AnchorPane.rightAnchor="0.0">
          <font>
             <Font size="40.0" />
          </font>
