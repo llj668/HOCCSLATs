@@ -18,12 +18,12 @@ import javafx.scene.input.InputMethodEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
-import profiles.Profile;
+import models.profiles.Profile;
 import views.ViewManager;
 import views.items.ConfirmDialog;
 import views.items.ProfileListItem;
 
-public class ViewProfileController extends Controller {
+public class ViewProfileController implements DialogControl {
 	private Boolean isModified = false;
 	private ConfirmDialog confirmDialog;
 	

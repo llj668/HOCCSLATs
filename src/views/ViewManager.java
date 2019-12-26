@@ -4,16 +4,19 @@ import java.io.IOException;
 
 import controllers.ProfileController;
 import controllers.ViewProfileController;
+import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Region;
+import javafx.scene.image.Image;
+import javafx.scene.layout.*;
+import javafx.scene.paint.ImagePattern;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.transform.Scale;
 import javafx.stage.Stage;
-import profiles.Profile;
+import models.profiles.Profile;
 
 public class ViewManager {
 	public final static String PATH_MAIN = "/views/MainMenu.fxml";
@@ -21,6 +24,7 @@ public class ViewManager {
 	public final static String PATH_NEWPROFILE = "/views/NewProfile.fxml";
 	public final static String PATH_VIEWPROFILE = "/views/ViewProfile.fxml";
 	public final static String PATH_TESTMENU = "/views/TestMenu.fxml";
+    public final static String PATH_GRAMMARTEST = "/views/GrammarTest.fxml";
 	final int initWidth = 1280;
 	final int initHeight = 720;
 	
@@ -46,8 +50,8 @@ public class ViewManager {
 		FXMLLoader loader = new FXMLLoader();
         try {
             loader.setLocation(getClass().getResource(path));
-            AnchorPane root = (AnchorPane) loader.load();
-            this.stage.setScene( setAutoResizeScene(root) );
+            AnchorPane root = loader.load();
+            this.stage.setScene( setDecoratedScene(root) );
             
         } catch (IOException e) {
             e.printStackTrace();
@@ -58,11 +62,11 @@ public class ViewManager {
 		FXMLLoader loader = new FXMLLoader();
         try {
             loader.setLocation(getClass().getResource(PATH_PROFILE));
-            AnchorPane root = (AnchorPane) loader.load();
+            AnchorPane root = loader.load();
             ProfileController controller = loader.getController();
             controller.updateControllerBeforeAssessment();
             
-            this.stage.setScene( setAutoResizeScene(root) );
+            this.stage.setScene( setDecoratedScene(root) );
             
         } catch (IOException e) {
             e.printStackTrace();
@@ -73,16 +77,44 @@ public class ViewManager {
 		FXMLLoader loader = new FXMLLoader();
         try {
             loader.setLocation(getClass().getResource(PATH_VIEWPROFILE));
-            AnchorPane root = (AnchorPane) loader.load();
+            AnchorPane root = loader.load();
             ViewProfileController controller = loader.getController();
             controller.displayProfile(profile);
             
-            this.stage.setScene( setAutoResizeScene(root) );
+            this.stage.setScene( setDecoratedScene(root) );
             
         } catch (IOException e) {
             e.printStackTrace();
         }
 	}
+
+	private Scene setDecoratedScene(AnchorPane root) {
+        VBox sceneRoot = new VBox();
+        sceneRoot.getStylesheets().add(ViewManager.class.getResource("/resources/styles/stageStyle.css").toString());
+        sceneRoot.setId("scene_root");
+
+        VBox top = new VBox();
+        top.setId("top");
+        top.setPrefSize(1280,50);
+
+        AnchorPane title = new AnchorPane();
+        Rectangle close = new Rectangle();
+        close.setWidth(40);
+        close.setHeight(40);
+        close.setId("win_close");
+        close.setFill(new ImagePattern(new Image("/resources/icons/win_close.png")));
+        close.setOnMouseEntered(event -> close.setFill(new ImagePattern(new Image("/resources/icons/win_close_pressed.png"))));
+        close.setOnMouseExited(event -> close.setFill(new ImagePattern(new Image("/resources/icons/win_close.png"))));
+        close.setOnMouseClicked(event -> Platform.exit());
+        title.getChildren().add(close);
+        AnchorPane.setRightAnchor(close, 10.0);
+        AnchorPane.setTopAnchor(close, 5.0);
+        top.getChildren().add(title);
+
+        sceneRoot.getChildren().addAll(top, root);
+        DragUtil.addDragListener(stage, top);
+        return new Scene( sceneRoot );
+    }
 	
 	private Scene setAutoResizeScene(AnchorPane root) {
         Scale scale = new Scale(1, 1, 0, 0);

@@ -22,7 +22,7 @@ import views.ViewManager;
 import views.items.ConfirmDialog;
 import views.items.ProfileListItem;
 
-public class NewProfileController extends Controller {
+public class NewProfileController implements DialogControl {
 	private Boolean isModified = false;
 	private ConfirmDialog confirmDialog;
 	

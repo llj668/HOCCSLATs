@@ -5,17 +5,14 @@ import java.util.HashMap;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXCheckBox;
 
+import controllers.ProfileController;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
-import profiles.ProfileLoader;
-import test.TestManager;
+import models.profiles.ProfileLoader;
 import views.ViewManager;
 
 public class ProfileListItem extends AnchorPane {
@@ -62,6 +59,7 @@ public class ProfileListItem extends AnchorPane {
 		selDelete.setTranslateX(1100);
 		selDelete.setPrefSize(USE_COMPUTED_SIZE, 50);
 		selDelete.setFont(Font.font("System", 20));
+		selDelete.setCheckedColor(Color.CRIMSON);
 		selDelete.selectedProperty().addListener(new ChangeListener<Boolean>() {
 			@Override
 			public void changed(ObservableValue<? extends Boolean> arg0, Boolean oldValue, Boolean newValue) {
@@ -70,10 +68,9 @@ public class ProfileListItem extends AnchorPane {
 		});
 	}
 
-	public void setHandleSelectForAssessment() {
+	public void setHandleSelectForAssessment(ProfileController controller) {
 		selButton.setOnAction(event -> {
-			ViewManager.getInstance().switchScene(ViewManager.PATH_TESTMENU);
-			TestManager.setProfile(ProfileLoader.profiles.get(this));
+			controller.onSelectProfileForAssessment(ProfileLoader.profiles.get(this));
 		});
 	}
 	

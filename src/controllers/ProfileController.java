@@ -3,6 +3,7 @@ package controllers;
 import java.util.Set;
 
 import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXDialogLayout;
 import com.jfoenix.controls.JFXListCell;
 import com.jfoenix.controls.JFXListView;
 
@@ -12,15 +13,22 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
-import profiles.ProfileLoader;
+import javafx.scene.layout.StackPane;
+import models.profiles.Profile;
+import models.profiles.ProfileLoader;
+import models.test.AssessmentManager;
 import views.ViewManager;
+import views.items.EnterAgeDialog;
 import views.items.ProfileListItem;
 
-public class ProfileController {
+public class ProfileController implements DialogControl {
 	private Set<ProfileListItem> profileItems;
+	private EnterAgeDialog ageDialog;
 	
 	@FXML
 	private AnchorPane root;
+	@FXML
+	private StackPane stackPane;
 	@FXML
 	private Label header;
 	@FXML
@@ -117,8 +125,28 @@ public class ProfileController {
 		root.getChildren().removeAll(btnDelete, btnCancel, btnConfirm);
 		header.setText("选择或新建一个档案");
 		for (ProfileListItem item : profileList.getItems()) {
-			item.setHandleSelectForAssessment();
+			item.setHandleSelectForAssessment(this);
 		}
+	}
+	
+	public void onSelectProfileForAssessment(Profile profile) {
+		AssessmentManager.profile = profile;
+		stackPane.toFront();
+		ageDialog = new EnterAgeDialog(this, stackPane, new JFXDialogLayout());
+		ageDialog.show();
+	}
+
+	@Override
+	public void onClickNoDialog() {
+		AssessmentManager.profile = null;
+		ageDialog.close();
+		stackPane.toBack();
+	}
+
+	@Override
+	public void onClickYesDialog() {
+		AssessmentManager.getInstance().setTestAge(ageDialog.getText());
+		ViewManager.getInstance().switchScene(ViewManager.PATH_TESTMENU);
 	}
 
 

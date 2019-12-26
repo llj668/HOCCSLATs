@@ -7,10 +7,11 @@ import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.layout.StackPane;
+import models.test.AssessmentManager;
 import views.ViewManager;
 import views.items.ConsentDialog;
 
-public class MainMenuController extends Controller {
+public class MainMenuController implements DialogControl {
 	private ConsentDialog consentDialog;
 	
 	@FXML
@@ -47,6 +48,7 @@ public class MainMenuController extends Controller {
 
 	@Override
 	public void onClickYesDialog() {
+		AssessmentManager.getInstance();
 		ViewManager.getInstance().switchProfileSelectScene();
 	}
 

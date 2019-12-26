@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.image.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.control.*?>
+<?import com.jfoenix.controls.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane fx:id="root" prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.GrammarTestController">
+   <children>
+      <Label alignment="CENTER_RIGHT" prefHeight="90.0" prefWidth="1280.0" style="-fx-background-color: #87CEFA;" text="句法/语法测试" AnchorPane.rightAnchor="0.0">
+         <font>
+            <Font size="40.0" />
+         </font>
+         <padding>
+            <Insets right="200.0" />
+         </padding>
+      </Label>
+      <JFXButton fx:id="btnBack" layoutX="26.0" layoutY="14.0" onAction="#onClickBack" prefHeight="63.0" prefWidth="134.0" ripplerFill="BLACK" text="返回菜单">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </JFXButton>
+      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITESMOKE" height="630.0" layoutX="781.0" layoutY="90.0" stroke="TRANSPARENT" strokeType="INSIDE" width="499.0" />
+      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#a4a4a4" height="552.0" layoutY="90.0" stroke="TRANSPARENT" strokeType="INSIDE" width="781.0" />
+      <ImageView fx:id="imgQuestion" fitHeight="543.0" fitWidth="771.0" layoutX="5.0" layoutY="95.0" pickOnBounds="true" preserveRatio="true" />
+      <Label layoutX="131.0" layoutY="660.0" prefHeight="46.0" prefWidth="43.0" text="图">
+         <font>
+            <Font size="25.0" />
+         </font>
+      </Label>
+      <Label layoutX="317.0" layoutY="660.0" prefHeight="46.0" prefWidth="58.0" text="阶段">
+         <font>
+            <Font size="25.0" />
+         </font>
+      </Label>
+      <Label layoutX="524.0" layoutY="660.0" prefHeight="46.0" prefWidth="58.0" text="年龄">
+         <font>
+            <Font size="25.0" />
+         </font>
+      </Label>
+      <JFXButton fx:id="btnAnalyze" buttonType="RAISED" layoutX="819.0" layoutY="660.0" onAction="#onClickAnalyze" prefHeight="46.0" prefWidth="168.0" ripplerFill="#0988ff" style="-fx-background-color: #87CEFA;" text="分析">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </JFXButton>
+      <JFXButton fx:id="btnNext" buttonType="RAISED" layoutX="1076.0" layoutY="660.0" onAction="#onClickNext" prefHeight="46.0" prefWidth="168.0" ripplerFill="#0988ff" style="-fx-background-color: #87CEFA;" text="下一项">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </JFXButton>
+      <JFXButton fx:id="btnStopRecord" buttonType="RAISED" layoutX="819.0" layoutY="110.0" onAction="#onClickStopRecord" prefHeight="46.0" prefWidth="90.0" ripplerFill="RED" style="-fx-background-color: #ff6969;" text="停止">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </JFXButton>
+      <JFXButton fx:id="btnRecord" buttonType="RAISED" layoutX="819.0" layoutY="110.0" onAction="#onClickRecord" prefHeight="46.0" prefWidth="90.0" ripplerFill="#cbc8ff" style="-fx-background-color: #cbc8ff;" text="录音">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </JFXButton>
+      <JFXTextArea fx:id="textTranscribe" layoutX="819.0" layoutY="167.0" prefHeight="155.0" prefWidth="424.0" promptText="录音转写" />
+      <JFXToggleButton fx:id="toggleCorrect" layoutX="819.0" layoutY="588.0" prefHeight="63.0" prefWidth="119.0" text="正确" toggleColor="#00c372" toggleLineColor="#40cdbf" />
+      <JFXToggleButton fx:id="toggleHalfCorrect" layoutX="971.0" layoutY="588.0" prefHeight="63.0" prefWidth="119.0" text="半正确" toggleColor="#f2d500" toggleLineColor="#ffbb00" />
+      <JFXToggleButton fx:id="toggleWrong" layoutX="1125.0" layoutY="588.0" prefHeight="63.0" prefWidth="119.0" text="错误" toggleColor="#dd0000" toggleLineColor="#ab0000" />
+      <JFXListView fx:id="resultList" layoutX="819.0" layoutY="391.0" prefHeight="197.0" prefWidth="424.0" />
+      <Label layoutX="819.0" layoutY="345.0" prefHeight="46.0" prefWidth="90.0" text="分析结果">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Label>
+   </children>
+</AnchorPane>

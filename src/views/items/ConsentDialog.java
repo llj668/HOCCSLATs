@@ -4,13 +4,13 @@ import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXDialog;
 import com.jfoenix.controls.JFXDialogLayout;
 
-import controllers.Controller;
+import controllers.DialogControl;
 import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
 
 public class ConsentDialog extends JFXDialog {
 	
-	public ConsentDialog(Controller controller, StackPane dialogContainer, JFXDialogLayout content) {
+	public ConsentDialog(DialogControl controller, StackPane dialogContainer, JFXDialogLayout content) {
 		super(dialogContainer, content, DialogTransition.CENTER, false);
 //		content.setLayoutX(dialogContainer.getWidth()*0.8);
 //		content.setLayoutY(dialogContainer.getHeight()*0.8);

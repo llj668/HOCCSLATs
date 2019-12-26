@@ -10,7 +10,7 @@ public class Main extends Application {
 	@Override
 	public void start(Stage primaryStage) {
 		try {
-			primaryStage.initStyle(StageStyle.UTILITY);
+			primaryStage.initStyle(StageStyle.TRANSPARENT);
 			primaryStage.setResizable(false);
 			
 			ViewManager viewManager = ViewManager.getInstance(primaryStage);

@@ -4,13 +4,13 @@ import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXDialog;
 import com.jfoenix.controls.JFXDialogLayout;
 
-import controllers.Controller;
+import controllers.DialogControl;
 import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
 
 public class ConfirmDialog extends JFXDialog {
 	
-	public ConfirmDialog(Controller controller, StackPane dialogContainer, JFXDialogLayout content) {
+	public ConfirmDialog(DialogControl controller, StackPane dialogContainer, JFXDialogLayout content) {
 		super(dialogContainer, content, DialogTransition.CENTER, false);
 		content.setHeading(new Text("有未保存的更改"));
 		content.setBody(new Text("是否要保存未保存的修改？"));
