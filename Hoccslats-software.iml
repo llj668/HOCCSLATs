@@ -10,23 +10,11 @@
     <orderEntry type="module-library" exported="">
       <library>
         <CLASSES>
-          <root url="file://E:/stanford-corenlp-full-2018-10-05/stanford-corenlp-full-2018-10-05" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES>
-          <root url="file://E:/stanford-corenlp-full-2018-10-05/stanford-corenlp-full-2018-10-05" />
-        </SOURCES>
-        <jarDirectory url="file://E:/stanford-corenlp-full-2018-10-05/stanford-corenlp-full-2018-10-05" recursive="false" />
-        <jarDirectory url="file://E:/stanford-corenlp-full-2018-10-05/stanford-corenlp-full-2018-10-05" recursive="false" type="SOURCES" />
-      </library>
-    </orderEntry>
-    <orderEntry type="module-library" exported="">
-      <library>
-        <CLASSES>
-          <root url="jar://E:/Workspace/jfoenix-8.0.8.jar!/" />
+          <root url="file://$MODULE_DIR$/lib" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
+        <jarDirectory url="file://$MODULE_DIR$/lib" recursive="false" />
       </library>
     </orderEntry>
   </component>

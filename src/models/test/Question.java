@@ -1,8 +1,9 @@
 package models.test;
 
 import org.apache.commons.lang3.StringUtils;
+import org.jetbrains.annotations.NotNull;
 
-public class Question {
+public class Question implements Comparable<Question> {
     public String path;
     public String name;
     public String target;
@@ -20,4 +21,8 @@ public class Question {
         this.target = target;
     }
 
+    @Override
+    public int compareTo(@NotNull Question o) {
+        return this.stage - o.stage;
+    }
 }

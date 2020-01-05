@@ -37,12 +37,12 @@ public class ProfileListItem extends AnchorPane {
 		name.setTranslateX(50);
 		name.setFont(Font.font("System", 20));
 		
-		ages = new Label("年龄: " + profileInfo.get("ages"));
+		ages = new Label("测试年龄: " + profileInfo.get("ages"));
 		ages.setPrefSize(200, 50);
 		ages.setTranslateX(250);
 		ages.setFont(Font.font("System", 20));
 		
-		String genderString = profileInfo.get("gender") == "male" ? "男" : "女";
+		String genderString = profileInfo.get("gender").equals("male") ? "男" : "女";
 		gender = new Label("性别: " + genderString);
 		gender.setPrefSize(200, 50);
 		gender.setTranslateX(450);

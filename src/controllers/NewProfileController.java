@@ -18,22 +18,20 @@ import javafx.scene.input.InputMethodEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
+import models.profiles.Profile;
+import models.profiles.ProfileWriter;
 import views.ViewManager;
 import views.items.ConfirmDialog;
 import views.items.ProfileListItem;
 
+import java.util.HashMap;
+
 public class NewProfileController implements DialogControl {
 	private Boolean isModified = false;
 	private ConfirmDialog confirmDialog;
-	
-	@FXML
-	private JFXButton btnBack;
-	@FXML
-	private JFXButton btnSave;
+
 	@FXML
 	private JFXTextField textName;
-	@FXML
-	private JFXTextField textAge;
 	@FXML
 	private JFXRadioButton selGenderMale;
 	@FXML
@@ -42,7 +40,6 @@ public class NewProfileController implements DialogControl {
 	private StackPane stackPane;
 	
 	public void initialize() {
-		stackPane.toBack();
 		final ToggleGroup toggleGenderGroup = new ToggleGroup();
 		selGenderMale.setToggleGroup(toggleGenderGroup);
 		selGenderFemale.setToggleGroup(toggleGenderGroup);
@@ -62,17 +59,19 @@ public class NewProfileController implements DialogControl {
 	
 	@FXML
 	void onClickSave(ActionEvent event) {
+		HashMap<String, String> info = new HashMap<>();
+		info.put("name", textName.getText());
+		if (selGenderMale.isSelected()) {
+			info.put("gender", "male");
+		} else if (selGenderFemale.isSelected()) {
+			info.put("gender", "female");
+		}
+		ProfileWriter.writeNewProfileToXML(new Profile(info));
 	}
 	
 	private void listenContentChange() {
-		ChangeListener<String> contentListener = new ChangeListener<String>() {
-			@Override
-			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-				isModified = true;
-			}
-		};
+		ChangeListener<String> contentListener = (observable, oldValue, newValue) -> isModified = true;
 		textName.textProperty().addListener(contentListener);
-		textAge.textProperty().addListener(contentListener);
 	}
 
 	@Override

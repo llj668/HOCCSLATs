@@ -25,6 +25,7 @@ public class ViewManager {
 	public final static String PATH_VIEWPROFILE = "/views/ViewProfile.fxml";
 	public final static String PATH_TESTMENU = "/views/TestMenu.fxml";
     public final static String PATH_GRAMMARTEST = "/views/GrammarTest.fxml";
+    public final static String PATH_PRONUNTEST = "/views/PronunTest.fxml";
 	final int initWidth = 1280;
 	final int initHeight = 720;
 	

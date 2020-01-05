@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<profile name="帕尔帕廷" gender="male">
+  <grammar>
+    <test age="1;2"/>
+    <test age="3;6"/>
+  </grammar>
+  <pronun>
+    <test age="1;2"/>
+  </pronun>
+</profile>
