@@ -18,7 +18,7 @@ public class ProfileLoader {
 		profiles = new HashMap<ProfileListItem, Profile>();
 		ProfileReader reader = new ProfileReader();
 		for (File file : new File(PROFILE_PATH).listFiles()) {
-			Profile profile = reader.readProfileFromXML(file.getPath());
+			Profile profile = reader.readProfileFromXML(file);
 			profiles.put(profile.toProfileListItem(), profile);
 		}
 	}

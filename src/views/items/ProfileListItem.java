@@ -38,7 +38,7 @@ public class ProfileListItem extends AnchorPane {
 		name.setFont(Font.font("System", 20));
 		
 		ages = new Label("测试年龄: " + profileInfo.get("ages"));
-		ages.setPrefSize(200, 50);
+		ages.setPrefSize(300, 50);
 		ages.setTranslateX(250);
 		ages.setFont(Font.font("System", 20));
 		
