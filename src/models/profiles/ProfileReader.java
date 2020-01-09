@@ -1,8 +1,7 @@
 package models.profiles;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 import models.test.results.GrammarResult;
@@ -15,18 +14,18 @@ import org.dom4j.io.SAXReader;
 
 public class ProfileReader {
 
-	public Profile readProfileFromXML(String path) {
+	public Profile readProfileFromXML(File xml) {
 		HashMap<String, String> info = new HashMap<>();
 		List<String> testAges = new LinkedList<>();
 		SAXReader reader = new SAXReader();
 		try {
-			Document document = reader.read(path);
+			Document document = reader.read(xml);
 			Element root = document.getRootElement();
 			// get attribute info
 			for(Attribute attribute : root.attributes()){
 				info.put(attribute.getName(), attribute.getValue());
 			}
-			info.put("profileName", getFilenameFromPath(path));
+			info.put("profileName", xml.getName().split("\\.")[0]);
 
 			// read test ages
 			Iterator rootElements = root.elementIterator();
@@ -58,10 +57,6 @@ public class ProfileReader {
 			e.printStackTrace();
 		}
 		return null;
-	}
-
-	private String getFilenameFromPath(String path) {
-		return path.substring(path.lastIndexOf("/")+1).split(".")[0];
 	}
 
 //	public Profile readProfileFromFile(String fileName) {
