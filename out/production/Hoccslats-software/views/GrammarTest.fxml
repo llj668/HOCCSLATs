@@ -28,17 +28,12 @@
       <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITESMOKE" height="630.0" layoutX="781.0" layoutY="90.0" stroke="TRANSPARENT" strokeType="INSIDE" width="499.0" />
       <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#a4a4a4" height="552.0" layoutY="90.0" stroke="TRANSPARENT" strokeType="INSIDE" width="781.0" />
       <ImageView fx:id="imgQuestion" fitHeight="543.0" fitWidth="771.0" layoutX="5.0" layoutY="95.0" pickOnBounds="true" preserveRatio="true" />
-      <Label layoutX="131.0" layoutY="660.0" prefHeight="46.0" prefWidth="43.0" text="图">
+      <Label layoutX="131.0" layoutY="660.0" prefHeight="46.0" prefWidth="112.0" text="语法结构">
          <font>
             <Font size="25.0" />
          </font>
       </Label>
-      <Label layoutX="317.0" layoutY="660.0" prefHeight="46.0" prefWidth="58.0" text="阶段">
-         <font>
-            <Font size="25.0" />
-         </font>
-      </Label>
-      <Label layoutX="524.0" layoutY="660.0" prefHeight="46.0" prefWidth="58.0" text="年龄">
+      <Label layoutX="524.0" layoutY="660.0" prefHeight="46.0" prefWidth="58.0" text="阶段">
          <font>
             <Font size="25.0" />
          </font>
@@ -83,5 +78,15 @@
       </Label>
       <JFXTextField fx:id="textScore" alignment="CENTER" layoutX="819.0" layoutY="610.0" prefHeight="30.0" prefWidth="36.0" style="-fx-background-color: #FFF;" />
       <Label fx:id="labelScore" layoutX="1021.0" layoutY="575.0" prefHeight="23.0" prefWidth="222.0" text="ScoreLabel" textFill="#005eff" />
+      <Label fx:id="labelTarget" layoutX="243.0" layoutY="660.0" prefHeight="46.0" prefWidth="112.0" text="structure">
+         <font>
+            <Font size="25.0" />
+         </font>
+      </Label>
+      <Label fx:id="labelStage" layoutX="582.0" layoutY="660.0" prefHeight="46.0" prefWidth="71.0" text="stage">
+         <font>
+            <Font size="25.0" />
+         </font>
+      </Label>
    </children>
 </AnchorPane>

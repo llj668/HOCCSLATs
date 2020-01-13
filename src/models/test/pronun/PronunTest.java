@@ -1,5 +1,6 @@
 package models.test.pronun;
 
+import controllers.BaseTestController;
 import models.services.jpinyin.PinyinException;
 import models.services.jpinyin.PinyinFormat;
 import models.services.jpinyin.PinyinHelper;
@@ -38,6 +39,16 @@ public class PronunTest extends Assessment {
 			String[] str = StringUtils.substringBefore(file.getName(), ".").split("-");
 			questionList.add(new Question(file.getPath(), str[1], PronunItems.targets[Integer.parseInt(str[0])]));
 		}
+	}
+
+	@Override
+	public void writeResult(BaseTestController controller, Question question) {
+
+	}
+
+	@Override
+	public void saveResult() {
+
 	}
 
 	public PronunResult getResults() {

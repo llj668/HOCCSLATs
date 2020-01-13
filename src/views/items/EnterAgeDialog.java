@@ -16,6 +16,11 @@ public class EnterAgeDialog extends JFXDialog {
 		super(dialogContainer, content, DialogTransition.CENTER, false);
 		textField = new JFXTextField();
 		textField.setPromptText("年龄");
+		textField.textProperty().addListener((observable, oldValue, newValue) -> {
+			if (textField.getText().contains("；"))
+				textField.setText(textField.getText().replaceAll("；", ";"));
+		});
+
 		content.setHeading(new Text("输入年龄"));
 		content.setBody(textField);
 		JFXButton buttonNo = new JFXButton("取消");

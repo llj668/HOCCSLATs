@@ -1,5 +1,6 @@
 package models.profiles;
 
+import models.test.Response;
 import models.test.results.GrammarResult;
 import models.test.results.GrammarStage;
 import models.test.results.GrammarStructure;
@@ -14,6 +15,7 @@ import org.dom4j.io.XMLWriter;
 import java.io.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.Map;
 
@@ -39,15 +41,12 @@ public class ProfileWriter {
         }
     }
 
-    public static void updateProfileInfoToXML(Profile profile) {
-
-    }
-
     public static void updateProfileResultToXML(Profile profile) {
         OutputFormat format = OutputFormat.createPrettyPrint();
         SAXReader reader = new SAXReader();
         try {
-            Document document = reader.read(PROFILE_PATH + profile.getProfileName());
+            File xml = new File(PROFILE_PATH + profile.getProfileName() + ".xml");
+            Document document = reader.read(xml);
             Element root = document.getRootElement();
 
             Iterator rootElements = root.elementIterator();
@@ -73,26 +72,26 @@ public class ProfileWriter {
                     if (hasNew) {
                         Element test = rootElement.addElement("test");
                         // attributes
-                        test.addAttribute("time", newResult.testTime.toString());
+                        test.addAttribute("time", newResult.getTestTime());
                         test.addAttribute("age", newResult.testAge);
-                        test.addAttribute("score", String.valueOf(newResult.scoreOverall));
+                        test.addAttribute("score", String.valueOf(newResult.score));
 
                         // stage results
+                        Collections.sort(newResult.stageResults);
                         for (GrammarStage grammarStage : newResult.stageResults) {
                             Element stage = test.addElement("stage");
                             // attributes
                             stage.addAttribute("stage_no", String.valueOf(grammarStage.getStageNo()));
                             stage.addAttribute("stage_score", String.valueOf(grammarStage.getStageScore()));
 
-                            for (Map.Entry<String, GrammarStructure> entry : grammarStage.getRecords().entrySet()) {
-                                Element response = stage.addElement("response");
-                                response.setText(entry.getKey());
+                            for (Map.Entry<Response, GrammarStructure> entry : grammarStage.getRecords().entrySet()) {
+                                Element question = stage.addElement("question");
+                                Element response = question.addElement("response");
+                                response.setText(entry.getKey().getResponse());
 
-                                Element structure = stage.addElement("structure");
                                 GrammarStructure grammar = entry.getValue();
-                                structure.addAttribute("name", grammar.name.toString());
-                                structure.addAttribute("level", grammar.level.toString());
-                                structure.addAttribute("score", String.valueOf(grammar.score));
+                                question.addAttribute("name", grammar.name.toString());
+                                question.addAttribute("score", String.valueOf(grammar.score));
                             }
                         }
                     }

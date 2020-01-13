@@ -61,4 +61,13 @@ public class PronunTestController extends BaseTestController {
 		manager.nextQuestion();
 	}
 
+	@Override
+	public void updateLabels(String struct, String stage) {
+
+	}
+
+	@Override
+	public String getScore() {
+		return null;
+	}
 }

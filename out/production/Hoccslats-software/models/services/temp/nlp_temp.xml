@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet href="CoreNLP-to-HTML.xsl" type="text/xsl"?>
+<root>
+  <document>
+    <sentences>
+      <sentence id="1">
+        <tokens>
+          <token id="1">
+            <word>他</word>
+            <lemma>他</lemma>
+            <CharacterOffsetBegin>0</CharacterOffsetBegin>
+            <CharacterOffsetEnd>1</CharacterOffsetEnd>
+            <POS>PN</POS>
+            <NER>O</NER>
+            <Speaker>PER0</Speaker>
+          </token>
+          <token id="2">
+            <word>和</word>
+            <lemma>和</lemma>
+            <CharacterOffsetBegin>1</CharacterOffsetBegin>
+            <CharacterOffsetEnd>2</CharacterOffsetEnd>
+            <POS>P</POS>
+            <NER>O</NER>
+            <Speaker>PER0</Speaker>
+          </token>
+          <token id="3">
+            <word>别人</word>
+            <lemma>别人</lemma>
+            <CharacterOffsetBegin>2</CharacterOffsetBegin>
+            <CharacterOffsetEnd>4</CharacterOffsetEnd>
+            <POS>NN</POS>
+            <NER>O</NER>
+            <Speaker>PER0</Speaker>
+          </token>
+          <token id="4">
+            <word>坐在</word>
+            <lemma>坐在</lemma>
+            <CharacterOffsetBegin>4</CharacterOffsetBegin>
+            <CharacterOffsetEnd>6</CharacterOffsetEnd>
+            <POS>VV</POS>
+            <NER>O</NER>
+            <Speaker>PER0</Speaker>
+          </token>
+          <token id="5">
+            <word>大树下</word>
+            <lemma>大树下</lemma>
+            <CharacterOffsetBegin>6</CharacterOffsetBegin>
+            <CharacterOffsetEnd>9</CharacterOffsetEnd>
+            <POS>NN</POS>
+            <NER>O</NER>
+            <Speaker>PER0</Speaker>
+          </token>
+        </tokens>
+        <parse>(ROOT
+          (IP
+          (NP (PN 他))
+          (VP
+          (PP (P 和)
+          (NP (NN 别人)))
+          (VP (VV 坐在)
+          (NP (NN 大树下))))))
+          
+          </parse>
+        <dependencies type="basic-dependencies">
+          <dep type="root">
+            <governor idx="0">ROOT</governor>
+            <dependent idx="4">坐在</dependent>
+          </dep>
+          <dep type="nsubj">
+            <governor idx="4">坐在</governor>
+            <dependent idx="1">他</dependent>
+          </dep>
+          <dep type="case">
+            <governor idx="3">别人</governor>
+            <dependent idx="2">和</dependent>
+          </dep>
+          <dep type="nmod:prep">
+            <governor idx="4">坐在</governor>
+            <dependent idx="3">别人</dependent>
+          </dep>
+          <dep type="dobj">
+            <governor idx="4">坐在</governor>
+            <dependent idx="5">大树下</dependent>
+          </dep>
+        </dependencies
+        <dependencies type="collapsed-dependencies">
+          <dep type="root">
+            <governor idx="0">ROOT</governor>
+            <dependent idx="4">坐在</dependent>
+          </dep>
+          <dep type="nsubj">
+            <governor idx="4">坐在</governor>
+            <dependent idx="1">他</dependent>
+          </dep>
+          <dep type="case">
+            <governor idx="3">别人</governor>
+            <dependent idx="2">和</dependent>
+          </dep>
+          <dep type="nmod:prep">
+            <governor idx="4">坐在</governor>
+            <dependent idx="3">别人</dependent>
+          </dep>
+          <dep type="dobj">
+            <governor idx="4">坐在</governor>
+            <dependent idx="5">大树下</dependent>
+          </dep>
+        </dependencies>
+        <dependencies type="collapsed-ccprocessed-dependencies">
+          <dep type="root">
+            <governor idx="0">ROOT</governor>
+            <dependent idx="4">坐在</dependent>
+          </dep>
+          <dep type="nsubj">
+            <governor idx="4">坐在</governor>
+            <dependent idx="1">他</dependent>
+          </dep>
+          <dep type="case">
+            <governor idx="3">别人</governor>
+            <dependent idx="2">和</dependent>
+          </dep>
+          <dep type="nmod:prep">
+            <governor idx="4">坐在</governor>
+            <dependent idx="3">别人</dependent>
+          </dep>
+          <dep type="dobj">
+            <governor idx="4">坐在</governor>
+            <dependent idx="5">大树下</dependent>
+          </dep>
+        </dependencies>
+        <dependencies type="enhanced-dependencies">
+          <dep type="root">
+            <governor idx="0">ROOT</governor>
+            <dependent idx="4">坐在</dependent>
+          </dep>
+          <dep type="nsubj">
+            <governor idx="4">坐在</governor>
+            <dependent idx="1">他</dependent>
+          </dep>
+          <dep type="case">
+            <governor idx="3">别人</governor>
+            <dependent idx="2">和</dependent>
+          </dep>
+          <dep type="nmod:prep">
+            <governor idx="4">坐在</governor>
+            <dependent idx="3">别人</dependent>
+          </dep>
+          <dep type="dobj">
+            <governor idx="4">坐在</governor>
+            <dependent idx="5">大树下</dependent>
+          </dep>
+        </dependencies>
+        <dependencies type="enhanced-plus-plus-dependencies">
+          <dep type="root">
+            <governor idx="0">ROOT</governor>
+            <dependent idx="4">坐在</dependent>
+          </dep>
+          <dep type="nsubj">
+            <governor idx="4">坐在</governor>
+            <dependent idx="1">他</dependent>
+          </dep>
+          <dep type="case">
+            <governor idx="3">别人</governor>
+            <dependent idx="2">和</dependent>
+          </dep>
+          <dep type="nmod:prep">
+            <governor idx="4">坐在</governor>
+            <dependent idx="3">别人</dependent>
+          </dep>
+          <dep type="dobj">
+            <governor idx="4">坐在</governor>
+            <dependent idx="5">大树下</dependent>
+          </dep>
+        </dependencies>
+      </sentence>
+    </sentences>
+    <coreference/>
+  </document>
+</root>

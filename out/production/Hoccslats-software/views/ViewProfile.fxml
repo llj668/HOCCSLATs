@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.shape.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.text.*?>
 <?import javafx.scene.control.*?>
@@ -10,7 +11,7 @@
 
 <AnchorPane fx:id="root" prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.ViewProfileController">
    <children>
-      <Label alignment="CENTER_RIGHT" prefHeight="90.0" prefWidth="1280.0" style="-fx-background-color: #87CEFA;" text="受试者档案" AnchorPane.rightAnchor="0.0">
+      <Label alignment="CENTER_RIGHT" prefHeight="90.0" prefWidth="1280.0" style="-fx-background-color: #87CEFA;" text="浏览档案" AnchorPane.rightAnchor="0.0">
          <font>
             <Font size="40.0" />
          </font>
@@ -23,5 +24,58 @@
             <Font size="20.0" />
          </font>
       </JFXButton>
+      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#f5f5f5" height="630.0" layoutY="90.0" stroke="TRANSPARENT" strokeType="INSIDE" width="400.0" />
+      <Label layoutX="123.0" layoutY="225.0" text="姓名">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Label>
+      <Label layoutX="123.0" layoutY="296.0" text="性别">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Label>
+      <Label layoutX="45.0" layoutY="369.0" text="上次测试时间">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Label>
+      <Label fx:id="labelName" layoutX="223.0" layoutY="225.0" prefHeight="27.0" prefWidth="85.0" text="name">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Label>
+      <Label fx:id="labelGender" layoutX="223.0" layoutY="296.0" prefHeight="27.0" prefWidth="85.0" text="gender">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Label>
+      <Label fx:id="labelRecent" layoutX="223.0" layoutY="369.0" prefHeight="27.0" prefWidth="85.0" text="last_time">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Label>
+      <Label layoutX="83.0" layoutY="442.0" text="档案名称">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Label>
+      <Label fx:id="labelFilename" layoutX="223.0" layoutY="442.0" prefHeight="27.0" prefWidth="85.0" text="filename">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Label>
+      <Label alignment="CENTER" layoutX="400.0" layoutY="90.0" prefHeight="63.0" prefWidth="440.0" text="语法测试结果">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Label>
+      <Label alignment="CENTER" layoutX="840.0" layoutY="90.0" prefHeight="63.0" prefWidth="440.0" text="发音测试结果">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Label>
+      <JFXListView fx:id="grammarResultList" layoutX="417.0" layoutY="162.0" prefHeight="550.0" prefWidth="410.0" />
+      <JFXListView fx:id="pronunResultList" layoutX="856.0" layoutY="162.0" prefHeight="550.0" prefWidth="410.0" />
    </children>
 </AnchorPane>

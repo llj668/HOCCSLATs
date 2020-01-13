@@ -6,7 +6,7 @@ import javafx.scene.layout.AnchorPane;
 import models.services.Recorder;
 import models.test.AssessmentManager;
 
-public class BaseTestController {
+public abstract class BaseTestController {
     public AssessmentManager manager;
     public Recorder recorder;
 
@@ -14,4 +14,7 @@ public class BaseTestController {
     public AnchorPane root;
     @FXML
     public ImageView imgQuestion;
+
+    public abstract void updateLabels(String struct, String stage);
+    public abstract String getScore();
 }

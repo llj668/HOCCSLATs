@@ -1,66 +1,62 @@
 package controllers;
 
 import com.jfoenix.controls.JFXButton;
-import com.jfoenix.controls.JFXDialog;
-import com.jfoenix.controls.JFXDialog.DialogTransition;
-import com.jfoenix.controls.JFXDialogLayout;
-import com.jfoenix.controls.JFXRadioButton;
-import com.jfoenix.controls.JFXTextField;
 
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
+import com.jfoenix.controls.JFXListCell;
+import com.jfoenix.controls.JFXListView;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Label;
-import javafx.scene.control.ToggleGroup;
-import javafx.scene.input.InputMethodEvent;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.StackPane;
-import javafx.scene.text.Text;
 import models.profiles.Profile;
+import models.test.results.GrammarResult;
 import views.ViewManager;
-import views.items.ConfirmDialog;
+import views.items.GrammarResultItem;
 import views.items.ProfileListItem;
+import views.items.ResultItem;
 
-public class ViewProfileController implements DialogControl {
-	private Boolean isModified = false;
-	private ConfirmDialog confirmDialog;
+public class ViewProfileController {
 	
 	@FXML
 	private JFXButton btnBack;
+	@FXML
+	private JFXListView<ResultItem> grammarResultList;
+	@FXML
+	private JFXListView<ResultItem> pronunResultList;
+	@FXML
+	private Label labelName;
+	@FXML
+	private Label labelGender;
+	@FXML
+	private Label labelRecent;
+	@FXML
+	private Label labelFilename;
 	
 	public void initialize() {
+		grammarResultList.setCellFactory(lv -> new JFXListCell<ResultItem>() {
+			@Override
+			public void updateItem(ResultItem item, boolean empty)
+			{
+				super.updateItem(item, empty);
+				if (empty) {
+					setGraphic(null);
+				} else {
+					setGraphic(item);
+				}
+			}
+		});
 	}
 	
 	public void displayProfile(Profile profile) {
-
+		labelName.setText(profile.getInfo().get("name"));
+		labelGender.setText(profile.getGender());
+		for (GrammarResult result : profile.getGrammarResults()) {
+			grammarResultList.getItems().add(result.toGrammarResultItem());
+		}
 	}
 	
 	@FXML
 	void onClickBack(ActionEvent event) {
 		ViewManager.getInstance().switchScene(ViewManager.PATH_PROFILE);
-	}
-	
-	@FXML
-	void onClickSave(ActionEvent event) {
-	}
-	
-	private void listenContentChange() {
-		ChangeListener<String> contentListener = new ChangeListener<String>() {
-			@Override
-			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-				isModified = true;
-			}
-		};
-	}
-
-	@Override
-	public void onClickNoDialog() {
-	}
-
-	@Override
-	public void onClickYesDialog() {
 	}
 
 }

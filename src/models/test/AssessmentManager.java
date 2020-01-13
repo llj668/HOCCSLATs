@@ -18,6 +18,7 @@ public class AssessmentManager {
 	private BaseTestController controller;
 	private String testAge;
 	private Queue<String> testQueue;
+	private Question question;
 	
     synchronized public static AssessmentManager getInstance() {
 		if (instance == null) {
@@ -31,9 +32,14 @@ public class AssessmentManager {
     }
 
     public void nextQuestion() {
-		Question question = assessment.getNextQuestion();
+    	assessment.writeResult(controller, question);
+		question = assessment.getNextQuestion();
 		if (question != null) {
-			controller.imgQuestion.setImage(new Image(question.path));
+			controller.imgQuestion.setImage(new Image(question.getPath()));
+			controller.updateLabels(question.getTarget(), question.getStage());
+		} else {
+			System.out.println("test complete");
+			assessment.saveResult();
 		}
 	}
 
@@ -62,5 +68,9 @@ public class AssessmentManager {
 
 	public void setTestQueue(Queue<String> testQueue) {
 		this.testQueue = testQueue;
+	}
+
+	public Question getQuestion() {
+    	return question;
 	}
 }

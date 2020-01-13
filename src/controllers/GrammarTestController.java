@@ -23,15 +23,7 @@ public class GrammarTestController extends BaseTestController {
 	static final String[] scoreTexts = {"无声或“不知道”", "语义错误，结构错误", "部分或全部重复", "语义错误，结构正确", "语义正确，结构错误", "语义正确，结构正确"};
 
 	@FXML
-	private JFXButton btnBack;
-	@FXML
-	private JFXButton btnRecord;
-	@FXML
 	private JFXButton btnStopRecord;
-	@FXML
-	private JFXButton btnAnalyze;
-	@FXML
-	private JFXButton btnNext;
 	@FXML
 	private JFXTextArea textTranscribe;
 	@FXML
@@ -42,6 +34,10 @@ public class GrammarTestController extends BaseTestController {
 	private JFXListView<String> resultList;
 	@FXML
 	private Label labelScore;
+	@FXML
+	private Label labelTarget;
+	@FXML
+	private Label labelStage;
 	
 	public void initialize() {
 		recorder = new Recorder();
@@ -99,6 +95,17 @@ public class GrammarTestController extends BaseTestController {
 		});
 		sliderScore.setValue(0);
 		labelScore.setText("");
+	}
+
+	@Override
+	public void updateLabels(String struct, String stage) {
+		labelTarget.setText(struct);
+		labelStage.setText(stage);
+	}
+
+	@Override
+	public String getScore() {
+		return String.valueOf(Math.round(Double.parseDouble(textScore.getText())));
 	}
 
 }

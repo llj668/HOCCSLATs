@@ -15,8 +15,6 @@ public class Profile {
 	private ArrayList<PronunResult> pronunResults;
 
 	public Profile(HashMap<String, String> info) {
-		this.grammarResults = new ArrayList<>();
-		this.pronunResults = new ArrayList<>();
 		this.info = info;
 	}
 
@@ -42,6 +40,10 @@ public class Profile {
 	}
 
 	public ArrayList<GrammarResult> getGrammarResults() {
+		if (grammarResults == null) {
+			this.grammarResults = new ArrayList<>();
+			this.grammarResults = ProfileReader.readGrammarResultsFromXML(info.get("profileName"));
+		}
 		return grammarResults;
 	}
 

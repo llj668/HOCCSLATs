@@ -1,4 +1,0 @@
-@info
-name,abc
-ages,1;2:6;3:6
-gender,female
