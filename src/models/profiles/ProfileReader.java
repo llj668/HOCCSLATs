@@ -1,6 +1,7 @@
 package models.profiles;
 
 import java.io.*;
+import java.lang.reflect.Array;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 
@@ -13,8 +14,9 @@ import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 
 public class ProfileReader {
+	public final static String PROFILE_PATH = "./src/resources/profiles/";
 
-	public Profile readProfileFromXML(File xml) {
+	public static Profile readProfileFromXML(File xml) {
 		HashMap<String, String> info = new HashMap<>();
 		List<String> testAges = new LinkedList<>();
 		SAXReader reader = new SAXReader();
@@ -39,7 +41,7 @@ public class ProfileReader {
 						testAges.add(age);
 				}
 			}
-			info.put("ages", testAges.toString());
+			info.put("ages", String.join(",", testAges));
 
 		} catch (DocumentException e) {
 			e.printStackTrace();
@@ -47,57 +49,32 @@ public class ProfileReader {
 		return new Profile(info);
 	}
 
-	public Profile readResultsFromXML(String path) {
+	public static ArrayList<GrammarResult> readGrammarResultsFromXML(String filename) {
+		ArrayList<GrammarResult> results = new ArrayList<>();
 		SAXReader reader = new SAXReader();
 		try {
-			Document document = reader.read(path);
+			File xml = new File(PROFILE_PATH + filename + ".xml");
+
+			Document document = reader.read(xml);
 			Element root = document.getRootElement();
 			Iterator rootElements = root.elementIterator();
+
+			while (rootElements.hasNext()) {
+				Element rootElement = (Element) rootElements.next();
+				if (rootElement.getName().equalsIgnoreCase("grammar")) {
+					Iterator testElements = rootElement.elementIterator();
+
+					while (testElements.hasNext()) {
+						Element test = (Element) testElements.next();
+						results.add(new GrammarResult(null, null, test.attribute("age").getValue()));
+					}
+				}
+			}
 		} catch (DocumentException e) {
 			e.printStackTrace();
 		}
-		return null;
+		System.out.println(results.size());
+		return results;
 	}
-
-//	public Profile readProfileFromFile(String fileName) {
-//		HashMap<String, String> info = new HashMap<String, String>();
-//		Set<GrammarResult> grammarResults = new HashSet<GrammarResult>();
-//	    BufferedReader reader = null;
-//	    tempString = null;
-//        try {
-//            reader = new BufferedReader(new FileReader(profilePath + fileName));
-//            tempString = reader.readLine();
-//            while (tempString != null) {
-//        	    switch (tempString) {
-//				case "@info":
-//					info = readInfo(reader);
-//					break;
-//
-//				default:
-//					tempString = reader.readLine();
-//					break;
-//				}
-//            }
-//            reader.close();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//		return new Profile(info, fileName);
-//	}
-//
-//	private HashMap<String, String> readInfo(BufferedReader reader) {
-//		HashMap<String, String> info = new HashMap<String, String>();
-//		try {
-//			while ((tempString = reader.readLine()) != null) {
-//				if (tempString.contains("@"))
-//					break;
-//	    	    String[] infoLine = tempString.split(",");
-//	    	    info.put(infoLine[0], infoLine[1]);
-//	        }
-//		} catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//		return info;
-//	}
 
 }

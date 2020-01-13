@@ -2,6 +2,7 @@ package controllers;
 
 import java.util.Set;
 
+import com.intellij.refactoring.changeClassSignature.TypeParameterInfo;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXDialogLayout;
 import com.jfoenix.controls.JFXListCell;
@@ -45,6 +46,7 @@ public class ProfileController implements DialogControl {
 	private JFXListView<ProfileListItem> profileList;
 	
 	public void initialize() {
+		NewProfileController.isBeforeAssessment = false;
 		profileList.setCellFactory(lv -> new JFXListCell<ProfileListItem>() {
             @Override
             public void updateItem(ProfileListItem item, boolean empty)
@@ -122,6 +124,7 @@ public class ProfileController implements DialogControl {
 	}
 	
 	public void updateControllerBeforeAssessment() {
+		NewProfileController.isBeforeAssessment = true;
 		root.getChildren().removeAll(btnDelete, btnCancel, btnConfirm);
 		header.setText("选择或新建一个档案");
 		for (ProfileListItem item : profileList.getItems()) {

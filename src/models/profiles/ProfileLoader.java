@@ -12,13 +12,11 @@ import views.items.ProfileListItem;
 
 public class ProfileLoader {
 	public static HashMap<ProfileListItem, Profile> profiles;
-	final static String PROFILE_PATH = "./src/resources/profiles/";
 	
 	public void refreshProfileList() {
-		profiles = new HashMap<ProfileListItem, Profile>();
-		ProfileReader reader = new ProfileReader();
-		for (File file : new File(PROFILE_PATH).listFiles()) {
-			Profile profile = reader.readProfileFromXML(file);
+		profiles = new HashMap<>();
+		for (File file : new File(ProfileReader.PROFILE_PATH).listFiles()) {
+			Profile profile = ProfileReader.readProfileFromXML(file);
 			profiles.put(profile.toProfileListItem(), profile);
 		}
 	}
@@ -26,7 +24,7 @@ public class ProfileLoader {
 	public static void deleteProfiles() {
 		for (ProfileListItem item : profiles.keySet()) {
 			if (item.isSelectedForDelete) {
-				new File(PROFILE_PATH + profiles.get(item).getProfileName()).delete();
+				new File(ProfileReader.PROFILE_PATH + profiles.get(item).getProfileName()).delete();
 			}
 		}
 	}

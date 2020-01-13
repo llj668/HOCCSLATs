@@ -2,8 +2,13 @@ package models.test.results;
 
 public class GrammarStructure {
 	public StructureName name;
-	public StructureLevel level;
+	// public StructureLevel level;
 	public int score;
+
+	public GrammarStructure(String name, int score) {
+		this.name = StructureName.valueOf(name);
+		this.score = score;
+	}
 	
 	public enum StructureLevel {
 		Clause, Phrase, Word

@@ -1,18 +1,22 @@
 package models.test.results;
 
+import models.test.Response;
+import org.jetbrains.annotations.NotNull;
+
 import java.util.HashMap;
 
-public class GrammarStage {
+public class GrammarStage implements Comparable<GrammarStage> {
     private int stageNo;
     private double stageScore;
-    private HashMap<String, GrammarStructure> records;
+    private HashMap<Response, GrammarStructure> records;
 
-    public GrammarStage() {
+    public GrammarStage(int stageNo) {
         records = new HashMap<>();
+        this.stageNo = stageNo;
     }
 
-    public void addRecord(String s, GrammarStructure structure) {
-        records.put(s, structure);
+    public void addRecord(Response response, GrammarStructure structure) {
+        records.put(response, structure);
     }
 
     public int getStageNo() {
@@ -31,7 +35,12 @@ public class GrammarStage {
         this.stageScore = stageScore;
     }
 
-    public HashMap<String, GrammarStructure> getRecords() {
+    public HashMap<Response, GrammarStructure> getRecords() {
         return records;
+    }
+
+    @Override
+    public int compareTo(@NotNull GrammarStage o) {
+        return this.stageNo - o.stageNo;
     }
 }
