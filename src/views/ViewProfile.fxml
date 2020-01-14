@@ -40,31 +40,17 @@
             <Font size="20.0" />
          </font>
       </Label>
-      <Label fx:id="labelName" layoutX="223.0" layoutY="225.0" prefHeight="27.0" prefWidth="85.0" text="name">
+      <Label fx:id="labelName" layoutX="200.0" layoutY="225.0" prefHeight="27.0" prefWidth="85.0" text="name">
          <font>
             <Font size="20.0" />
          </font>
       </Label>
-      <Label fx:id="labelGender" layoutX="223.0" layoutY="296.0" prefHeight="27.0" prefWidth="85.0" text="gender">
+      <Label fx:id="labelGender" layoutX="200.0" layoutY="296.0" prefHeight="27.0" prefWidth="85.0" text="gender">
          <font>
             <Font size="20.0" />
          </font>
       </Label>
-      <Label fx:id="labelRecent" layoutX="223.0" layoutY="369.0" prefHeight="27.0" prefWidth="85.0" text="last_time">
-         <font>
-            <Font size="20.0" />
-         </font>
-      </Label>
-      <Label layoutX="83.0" layoutY="442.0" text="档案名称">
-         <font>
-            <Font size="20.0" />
-         </font>
-      </Label>
-      <Label fx:id="labelFilename" layoutX="223.0" layoutY="442.0" prefHeight="27.0" prefWidth="85.0" text="filename">
-         <font>
-            <Font size="20.0" />
-         </font>
-      </Label>
+      <Label fx:id="labelRecent" layoutX="200.0" layoutY="369.0" prefHeight="27.0" prefWidth="189.0" text="last_time" />
       <Label alignment="CENTER" layoutX="400.0" layoutY="90.0" prefHeight="63.0" prefWidth="440.0" text="语法测试结果">
          <font>
             <Font size="20.0" />
