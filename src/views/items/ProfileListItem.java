@@ -54,7 +54,7 @@ public class ProfileListItem extends HBox {
 
 		String[] ages = profileInfo.get("ages").split(",");
 		ageContainer = new HBox();
-		ageContainer.setPrefSize(ages.length * 60, 50);
+		ageContainer.setPrefSize(400, 50);
 		ageContainer.setTranslateX(200);
 		ageContainer.setSpacing(10);
 		ageContainer.setId("age_container");
@@ -80,16 +80,16 @@ public class ProfileListItem extends HBox {
 		gender.setPrefSize(200, 50);
 		gender.setTranslateX(200);
 		gender.setFont(Font.font("System", 20));
-		
+
 		selButton = new JFXButton("选择");
-		selButton.setTranslateX(500);
+		selButton.setTranslateX(200);
 		selButton.setPrefSize(100, 50);
 		selButton.setTextFill(Color.AZURE);
 		selButton.setFont(Font.font("System", 20));
 		selButton.setOnAction(event -> ViewManager.getInstance().switchProfileViewScene(ProfileLoader.profiles.get(this)));
 		
 		selDelete = new JFXCheckBox("删除");
-		selDelete.setTranslateX(500);
+		selDelete.setTranslateX(200);
 		selDelete.setPrefSize(USE_COMPUTED_SIZE, 50);
 		selDelete.setFont(Font.font("System", 20));
 		selDelete.setCheckedColor(Color.CRIMSON);

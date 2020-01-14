@@ -1,13 +1,14 @@
 package models.test.results;
 
 import models.test.Response;
+import org.jetbrains.annotations.NotNull;
 import views.items.GrammarResultItem;
 import views.items.ResultItem;
 
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-public class GrammarResult {
+public class GrammarResult implements Comparable<GrammarResult> {
 	public Date testTime;
 	public String testAge;
 	public double score;
@@ -18,10 +19,11 @@ public class GrammarResult {
 		this.testAge = testAge;
 	}
 	
-	public GrammarResult(List<GrammarStage> stageResults, Date testTime, String testAge) {
+	public GrammarResult(List<GrammarStage> stageResults, Date testTime, String testAge, String testScore) {
 		this.stageResults = stageResults;
 		this.testTime = testTime;
 		this.testAge = testAge;
+		this.score = Double.parseDouble(testScore);
 	}
 
 	public void conclude() {
@@ -48,4 +50,12 @@ public class GrammarResult {
 		return f.format(testTime);
 	}
 
+	@Override
+	public int compareTo(@NotNull GrammarResult o) {
+		if (o.testTime.getTime() > this.testTime.getTime()) {
+			return 1;
+		} else {
+			return -1;
+		}
+	}
 }

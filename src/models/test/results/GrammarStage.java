@@ -23,10 +23,6 @@ public class GrammarStage implements Comparable<GrammarStage> {
         return stageNo;
     }
 
-    public void setStageNo(int stageNo) {
-        this.stageNo = stageNo;
-    }
-
     public double getStageScore() {
         return stageScore;
     }

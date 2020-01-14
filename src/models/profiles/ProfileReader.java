@@ -3,9 +3,13 @@ package models.profiles;
 import java.io.*;
 import java.lang.reflect.Array;
 import java.nio.charset.StandardCharsets;
+import java.text.ParsePosition;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
+import models.test.Response;
 import models.test.results.GrammarResult;
+import models.test.results.GrammarStage;
 import models.test.results.GrammarStructure;
 import org.dom4j.Attribute;
 import org.dom4j.Document;
@@ -57,18 +61,53 @@ public class ProfileReader {
 
 			Document document = reader.read(xml);
 			Element root = document.getRootElement();
-			Iterator rootElements = root.elementIterator();
 
+			Iterator rootElements = root.elementIterator();
 			while (rootElements.hasNext()) {
 				Element rootElement = (Element) rootElements.next();
-				if (rootElement.getName().equalsIgnoreCase("grammar")) {
-					Iterator testElements = rootElement.elementIterator();
 
+				if (rootElement.getName().equalsIgnoreCase("grammar")) {
+
+					Iterator testElements = rootElement.elementIterator();
 					while (testElements.hasNext()) {
 						Element test = (Element) testElements.next();
-						results.add(new GrammarResult(null, null, test.attribute("age").getValue()));
+
+						List<GrammarStage> stageResults = new LinkedList<>();
+						SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+						String testTime = test.attribute("time").getValue();
+						String testAge = test.attribute("age").getValue();
+						String testScore = test.attribute("score").getValue();
+
+						Iterator stageElements = test.elementIterator();
+						while (stageElements.hasNext()) {
+							Element stage = (Element) stageElements.next();
+
+							String stageNo = stage.attribute("stage_no").getValue();
+							String stageScore = stage.attribute("stage_score").getValue();
+							GrammarStage grammarStage = new GrammarStage(Integer.parseInt(stageNo));
+							grammarStage.setStageScore(Double.parseDouble(stageScore));
+
+							Iterator questionElements = stage.elementIterator();
+							while (questionElements.hasNext()) {
+								Element question = (Element) questionElements.next();
+
+								String target = question.attribute("name").getValue();
+								String score = question.attribute("score").getValue();
+
+								Iterator responseElements = question.elementIterator();
+								while (responseElements.hasNext()) {
+									Element response = (Element) responseElements.next();
+									grammarStage.addRecord(new Response(response.getStringValue()), new GrammarStructure(target, Integer.parseInt(score)));
+								}
+							}
+							stageResults.add(grammarStage);
+						}
+						results.add(new GrammarResult(stageResults, f.parse(testTime, new ParsePosition(0)), testAge, testScore));
 					}
+				} else if (rootElement.getName().equalsIgnoreCase("pronun")) {
+					// todo read pronun results
 				}
+
 			}
 		} catch (DocumentException e) {
 			e.printStackTrace();

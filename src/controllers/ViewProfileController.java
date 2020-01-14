@@ -14,10 +14,10 @@ import views.items.GrammarResultItem;
 import views.items.ProfileListItem;
 import views.items.ResultItem;
 
+import java.util.Collections;
+
 public class ViewProfileController {
-	
-	@FXML
-	private JFXButton btnBack;
+
 	@FXML
 	private JFXListView<ResultItem> grammarResultList;
 	@FXML
@@ -28,8 +28,6 @@ public class ViewProfileController {
 	private Label labelGender;
 	@FXML
 	private Label labelRecent;
-	@FXML
-	private Label labelFilename;
 	
 	public void initialize() {
 		grammarResultList.setCellFactory(lv -> new JFXListCell<ResultItem>() {
@@ -47,8 +45,7 @@ public class ViewProfileController {
 	}
 	
 	public void displayProfile(Profile profile) {
-		labelName.setText(profile.getInfo().get("name"));
-		labelGender.setText(profile.getGender());
+		initProfileInfo(profile);
 		for (GrammarResult result : profile.getGrammarResults()) {
 			grammarResultList.getItems().add(result.toGrammarResultItem());
 		}
@@ -59,4 +56,14 @@ public class ViewProfileController {
 		ViewManager.getInstance().switchScene(ViewManager.PATH_PROFILE);
 	}
 
+	private void initProfileInfo(Profile profile) {
+		labelName.setText(profile.getInfo().get("name"));
+		labelGender.setText(profile.getGender());
+		Collections.sort(profile.getGrammarResults());
+		if (profile.getGrammarResults().size() == 0) {
+			labelRecent.setText("暂无");
+		} else {
+			labelRecent.setText(profile.getGrammarResults().get(0).getTestTime());
+		}
+	}
 }
