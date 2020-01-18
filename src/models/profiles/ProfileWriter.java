@@ -100,14 +100,13 @@ public class ProfileWriter {
                 }
             }
 
-            String filename = profile.getInfo().get("name").split("_")[0] + "_" + LocalDate.now();
+            String filename = profile.getInfo().get("name") + "_" + LocalDate.now();
             File file = new File(PROFILE_PATH + filename + ".xml");
             XMLWriter writer = new XMLWriter(new FileOutputStream(file), format);
             writer.write(document);
             writer.close();
 
-            // delete old profile
-            new File(PROFILE_PATH + profile.getInfo().get("name")).delete();
+            new File(PROFILE_PATH + profile.getProfileName() + ".xml").delete();
 
         } catch (DocumentException | FileNotFoundException e) {
             e.printStackTrace();

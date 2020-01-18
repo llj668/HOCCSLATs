@@ -8,6 +8,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.image.Image;
+import javafx.scene.layout.Region;
 import models.test.AssessmentManager;
 import views.ViewManager;
 
@@ -26,7 +27,7 @@ public class PronunTestController extends BaseTestController {
 	@FXML
 	private JFXTextArea textTranscribe;
 	@FXML
-	private JFXTextArea textTarget;
+	private JFXTextArea textPinyin;
 	@FXML
 	private JFXListView<String> resultList;
 	
@@ -48,7 +49,7 @@ public class PronunTestController extends BaseTestController {
 
 	@FXML
 	void onClickAnalyze(ActionEvent event) {
-		textTarget.setText(manager.getAssessment().analyzeResponse(textTranscribe.getText()));
+		textPinyin.setText(manager.getAssessment().analyzeResponse(textTranscribe.getText()));
 	}
 	
 	@FXML
@@ -69,5 +70,20 @@ public class PronunTestController extends BaseTestController {
 	@Override
 	public String getScore() {
 		return null;
+	}
+
+	@Override
+	public void setSummary(Region summary) {
+
+	}
+
+	@Override
+	public void onClickNoDialog() {
+
+	}
+
+	@Override
+	public void onClickYesDialog() {
+
 	}
 }

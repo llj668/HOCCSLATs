@@ -1,19 +1,23 @@
 package models.test.pronun;
 
 import controllers.BaseTestController;
+import controllers.items.ItemController;
+import javafx.scene.layout.Region;
 import models.services.jpinyin.PinyinException;
 import models.services.jpinyin.PinyinFormat;
 import models.services.jpinyin.PinyinHelper;
 import models.test.Assessment;
 import models.test.Question;
+import models.test.results.BaseResult;
 import models.test.results.GrammarResult;
 import models.test.results.PronunResult;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.File;
+import java.util.Map;
 
 public class PronunTest extends Assessment {
-	final static String GRAMMAR_QUESTION_PATH = "./src/resources/questions/pronun/";
+	final static String PRONUN_QUESTION_PATH = "./src/resources/questions/pronun/";
 	private PronunResult results;
 
 	public PronunTest() {
@@ -34,7 +38,7 @@ public class PronunTest extends Assessment {
 
 	@Override
 	public void getQuestionList() {
-		File[] files = new File(GRAMMAR_QUESTION_PATH).listFiles();
+		File[] files = new File(PRONUN_QUESTION_PATH).listFiles();
 		for (File file : files) {
 			String[] str = StringUtils.substringBefore(file.getName(), ".").split("-");
 			questionList.add(new Question(file.getPath(), str[1], PronunItems.targets[Integer.parseInt(str[0])]));
@@ -49,6 +53,16 @@ public class PronunTest extends Assessment {
 	@Override
 	public void saveResult() {
 
+	}
+
+	@Override
+	public Map.Entry<Region, ItemController> end() {
+		return null;
+	}
+
+	@Override
+	public BaseResult getResult() {
+		return results;
 	}
 
 	public PronunResult getResults() {

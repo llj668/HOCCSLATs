@@ -1,29 +1,30 @@
 package models.test.grammar;
 
 import controllers.BaseTestController;
-import edu.stanford.nlp.ling.CoreAnnotations;
-import edu.stanford.nlp.pipeline.Annotation;
-import edu.stanford.nlp.pipeline.JSONOutputter;
-import edu.stanford.nlp.pipeline.StanfordCoreNLP;
-import edu.stanford.nlp.util.CoreMap;
+import controllers.items.GrammarSummaryController;
+import controllers.items.ItemController;
 import javafx.application.Platform;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Region;
 import models.profiles.ProfileWriter;
 import models.test.Assessment;
 import models.test.AssessmentManager;
 import models.test.Question;
 import models.test.Response;
+import models.test.results.BaseResult;
 import models.test.results.GrammarResult;
 import models.test.results.GrammarStage;
 import models.test.results.GrammarStructure;
 import org.apache.commons.lang3.StringUtils;
 import org.dom4j.io.OutputFormat;
 import org.dom4j.io.XMLWriter;
+import views.ViewManager;
 import views.items.InitializePane;
 
 import java.io.*;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.Queue;
 
 public class GrammarTest extends Assessment {
@@ -31,7 +32,6 @@ public class GrammarTest extends Assessment {
 	final static String TEMP_ANALYZE_FILE = "./src/models/services/temp/nlp_temp.xml";
 	private GrammarResult results;
 	private Queue<String> testQueue;
-	private StanfordCoreNLP pipeline;
 	private GrammarStage stage;
 	private String prevStage = "-1";
 
@@ -45,13 +45,7 @@ public class GrammarTest extends Assessment {
 
 	@Override
 	public String analyzeResponse(String response) {
-		try {
-			Annotation annotation = new Annotation(response);
-			pipeline.annotate(annotation);
-			pipeline.xmlPrint(annotation, new BufferedWriter(new FileWriter(TEMP_ANALYZE_FILE)));
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+
 		return null;
 	}
 
@@ -82,15 +76,23 @@ public class GrammarTest extends Assessment {
 	public void saveResult() {
 		results.stageResults.add(stage);
 		results.conclude();
-		AssessmentManager.profile.getGrammarResults().add(results);
-		ProfileWriter.updateProfileResultToXML(AssessmentManager.profile);
+	}
+
+	@Override
+	public Map.Entry<Region, ItemController> end() {
+		return ViewManager.getInstance().getItemFromFXML(ViewManager.ITEM_GRAMMARSUMMARY);
+	}
+
+	@Override
+	public BaseResult getResult() {
+		return results;
 	}
 
 	private void initializePipeline(AnchorPane root) {
 		InitializePane initializePane = new InitializePane();
 		root.getChildren().add(initializePane);
 		new Thread(() -> {
-			// this.pipeline = new StanfordCoreNLP("StanfordCoreNLP-chinese.properties");
+
 			System.out.println("NLP initialization complete");
 			Platform.runLater(() -> root.getChildren().remove(initializePane));
 		}).start();

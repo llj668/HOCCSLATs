@@ -1,6 +1,8 @@
 package controllers;
 
 import com.jfoenix.controls.*;
+import controllers.items.GrammarSummaryController;
+import controllers.items.ItemController;
 import javafx.beans.binding.Bindings;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -11,16 +13,20 @@ import javafx.scene.control.ToggleGroup;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Region;
 import javafx.util.StringConverter;
 import models.profiles.Profile;
 import models.services.Recorder;
 import models.test.AssessmentManager;
 import models.test.Question;
+import models.test.results.GrammarResult;
 import views.ViewManager;
 import views.items.ConfirmDialog;
 
+import java.util.Map;
+
 public class GrammarTestController extends BaseTestController {
-	static final String[] scoreTexts = {"无声或“不知道”", "语义错误，结构错误", "部分或全部重复", "语义错误，结构正确", "语义正确，结构错误", "语义正确，结构正确"};
+	public static final String[] scoreTexts = {"无声或“不知道”", "语义错误，结构错误", "部分或全部重复", "语义错误，结构正确", "语义正确，结构错误", "语义正确，结构正确"};
 
 	@FXML
 	private JFXButton btnStopRecord;
@@ -66,7 +72,10 @@ public class GrammarTestController extends BaseTestController {
 	
 	@FXML
 	void onClickBack(ActionEvent event) {
-		ViewManager.getInstance().switchScene(ViewManager.PATH_TESTMENU);
+		stackPane.toFront();
+		confirmDialog = new ConfirmDialog(this, stackPane, new JFXDialogLayout());
+		confirmDialog.setText(ConfirmDialog.TEXT_BACKINTEST);
+		confirmDialog.show();
 	}
 
 	@FXML
@@ -108,4 +117,19 @@ public class GrammarTestController extends BaseTestController {
 		return String.valueOf(Math.round(Double.parseDouble(textScore.getText())));
 	}
 
+	@Override
+	public void setSummary(Region summary) {
+		root.getChildren().add(summary);
+	}
+
+	@Override
+	public void onClickNoDialog() {
+		ViewManager.getInstance().switchScene(ViewManager.PATH_TESTMENU);
+	}
+
+	@Override
+	public void onClickYesDialog() {
+		confirmDialog.close();
+		stackPane.toBack();
+	}
 }
