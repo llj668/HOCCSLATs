@@ -1,9 +1,14 @@
 package views;
 
 import java.io.IOException;
+import java.util.AbstractMap;
+import java.util.HashMap;
+import java.util.Map;
 
 import controllers.ProfileController;
 import controllers.ViewProfileController;
+import controllers.items.GrammarSummaryController;
+import controllers.items.ItemController;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -26,6 +31,8 @@ public class ViewManager {
 	public final static String PATH_TESTMENU = "/views/TestMenu.fxml";
     public final static String PATH_GRAMMARTEST = "/views/GrammarTest.fxml";
     public final static String PATH_PRONUNTEST = "/views/PronunTest.fxml";
+
+    public final static String ITEM_GRAMMARSUMMARY = "/views/items/GrammarSummary.fxml";
 	final int initWidth = 1280;
 	final int initHeight = 720;
 	
@@ -88,6 +95,20 @@ public class ViewManager {
             e.printStackTrace();
         }
 	}
+
+	public Map.Entry<Region, ItemController> getItemFromFXML(String path) {
+        FXMLLoader loader = new FXMLLoader();
+        try {
+            loader.setLocation(getClass().getResource(path));
+            AnchorPane root = loader.load();
+            GrammarSummaryController controller = loader.getController();
+
+            return new AbstractMap.SimpleEntry<>(root, controller);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 
 	private Scene setDecoratedScene(AnchorPane root) {
         VBox sceneRoot = new VBox();

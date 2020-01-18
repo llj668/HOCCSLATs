@@ -1,15 +1,15 @@
 package models.test;
 
 import controllers.BaseTestController;
+import controllers.items.GrammarSummaryController;
+import controllers.items.ItemController;
 import javafx.scene.image.Image;
+import javafx.scene.layout.Region;
 import models.profiles.Profile;
 import models.test.grammar.GrammarTest;
 import models.test.pronun.PronunTest;
 
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.Queue;
-import java.util.Set;
+import java.util.*;
 
 public class AssessmentManager {
 	public static Profile profile;
@@ -38,8 +38,11 @@ public class AssessmentManager {
 			controller.imgQuestion.setImage(new Image(question.getPath()));
 			controller.updateLabels(question.getTarget(), question.getStage());
 		} else {
-			System.out.println("test complete");
 			assessment.saveResult();
+			Map.Entry<Region, ItemController> entry = assessment.end();
+			entry.getValue().setOnAfterTest(controller);
+			entry.getValue().setResult(assessment.getResult());
+			controller.setSummary(entry.getKey());
 		}
 	}
 

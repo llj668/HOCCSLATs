@@ -8,7 +8,7 @@ import views.items.ResultItem;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-public class GrammarResult implements Comparable<GrammarResult> {
+public class GrammarResult extends BaseResult implements Comparable<GrammarResult> {
 	public Date testTime;
 	public String testAge;
 	public double score;

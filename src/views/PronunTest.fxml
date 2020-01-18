@@ -28,12 +28,7 @@
       <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITESMOKE" height="630.0" layoutX="781.0" layoutY="90.0" stroke="TRANSPARENT" strokeType="INSIDE" width="499.0" />
       <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#a4a4a4" height="552.0" layoutY="90.0" stroke="TRANSPARENT" strokeType="INSIDE" width="781.0" />
       <ImageView fx:id="imgQuestion" fitHeight="543.0" fitWidth="771.0" layoutX="5.0" layoutY="95.0" pickOnBounds="true" preserveRatio="true" />
-      <Label layoutX="131.0" layoutY="660.0" prefHeight="46.0" prefWidth="43.0" text="图">
-         <font>
-            <Font size="25.0" />
-         </font>
-      </Label>
-      <Label layoutX="524.0" layoutY="660.0" prefHeight="46.0" prefWidth="58.0" text="年龄">
+      <Label layoutX="237.0" layoutY="660.0" prefHeight="46.0" prefWidth="90.0" text="目标音">
          <font>
             <Font size="25.0" />
          </font>
@@ -65,11 +60,16 @@
             <Font size="20.0" />
          </font>
       </Label>
-      <Label layoutX="819.0" layoutY="240.0" prefHeight="46.0" prefWidth="90.0" text="目标音">
+      <Label layoutX="819.0" layoutY="240.0" prefHeight="46.0" prefWidth="90.0" text="转写拼音">
          <font>
             <Font size="20.0" />
          </font>
       </Label>
-      <JFXTextArea fx:id="textTarget" layoutX="819.0" layoutY="286.0" prefHeight="46.0" prefWidth="424.0" />
+      <JFXTextArea fx:id="textPinyin" layoutX="819.0" layoutY="286.0" prefHeight="46.0" prefWidth="424.0" />
+      <Label layoutX="327.0" layoutY="660.0" prefHeight="46.0" prefWidth="147.0" text="target">
+         <font>
+            <Font size="25.0" />
+         </font>
+      </Label>
    </children>
 </AnchorPane>

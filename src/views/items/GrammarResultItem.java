@@ -10,37 +10,35 @@ import models.test.results.GrammarStage;
 import java.text.SimpleDateFormat;
 
 public class GrammarResultItem extends ResultItem {
-    private GrammarResult result;
     private Label age;
     private Label time;
     private Label score;
 
     public GrammarResultItem(GrammarResult result) {
-        super();
-        this.result = result;
+        super(result, null);
         initializeItemContent();
         addStageResults();
         this.getChildren().addAll(age, time, score);
     }
 
     private void initializeItemContent() {
-        age = new Label("测试年龄：" + result.testAge);
+        age = new Label("测试年龄：" + grammarResult.testAge);
         age.setPrefSize(100, 30);
         age.setFont(Font.font("System", 15));
 
-        time = new Label("测试时间：" + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(result.testTime));
+        time = new Label("测试时间：" + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(grammarResult.testTime));
         time.setTranslateX(150);
         time.setPrefSize(250, 30);
         time.setFont(Font.font("System", 15));
 
-        score = new Label("总分：" + result.score);
+        score = new Label("总分：" + grammarResult.score);
         score.setTranslateY(40);
         score.setPrefSize(100, 30);
         score.setFont(Font.font("System", 15));
     }
 
     private void addStageResults() {
-        for (GrammarStage stage : result.stageResults) {
+        for (GrammarStage stage : grammarResult.stageResults) {
             Label label = new Label();
             label.setPrefSize(100, 30);
             label.setFont(Font.font("System", 15));

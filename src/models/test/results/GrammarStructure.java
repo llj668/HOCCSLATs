@@ -1,6 +1,11 @@
 package models.test.results;
 
-public class GrammarStructure {
+import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
+import controllers.GrammarTestController;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
+
+public class GrammarStructure extends RecursiveTreeObject<GrammarStructure> {
 	public StructureName name;
 	// public StructureLevel level;
 	public int score;
@@ -8,6 +13,18 @@ public class GrammarStructure {
 	public GrammarStructure(String name, int score) {
 		this.name = StructureName.valueOf(name);
 		this.score = score;
+	}
+
+	public StringProperty getNameProperty() {
+		return new SimpleStringProperty(name.toString());
+	}
+
+	public StringProperty getScoreProperty() {
+		return new SimpleStringProperty(String.valueOf(score));
+	}
+
+	public StringProperty getEvaluationProperty() {
+		return new SimpleStringProperty(GrammarTestController.scoreTexts[score]);
 	}
 	
 	public enum StructureLevel {

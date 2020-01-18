@@ -42,6 +42,7 @@ public class NewProfileController implements DialogControl {
 		if (isModified) {
 			stackPane.toFront();
 			confirmDialog = new ConfirmDialog(this, stackPane, new JFXDialogLayout());
+			confirmDialog.setText(ConfirmDialog.TEXT_NEWPROFILE);
 			confirmDialog.show();
 		} else {
 			ViewManager.getInstance().switchScene(ViewManager.PATH_PROFILE);
