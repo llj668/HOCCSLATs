@@ -1,13 +1,11 @@
 package models.profiles;
 
 import java.io.*;
-import java.lang.reflect.Array;
-import java.nio.charset.StandardCharsets;
 import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-import models.test.Response;
+import models.test.grammar.Utterance;
 import models.test.results.GrammarResult;
 import models.test.results.GrammarStage;
 import models.test.results.GrammarStructure;
@@ -97,7 +95,17 @@ public class ProfileReader {
 								Iterator responseElements = question.elementIterator();
 								while (responseElements.hasNext()) {
 									Element response = (Element) responseElements.next();
-									grammarStage.addRecord(new Response(response.getStringValue()), new GrammarStructure(target, Integer.parseInt(score)));
+
+									String utterance = response.attribute("utterance").getValue();
+									List<Map.Entry<String, String>> analyzed = new LinkedList<>();
+
+									Iterator structureElements = response.elementIterator();
+									while (structureElements.hasNext()) {
+										Element structure = (Element) structureElements.next();
+										analyzed.add(new AbstractMap.SimpleEntry<>(structure.getStringValue(), structure.attribute("value").getValue()));
+									}
+
+									grammarStage.addRecord(new GrammarStructure(target, Integer.parseInt(score)), new Utterance(utterance, analyzed));
 								}
 							}
 							stageResults.add(grammarStage);

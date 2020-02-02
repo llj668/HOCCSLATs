@@ -54,7 +54,6 @@
          </font>
       </JFXButton>
       <JFXTextArea fx:id="textTranscribe" layoutX="819.0" layoutY="167.0" prefHeight="63.0" prefWidth="424.0" promptText="录音转写" />
-      <JFXListView fx:id="resultList" layoutX="819.0" layoutY="391.0" prefHeight="251.0" prefWidth="424.0" />
       <Label layoutX="819.0" layoutY="345.0" prefHeight="46.0" prefWidth="90.0" text="分析结果">
          <font>
             <Font size="20.0" />
@@ -71,5 +70,6 @@
             <Font size="25.0" />
          </font>
       </Label>
+      <VBox fx:id="resultBox" layoutX="819.0" layoutY="405.0" prefHeight="226.0" prefWidth="424.0" style="-fx-background-color: #FFFFFF; -fx-border-color: #DDDDDD; -fx-border-width: 1px;" />
    </children>
 </AnchorPane>

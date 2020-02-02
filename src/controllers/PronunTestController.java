@@ -9,6 +9,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.image.Image;
 import javafx.scene.layout.Region;
+import javafx.scene.layout.VBox;
 import models.test.AssessmentManager;
 import views.ViewManager;
 
@@ -29,7 +30,7 @@ public class PronunTestController extends BaseTestController {
 	@FXML
 	private JFXTextArea textPinyin;
 	@FXML
-	private JFXListView<String> resultList;
+	private VBox resultBox;
 	
 	public void initialize() {
 		manager = AssessmentManager.getInstance();
@@ -49,7 +50,7 @@ public class PronunTestController extends BaseTestController {
 
 	@FXML
 	void onClickAnalyze(ActionEvent event) {
-		textPinyin.setText(manager.getAssessment().analyzeResponse(textTranscribe.getText()));
+		// textPinyin.setText(manager.getAssessment().analyzeResponse(textTranscribe.getText()));
 	}
 	
 	@FXML

@@ -1,6 +1,6 @@
 package models.profiles;
 
-import models.test.Response;
+import models.test.grammar.Utterance;
 import models.test.results.GrammarResult;
 import models.test.results.GrammarStage;
 import models.test.results.GrammarStructure;
@@ -44,6 +44,7 @@ public class ProfileWriter {
     public static void updateProfileResultToXML(Profile profile) {
         OutputFormat format = OutputFormat.createPrettyPrint();
         SAXReader reader = new SAXReader();
+        String fileDate = profile.getProfileName().split("_")[1];
         try {
             File xml = new File(PROFILE_PATH + profile.getProfileName() + ".xml");
             Document document = reader.read(xml);
@@ -84,14 +85,20 @@ public class ProfileWriter {
                             stage.addAttribute("stage_no", String.valueOf(grammarStage.getStageNo()));
                             stage.addAttribute("stage_score", String.valueOf(grammarStage.getStageScore()));
 
-                            for (Map.Entry<Response, GrammarStructure> entry : grammarStage.getRecords().entrySet()) {
+                            for (Map.Entry<GrammarStructure, Utterance> entry : grammarStage.getRecords().entrySet()) {
                                 Element question = stage.addElement("question");
                                 Element response = question.addElement("response");
-                                response.setText(entry.getKey().getResponse());
 
-                                GrammarStructure grammar = entry.getValue();
+                                for (Map.Entry<String, String> segment : entry.getValue().getAnalyzedUtterance()) {
+                                    Element structure = response.addElement("structure");
+                                    structure.setText(segment.getKey());
+                                    structure.addAttribute("value", segment.getValue());
+                                }
+
+                                GrammarStructure grammar = entry.getKey();
                                 question.addAttribute("name", grammar.name.toString());
                                 question.addAttribute("score", String.valueOf(grammar.score));
+                                response.addAttribute("utterance", entry.getValue().getUtterance());
                             }
                         }
                     }
@@ -106,7 +113,9 @@ public class ProfileWriter {
             writer.write(document);
             writer.close();
 
-            new File(PROFILE_PATH + profile.getProfileName() + ".xml").delete();
+            if (!LocalDate.now().toString().equals(fileDate)) {
+                new File(PROFILE_PATH + profile.getProfileName() + ".xml").delete();
+            }
 
         } catch (DocumentException | FileNotFoundException e) {
             e.printStackTrace();

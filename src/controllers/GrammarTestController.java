@@ -14,12 +14,15 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Region;
+import javafx.scene.layout.VBox;
 import javafx.util.StringConverter;
 import models.profiles.Profile;
 import models.services.Recorder;
 import models.test.AssessmentManager;
 import models.test.Question;
+import models.test.grammar.Utterance;
 import models.test.results.GrammarResult;
+import views.ResultDisplayer;
 import views.ViewManager;
 import views.items.ConfirmDialog;
 
@@ -27,6 +30,7 @@ import java.util.Map;
 
 public class GrammarTestController extends BaseTestController {
 	public static final String[] scoreTexts = {"无声或“不知道”", "语义错误，结构错误", "部分或全部重复", "语义错误，结构正确", "语义正确，结构错误", "语义正确，结构正确"};
+	private ResultDisplayer displayer;
 
 	@FXML
 	private JFXButton btnStopRecord;
@@ -37,7 +41,7 @@ public class GrammarTestController extends BaseTestController {
 	@FXML
 	private JFXSlider sliderScore;
 	@FXML
-	private JFXListView<String> resultList;
+	private VBox resultBox;
 	@FXML
 	private Label labelScore;
 	@FXML
@@ -47,10 +51,12 @@ public class GrammarTestController extends BaseTestController {
 	
 	public void initialize() {
 		recorder = new Recorder();
+		displayer = new ResultDisplayer();
 		manager = AssessmentManager.getInstance();
 		manager.startGrammarAssessment(this);
 		manager.nextQuestion();
 		initScoreDisplay();
+		initButtonListener();
 	}
 
 	@FXML
@@ -67,7 +73,10 @@ public class GrammarTestController extends BaseTestController {
 
 	@FXML
 	void onClickAnalyze(ActionEvent event) {
-		manager.getAssessment().analyzeResponse(textTranscribe.getText());
+		resultBox.getChildren().clear();
+		Utterance utterance = (Utterance) manager.getAssessment().analyzeResponse(textTranscribe.getText());
+		displayer.displayGrammarResult(utterance, resultBox);
+		btnNext.setDisable(false);
 	}
 	
 	@FXML
@@ -83,6 +92,8 @@ public class GrammarTestController extends BaseTestController {
 		manager.nextQuestion();
 		sliderScore.setValue(0);
 		labelScore.setText("");
+		textTranscribe.setText("");
+		btnNext.setDisable(true);
 	}
 
 	private void initScoreDisplay() {
@@ -104,6 +115,13 @@ public class GrammarTestController extends BaseTestController {
 		});
 		sliderScore.setValue(0);
 		labelScore.setText("");
+	}
+
+	private void initButtonListener() {
+		btnNext.setDisable(true);
+		textTranscribe.textProperty().addListener((observable, oldValue, newValue) -> {
+			btnNext.setDisable(true);
+		});
 	}
 
 	@Override

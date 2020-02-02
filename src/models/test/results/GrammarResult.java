@@ -1,44 +1,44 @@
 package models.test.results;
 
-import models.test.Response;
+import models.test.grammar.Utterance;
 import org.jetbrains.annotations.NotNull;
 import views.items.GrammarResultItem;
 import views.items.ResultItem;
 
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class GrammarResult extends BaseResult implements Comparable<GrammarResult> {
-	public Date testTime;
-	public String testAge;
 	public double score;
 	public List<GrammarStage> stageResults;
 
 	public GrammarResult(String testAge) {
+		super(testAge);
 		stageResults = new LinkedList<>();
-		this.testAge = testAge;
 	}
 	
 	public GrammarResult(List<GrammarStage> stageResults, Date testTime, String testAge, String testScore) {
+		super(testAge);
 		this.stageResults = stageResults;
 		this.testTime = testTime;
-		this.testAge = testAge;
 		this.score = Double.parseDouble(testScore);
 	}
 
 	public void conclude() {
 		testTime = new Date();
 		double scoreTotal = 0;
+		DecimalFormat df = new DecimalFormat("#.00");
 		for (GrammarStage stage : stageResults) {
 			double stageTotalScore = 0;
-			for (Map.Entry<Response, GrammarStructure> entry : stage.getRecords().entrySet()) {
-				stageTotalScore += entry.getValue().score;
+			for (Map.Entry<GrammarStructure, Utterance> entry : stage.getRecords().entrySet()) {
+				stageTotalScore += entry.getKey().score;
 			}
 			double stageScore = stageTotalScore / stage.getRecords().size();
-			stage.setStageScore(stageScore);
+			stage.setStageScore(Double.parseDouble(df.format(stageScore)));
 			scoreTotal += stageScore;
 		}
-		score = scoreTotal / stageResults.size();
+		score = Double.parseDouble(df.format(scoreTotal / stageResults.size()));
 	}
 
 	public ResultItem toGrammarResultItem() {

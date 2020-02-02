@@ -7,7 +7,9 @@ import models.services.jpinyin.PinyinException;
 import models.services.jpinyin.PinyinFormat;
 import models.services.jpinyin.PinyinHelper;
 import models.test.Assessment;
+import models.test.AssessmentManager;
 import models.test.Question;
+import models.test.Response;
 import models.test.results.BaseResult;
 import models.test.results.GrammarResult;
 import models.test.results.PronunResult;
@@ -22,18 +24,18 @@ public class PronunTest extends Assessment {
 
 	public PronunTest() {
 		super();
-		results = new PronunResult();
+		results = new PronunResult(AssessmentManager.getInstance().getTestAge());
 	}
 
 	@Override
-	public String analyzeResponse(String response) {
-		String analyzed = null;
+	public Response analyzeResponse(String response) {
+		Syllable syllable = new Syllable(response);
 		try {
-			analyzed = PinyinHelper.convertToPinyinString(response, ",", PinyinFormat.WITH_TONE_MARK);
+			PinyinHelper.convertToPinyinString(response, ",", PinyinFormat.WITH_TONE_MARK);
 		} catch (PinyinException e) {
 			e.printStackTrace();
 		}
-		return analyzed;
+		return syllable;
 	}
 
 	@Override
