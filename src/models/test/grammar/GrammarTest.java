@@ -1,12 +1,13 @@
 package models.test.grammar;
 
+import com.hankcs.hanlp.corpus.document.sentence.Sentence;
+import com.hankcs.hanlp.corpus.document.sentence.word.IWord;
+import com.hankcs.hanlp.model.crf.CRFLexicalAnalyzer;
 import controllers.BaseTestController;
-import controllers.items.GrammarSummaryController;
 import controllers.items.ItemController;
 import javafx.application.Platform;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Region;
-import models.profiles.ProfileWriter;
 import models.test.Assessment;
 import models.test.AssessmentManager;
 import models.test.Question;
@@ -16,16 +17,11 @@ import models.test.results.GrammarResult;
 import models.test.results.GrammarStage;
 import models.test.results.GrammarStructure;
 import org.apache.commons.lang3.StringUtils;
-import org.dom4j.io.OutputFormat;
-import org.dom4j.io.XMLWriter;
 import views.ViewManager;
 import views.items.InitializePane;
 
 import java.io.*;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.Queue;
+import java.util.*;
 
 public class GrammarTest extends Assessment {
 	final static String GRAMMAR_QUESTION_PATH = "./src/resources/questions/grammar/";
@@ -33,6 +29,7 @@ public class GrammarTest extends Assessment {
 	private GrammarResult results;
 	private Queue<String> testQueue;
 	private GrammarStage stage;
+	private Utterance utterance;
 	private String prevStage = "-1";
 
 	public GrammarTest(AnchorPane root, Queue<String> testQueue) {
@@ -44,9 +41,21 @@ public class GrammarTest extends Assessment {
 	}
 
 	@Override
-	public String analyzeResponse(String response) {
-
-		return null;
+	public Response analyzeResponse(String response) {
+		this.utterance = new Utterance(response);
+		try {
+			CRFLexicalAnalyzer analyzer = new CRFLexicalAnalyzer();
+			Sentence sentence = analyzer.analyze(response);
+			List<Map.Entry<String, String>> analyzed = new LinkedList<>();
+			for (IWord word : sentence.wordList) {
+				analyzed.add(new AbstractMap.SimpleEntry<>(word.getValue(), word.getLabel()));
+			}
+			utterance.setAnalyzedUtterance(analyzed);
+			return utterance;
+		} catch (IOException e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 
 	@Override
@@ -67,7 +76,7 @@ public class GrammarTest extends Assessment {
 					results.stageResults.add(stage);
 				stage = new GrammarStage(Integer.parseInt(question.getStage()));
 			}
-			stage.addRecord(new Response("response"), new GrammarStructure(question.getTarget(), Integer.parseInt(controller.getScore())));
+			stage.addRecord(new GrammarStructure(question.getTarget(), Integer.parseInt(controller.getScore())), this.utterance);
 			prevStage = question.getStage();
 		}
 	}

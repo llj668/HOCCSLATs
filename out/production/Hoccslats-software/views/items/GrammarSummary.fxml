@@ -49,8 +49,17 @@
             <Font size="25.0" />
          </font>
       </Label>
-      <JFXComboBox fx:id="stageComboBox" layoutX="500.0" layoutY="49.0" prefHeight="30.0" prefWidth="131.0" />
+      <JFXComboBox fx:id="stageComboBox" layoutX="450.0" layoutY="49.0" prefHeight="30.0" prefWidth="131.0" />
       <JFXButton fx:id="btnDiscard" buttonType="RAISED" layoutX="87.0" layoutY="392.0" onAction="#onClickDiscard" prefHeight="52.0" prefWidth="181.0" ripplerFill="RED" style="-fx-background-color: #ff7373;" text="丢弃" />
       <JFXButton fx:id="btnSave" buttonType="RAISED" layoutX="87.0" layoutY="469.0" onAction="#onClickSave" prefHeight="52.0" prefWidth="181.0" ripplerFill="#1a81ff" style="-fx-background-color: #8ec1ff;" text="保存结果" />
+      <VBox fx:id="responseBox" layoutX="450.0" layoutY="475.0" prefHeight="125.0" prefWidth="700.0" style="-fx-border-width: 1px; -fx-border-color: #000000;">
+         <padding>
+            <Insets left="10.0" top="10.0" />
+         </padding></VBox>
+      <Label layoutX="450.0" layoutY="442.0" text="回应：">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Label>
    </children>
 </AnchorPane>

@@ -1,5 +1,6 @@
 package controllers;
 
+import com.jfoenix.controls.JFXButton;
 import javafx.fxml.FXML;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
@@ -20,6 +21,8 @@ public abstract class BaseTestController implements DialogControl {
     public ImageView imgQuestion;
     @FXML
     public StackPane stackPane;
+    @FXML
+    public JFXButton btnNext;
 
     public abstract void updateLabels(String struct, String stage);
     public abstract String getScore();

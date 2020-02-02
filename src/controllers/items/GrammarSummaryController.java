@@ -16,12 +16,15 @@ import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeTableColumn;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import models.profiles.ProfileWriter;
 import models.test.AssessmentManager;
+import models.test.grammar.Utterance;
 import models.test.results.BaseResult;
 import models.test.results.GrammarResult;
 import models.test.results.GrammarStage;
 import models.test.results.GrammarStructure;
+import views.ResultDisplayer;
 import views.ViewManager;
 import views.items.ConfirmDialog;
 
@@ -30,6 +33,8 @@ import javax.swing.text.View;
 public class GrammarSummaryController extends ItemController implements DialogControl {
     @FXML
     private AnchorPane pane;
+    @FXML
+    private VBox responseBox;
     @FXML
     private StackPane stackPane;
     @FXML
@@ -48,8 +53,10 @@ public class GrammarSummaryController extends ItemController implements DialogCo
     private GrammarResult result;
     private BaseTestController testController;
     private ConfirmDialog confirmDialog;
+    private ResultDisplayer displayer;
 
     public void initialize() {
+        displayer = new ResultDisplayer();
         pane.setLayoutY(90);
         pane.getChildren().removeAll(btnDiscard, btnSave);
     }
@@ -119,6 +126,7 @@ public class GrammarSummaryController extends ItemController implements DialogCo
         }
 
         stageComboBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            responseBox.getChildren().clear();
             for (GrammarStage stage : result.stageResults) {
                 if (stage.getStageNo() == Integer.parseInt(newValue.getId())) {
                     displayStageResult(stage);
@@ -128,12 +136,11 @@ public class GrammarSummaryController extends ItemController implements DialogCo
     }
 
     private void displayStageResult(GrammarStage stage) {
-        ObservableList<GrammarStructure> questions = FXCollections.observableArrayList(stage.getRecords().values());
+        ObservableList<GrammarStructure> questions = FXCollections.observableArrayList(stage.getRecords().keySet());
         final TreeItem<GrammarStructure> root = new RecursiveTreeItem<>(questions, RecursiveTreeObject::getChildren);
 
         JFXTreeTableColumn<GrammarStructure, String> nameColumn = new JFXTreeTableColumn<>("结构");
         nameColumn.setPrefWidth(150);
-
         nameColumn.setCellValueFactory((TreeTableColumn.CellDataFeatures<GrammarStructure, String> param) ->{
             if (nameColumn.validateValue(param))
                 return param.getValue().getValue().getNameProperty();
@@ -160,11 +167,17 @@ public class GrammarSummaryController extends ItemController implements DialogCo
         });
 
         JFXTreeTableView<GrammarStructure> table = new JFXTreeTableView<>(root);
-        table.setLayoutX(500);
+        table.setLayoutX(450);
         table.setLayoutY(80);
         table.setPrefHeight(350);
         table.setShowRoot(false);
         table.getColumns().setAll(nameColumn, scoreColumn, evaluationColumn);
+
+        table.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            responseBox.getChildren().clear();
+            Utterance response = stage.getRecords().get(newValue.getValue());
+            displayer.displayGrammarResult(response, responseBox);
+        });
         pane.getChildren().add(table);
     }
 

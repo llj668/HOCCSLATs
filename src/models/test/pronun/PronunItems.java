@@ -7,5 +7,4 @@ public class PronunItems {
     public static String[] targets = {
             "鼻子", "耳朵", "嘴"
     };
-    public static HashMap<String, String> ipaMap;
 }

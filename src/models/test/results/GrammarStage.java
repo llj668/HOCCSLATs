@@ -1,6 +1,6 @@
 package models.test.results;
 
-import models.test.Response;
+import models.test.grammar.Utterance;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
@@ -8,15 +8,15 @@ import java.util.HashMap;
 public class GrammarStage implements Comparable<GrammarStage> {
     private int stageNo;
     private double stageScore;
-    private HashMap<Response, GrammarStructure> records;
+    private HashMap<GrammarStructure, Utterance> records;
 
     public GrammarStage(int stageNo) {
         records = new HashMap<>();
         this.stageNo = stageNo;
     }
 
-    public void addRecord(Response response, GrammarStructure structure) {
-        records.put(response, structure);
+    public void addRecord(GrammarStructure structure, Utterance utterance) {
+        records.put(structure, utterance);
     }
 
     public int getStageNo() {
@@ -31,7 +31,7 @@ public class GrammarStage implements Comparable<GrammarStage> {
         this.stageScore = stageScore;
     }
 
-    public HashMap<Response, GrammarStructure> getRecords() {
+    public HashMap<GrammarStructure, Utterance> getRecords() {
         return records;
     }
 
