@@ -7,6 +7,8 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import models.test.grammar.Utterance;
+import models.test.pronun.ErrorPattern;
+import models.test.pronun.Syllable;
 
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -24,6 +26,7 @@ public class ResultDisplayer {
     }
 
     public void displayGrammarResult(Utterance utterance, VBox container) {
+        container.getChildren().clear();
         double containerWidth = container.getWidth();
         double addedWidth = 0;
         HBox utteranceLine = new HBox();
@@ -43,6 +46,22 @@ public class ResultDisplayer {
             }
         }
         container.getChildren().add(utteranceLine);
+        container.setSpacing(verticalSpacing);
+    }
+
+    public void displayPronunResult(Syllable syllable, VBox container) {
+        container.getChildren().clear();
+        Label presentLabel = new Label("正确辅音：" + syllable.getConsonantsCorrectAsString());
+        Label errorLabel = new Label("错误模式：");
+        presentLabel.setFont(this.font);
+        errorLabel.setFont(this.font);
+        container.getChildren().addAll(presentLabel, errorLabel);
+
+        for (ErrorPattern error : syllable.getErrorPatterns()) {
+            Label label = new Label(error.name());
+            label.setFont(this.font);
+            container.getChildren().add(label);
+        }
         container.setSpacing(verticalSpacing);
     }
 

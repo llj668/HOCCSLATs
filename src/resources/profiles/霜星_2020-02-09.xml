@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<profile name="霜星" gender="female"> 
+  <grammar> 
+    <test time="2020-01-30 12:56:45" age="2;0" score="2.111111111111111"> 
+      <stage stage_no="1" stage_score="4.333333333333333"> 
+        <question name="N_DUP" score="5"> 
+          <response utterance="他去北京"> 
+            <structure value="r">他</structure>  
+            <structure value="v">去</structure>  
+            <structure value="ns">北京</structure> 
+          </response> 
+        </question>  
+        <question name="V" score="3"> 
+          <response utterance="踢足球"> 
+            <structure value="v">踢</structure>  
+            <structure value="n">足球</structure> 
+          </response> 
+        </question>  
+        <question name="Q" score="5"> 
+          <response utterance="谁在玩"> 
+            <structure value="r">谁</structure>  
+            <structure value="p">在</structure>  
+            <structure value="v">玩</structure> 
+          </response> 
+        </question> 
+      </stage>  
+      <stage stage_no="2" stage_score="1.5"> 
+        <question name="SVO" score="2"> 
+          <response utterance="他认为他是对的"> 
+            <structure value="r">他</structure>  
+            <structure value="v">认为</structure>  
+            <structure value="r">他</structure>  
+            <structure value="v">是</structure>  
+            <structure value="p">对</structure>  
+            <structure value="u">的</structure> 
+          </response> 
+        </question>  
+        <question name="ENDO" score="1"> 
+          <response utterance="黑兔子白兔子"> 
+            <structure value="n">黑兔子</structure>  
+            <structure value="n">白兔子</structure> 
+          </response> 
+        </question> 
+      </stage>  
+      <stage stage_no="3" stage_score="0.5"> 
+        <question name="SVCvO" score="0"> 
+          <response utterance="他来了"> 
+            <structure value="r">他</structure>  
+            <structure value="v">来</structure>  
+            <structure value="y">了</structure> 
+          </response> 
+        </question>  
+        <question name="Cv_COMP" score="1"> 
+          <response utterance="乌龟和兔子赛跑"> 
+            <structure value="nr">乌龟</structure>  
+            <structure value="c">和</structure>  
+            <structure value="n">兔子</structure>  
+            <structure value="v">赛跑</structure> 
+          </response> 
+        </question> 
+      </stage> 
+    </test> 
+  </grammar>  
+  <pronun/> 
+</profile>
