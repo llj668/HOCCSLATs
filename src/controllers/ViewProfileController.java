@@ -6,6 +6,7 @@ import com.jfoenix.controls.JFXListCell;
 import com.jfoenix.controls.JFXListView;
 import controllers.items.GrammarSummaryController;
 import controllers.items.ItemController;
+import controllers.items.PronunSummaryController;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
@@ -14,6 +15,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Region;
 import models.profiles.Profile;
 import models.test.results.GrammarResult;
+import models.test.results.PronunResult;
 import views.ViewManager;
 import views.items.GrammarResultItem;
 import views.items.ProfileListItem;
@@ -65,12 +67,39 @@ public class ViewProfileController {
 				}
 			}
 		});
+
+		pronunResultList.setCellFactory(lv -> new JFXListCell<ResultItem>() {
+			@Override
+			public void updateItem(ResultItem item, boolean empty)
+			{
+				super.updateItem(item, empty);
+				if (empty) {
+					setGraphic(null);
+				} else {
+					setGraphic(item);
+					setOnMouseClicked(mouseClickedEvent -> {
+						if (mouseClickedEvent.getButton().equals(MouseButton.PRIMARY) && mouseClickedEvent.getClickCount() == 2) {
+							Map.Entry<Region, ItemController> entry = ViewManager.getInstance().getItemFromFXML(ViewManager.ITEM_PRONUNSUMMARY);
+							summary = entry.getKey();
+							summary.setLayoutY(90);
+							PronunSummaryController controller = (PronunSummaryController) entry.getValue();
+							root.getChildren().add(summary);
+							controller.setResult(item.pronunResult);
+							setBackBtnBehavior();
+						}
+					});
+				}
+			}
+		});
 	}
 	
 	public void displayProfile(Profile profile) {
 		initProfileInfo(profile);
 		for (GrammarResult result : profile.getGrammarResults()) {
-			grammarResultList.getItems().add(result.toGrammarResultItem());
+			grammarResultList.getItems().add(result.toResultItem());
+		}
+		for (PronunResult result : profile.getPronunResults()) {
+			pronunResultList.getItems().add(result.toResultItem());
 		}
 	}
 	
@@ -90,7 +119,7 @@ public class ViewProfileController {
 		labelName.setText(profile.getInfo().get("name"));
 		labelGender.setText(profile.getGender());
 		Collections.sort(profile.getGrammarResults());
-		if (profile.getGrammarResults().size() == 0) {
+		if (profile.getGrammarResults().size() == 0 || profile.getPronunResults().size() == 0) {
 			labelRecent.setText("暂无");
 		} else {
 			labelRecent.setText(profile.getGrammarResults().get(0).getTestTime());

@@ -73,7 +73,6 @@ public class GrammarTestController extends BaseTestController {
 
 	@FXML
 	void onClickAnalyze(ActionEvent event) {
-		resultBox.getChildren().clear();
 		Utterance utterance = (Utterance) manager.getAssessment().analyzeResponse(textTranscribe.getText());
 		displayer.displayGrammarResult(utterance, resultBox);
 		btnNext.setDisable(false);
@@ -94,6 +93,7 @@ public class GrammarTestController extends BaseTestController {
 		labelScore.setText("");
 		textTranscribe.setText("");
 		btnNext.setDisable(true);
+		resultBox.getChildren().clear();
 	}
 
 	private void initScoreDisplay() {

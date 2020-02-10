@@ -28,9 +28,5 @@ public class ProfileLoader {
 			}
 		}
 	}
-	
-	public void writeProfileToFile() {
-		
-	}
 
 }

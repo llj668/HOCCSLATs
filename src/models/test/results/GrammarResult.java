@@ -9,7 +9,7 @@ import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-public class GrammarResult extends BaseResult implements Comparable<GrammarResult> {
+public class GrammarResult extends BaseResult {
 	public double score;
 	public List<GrammarStage> stageResults;
 
@@ -25,6 +25,7 @@ public class GrammarResult extends BaseResult implements Comparable<GrammarResul
 		this.score = Double.parseDouble(testScore);
 	}
 
+	@Override
 	public void conclude() {
 		testTime = new Date();
 		double scoreTotal = 0;
@@ -41,21 +42,9 @@ public class GrammarResult extends BaseResult implements Comparable<GrammarResul
 		score = Double.parseDouble(df.format(scoreTotal / stageResults.size()));
 	}
 
-	public ResultItem toGrammarResultItem() {
+	@Override
+	public ResultItem toResultItem() {
 		return new GrammarResultItem(this);
 	}
 
-	public String getTestTime() {
-		SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		return f.format(testTime);
-	}
-
-	@Override
-	public int compareTo(@NotNull GrammarResult o) {
-		if (o.testTime.getTime() > this.testTime.getTime()) {
-			return 1;
-		} else {
-			return -1;
-		}
-	}
 }

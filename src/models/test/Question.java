@@ -15,6 +15,11 @@ public class Question implements Comparable<Question> {
         this.target = target;
     }
 
+    public Question(String path, String target) {
+        this.path = StringUtils.substring(path,5);
+        this.target = target;
+    }
+
     @Override
     public int compareTo(@NotNull Question o) {
         return this.stage - o.stage;

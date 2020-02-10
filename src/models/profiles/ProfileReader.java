@@ -1,14 +1,17 @@
 package models.profiles;
 
 import java.io.*;
+import java.lang.reflect.Array;
 import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
 import models.test.grammar.Utterance;
+import models.test.pronun.Syllable;
 import models.test.results.GrammarResult;
 import models.test.results.GrammarStage;
 import models.test.results.GrammarStructure;
+import models.test.results.PronunResult;
 import org.dom4j.Attribute;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
@@ -112,15 +115,70 @@ public class ProfileReader {
 						}
 						results.add(new GrammarResult(stageResults, f.parse(testTime, new ParsePosition(0)), testAge, testScore));
 					}
-				} else if (rootElement.getName().equalsIgnoreCase("pronun")) {
-					// todo read pronun results
 				}
-
 			}
 		} catch (DocumentException e) {
 			e.printStackTrace();
 		}
-		System.out.println(results.size());
+		return results;
+	}
+
+	public static ArrayList<PronunResult> readPronunResultsFromXML(String filename) {
+		ArrayList<PronunResult> results = new ArrayList<>();
+		SAXReader reader = new SAXReader();
+		try {
+			File xml = new File(PROFILE_PATH + filename + ".xml");
+
+			Document document = reader.read(xml);
+			Element root = document.getRootElement();
+
+			Iterator rootElements = root.elementIterator();
+			while (rootElements.hasNext()) {
+				Element rootElement = (Element) rootElements.next();
+
+				if (rootElement.getName().equalsIgnoreCase("pronun")) {
+
+					Iterator testElements = rootElement.elementIterator();
+					while (testElements.hasNext()) {
+						Element test = (Element) testElements.next();
+
+						List<Syllable> syllables = new LinkedList<>();
+						List<String> presentConsonants = new LinkedList<>();
+						SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+						String testTime = test.attribute("time").getValue();
+						String testAge = test.attribute("age").getValue();
+						String testScore = test.attribute("pcc").getValue();
+
+						Iterator resultElements = test.elementIterator();
+						while (resultElements.hasNext()) {
+							Element result = (Element) resultElements.next();
+
+							if (result.getName().equalsIgnoreCase("syllables")) {
+
+								Iterator syllableElements = result.elementIterator();
+								while (syllableElements.hasNext()) {
+									Element syllable = (Element) syllableElements.next();
+
+									HashMap<String, String> syllableData = new HashMap<>();
+
+									Iterator dataElements = syllable.elementIterator();
+									while (dataElements.hasNext()) {
+										Element data = (Element) dataElements.next();
+										syllableData.put(data.getName(), data.getStringValue());
+									}
+									syllables.add(new Syllable(syllableData));
+								}
+							} else if (result.getName().equalsIgnoreCase("pronounced_consonants")) {
+								presentConsonants = Arrays.asList(result.getStringValue().split(","));
+							}
+						}
+						results.add(new PronunResult(testAge, f.parse(testTime, new ParsePosition(0)), testScore, syllables, presentConsonants));
+					}
+				}
+			}
+		} catch (DocumentException e) {
+			e.printStackTrace();
+		}
 		return results;
 	}
 

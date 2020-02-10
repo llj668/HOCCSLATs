@@ -52,6 +52,10 @@ public class Profile {
 	}
 
 	public ArrayList<PronunResult> getPronunResults() {
+		if (pronunResults == null) {
+			this.pronunResults = new ArrayList<>();
+			this.pronunResults = ProfileReader.readPronunResultsFromXML(info.get("profileName"));
+		}
 		return pronunResults;
 	}
 

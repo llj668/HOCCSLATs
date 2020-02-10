@@ -89,7 +89,7 @@ public class GrammarSummaryController extends ItemController implements DialogCo
     @FXML
     void onClickSave(ActionEvent event) {
         AssessmentManager.profile.getGrammarResults().add(result);
-        ProfileWriter.updateProfileResultToXML(AssessmentManager.profile);
+        ProfileWriter.updateProfileResultToXML(AssessmentManager.profile, "grammar");
         stackPane.toFront();
         confirmDialog = new ConfirmDialog(this, stackPane, new JFXDialogLayout());
         confirmDialog.setText(ConfirmDialog.TEXT_SAVEPROFILE);

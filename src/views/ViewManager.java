@@ -33,6 +33,7 @@ public class ViewManager {
     public final static String PATH_PRONUNTEST = "/views/PronunTest.fxml";
 
     public final static String ITEM_GRAMMARSUMMARY = "/views/items/GrammarSummary.fxml";
+    public final static String ITEM_PRONUNSUMMARY = "/views/items/PronunSummary.fxml";
 	final int initWidth = 1280;
 	final int initHeight = 720;
 	
@@ -101,7 +102,7 @@ public class ViewManager {
         try {
             loader.setLocation(getClass().getResource(path));
             AnchorPane root = loader.load();
-            GrammarSummaryController controller = loader.getController();
+            ItemController controller = loader.getController();
 
             return new AbstractMap.SimpleEntry<>(root, controller);
         } catch (IOException e) {

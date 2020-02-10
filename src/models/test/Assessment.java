@@ -11,6 +11,7 @@ import java.util.Queue;
 
 public abstract class Assessment {
     public Queue<Question> questionList;
+    public String target;
 
     public Assessment() {
         questionList = new LinkedList<>();
@@ -26,4 +27,7 @@ public abstract class Assessment {
     public abstract void saveResult();
     public abstract Map.Entry<Region, ItemController> end();
     public abstract BaseResult getResult();
+    public void setTarget(String target) {
+        this.target = target;
+    }
 }

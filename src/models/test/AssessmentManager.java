@@ -37,6 +37,7 @@ public class AssessmentManager {
 		if (question != null) {
 			controller.imgQuestion.setImage(new Image(question.getPath()));
 			controller.updateLabels(question.getTarget(), question.getStage());
+			assessment.setTarget(question.getTarget());
 		} else {
 			assessment.saveResult();
 			Map.Entry<Region, ItemController> entry = assessment.end();

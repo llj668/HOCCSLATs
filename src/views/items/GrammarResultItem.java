@@ -26,7 +26,7 @@ public class GrammarResultItem extends ResultItem {
         age.setPrefSize(100, 30);
         age.setFont(Font.font("System", 15));
 
-        time = new Label("测试时间：" + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(grammarResult.testTime));
+        time = new Label("测试时间：" + grammarResult.getTestTime());
         time.setTranslateX(150);
         time.setPrefSize(250, 30);
         time.setFont(Font.font("System", 15));

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<profile name="浮士德" gender="male"> 
+  <grammar/>  
+  <pronun>
+    <test time="2020-02-09 14:02:25" age="1;3" pcc="0.0">
+      <syllables>
+        <item>
+          <target>鼻子</target>
+          <response>bi2,zi3</response>
+          <present_consonant>c</present_consonant>
+          <error_pattern>AFFRICATION</error_pattern>
+        </item>
+        <item>
+          <target>耳朵</target>
+          <response>er3,duo3</response>
+          <present_consonant>c</present_consonant>
+          <error_pattern>AFFRICATION</error_pattern>
+        </item>
+        <item>
+          <target>嘴</target>
+          <response>zui3</response>
+          <present_consonant>c</present_consonant>
+          <error_pattern>AFFRICATION</error_pattern>
+        </item>
+      </syllables>
+      <pronounced_consonants>c</pronounced_consonants>
+    </test>
+  </pronun> 
+</profile>
