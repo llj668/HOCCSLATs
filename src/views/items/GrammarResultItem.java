@@ -22,7 +22,7 @@ public class GrammarResultItem extends ResultItem {
     }
 
     private void initializeItemContent() {
-        age = new Label("测试年龄：" + grammarResult.testAge);
+        age = new Label("测试年龄：" + grammarResult.testAge.toString());
         age.setPrefSize(100, 30);
         age.setFont(Font.font("System", 15));
 

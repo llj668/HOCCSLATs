@@ -1,15 +1,18 @@
 package models.test.results;
 
+import application.PropertyManager;
+import models.profiles.Age;
 import models.test.pronun.ErrorPattern;
+import models.test.pronun.Inventory;
+import models.test.pronun.PronunItems;
 import models.test.pronun.Syllable;
+import models.test.reader.InventoryReader;
 import views.items.GrammarResultItem;
 import views.items.PronunResultItem;
 import views.items.ResultItem;
 
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class PronunResult extends BaseResult {
@@ -18,8 +21,10 @@ public class PronunResult extends BaseResult {
     public List<String> presentConsonants;
     public List<String> absentConsonants;
     public List<ErrorPattern> errors;
+    public Map<String, String> comparedMap75;
+    public Map<String, String> comparedMap90;
 
-    public PronunResult(String testAge) {
+    public PronunResult(Age testAge) {
         super(testAge);
         syllables = new LinkedList<>();
         presentConsonants = new LinkedList<>();
@@ -27,7 +32,7 @@ public class PronunResult extends BaseResult {
         errors = new LinkedList<>();
     }
 
-    public PronunResult(String testAge, Date testTime, String pcc, List<Syllable> syllables, List<String> presentConsonants) {
+    public PronunResult(Age testAge, Date testTime, String pcc, List<Syllable> syllables, List<String> presentConsonants) {
         super(testAge);
         this.testTime = testTime;
         this.pcc = Double.parseDouble(pcc);
@@ -35,10 +40,16 @@ public class PronunResult extends BaseResult {
         this.presentConsonants = presentConsonants;
         this.absentConsonants = getAbsentFromPresent();
         this.errors = getErrorsFromSyllable();
+        this.comparedMap75 = compareToInventory("75");
+        this.comparedMap90 = compareToInventory("90");
     }
 
     private List<String> getAbsentFromPresent() {
         List<String> absent = new LinkedList<>();
+        for (String consonant : PronunItems.consonants) {
+            if (!presentConsonants.contains(consonant))
+                absent.add(consonant);
+        }
         return absent;
     }
 
@@ -69,6 +80,26 @@ public class PronunResult extends BaseResult {
         this.presentConsonants = getPresentsFromSyllable();
         this.absentConsonants = getAbsentFromPresent();
         this.errors = getErrorsFromSyllable();
+        this.comparedMap75 = compareToInventory("75");
+        this.comparedMap90 = compareToInventory("90");
+    }
+
+    private Map<String, String> compareToInventory(String type) {
+        Map<String, String> comparedMap = new HashMap<>();
+        List<Inventory> inventoryList = new LinkedList<>();
+        if (type.equalsIgnoreCase("75")) {
+            inventoryList = InventoryReader.readInventoryFromXML(PropertyManager.getResourceProperty("inventory_75pc"));
+        } else if (type.equalsIgnoreCase("90")) {
+            inventoryList = InventoryReader.readInventoryFromXML(PropertyManager.getResourceProperty("inventory_90pc"));
+        }
+
+        for (Inventory inventory : inventoryList) {
+            if (testAge.isInAgePeriod(inventory.getAgePeriod())) {
+                System.out.println("compare with age period: " + inventory.getAgePeriod());
+                comparedMap = inventory.compare(presentConsonants, absentConsonants);
+            }
+        }
+        return comparedMap;
     }
 
     @Override

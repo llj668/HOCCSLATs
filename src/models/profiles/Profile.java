@@ -1,39 +1,51 @@
 package models.profiles;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 import models.test.results.GrammarResult;
 import models.test.results.PronunResult;
 import views.items.ProfileListItem;
 
 public class Profile {
-	private HashMap<String, String> info;	// name, ages, gender, profileName
+	private String name;
+	private String gender;
+	private String profileName;
+	private List<Age> ages;
 	private ArrayList<GrammarResult> grammarResults;
 	private ArrayList<PronunResult> pronunResults;
 
-	public Profile(HashMap<String, String> info) {
-		this.info = info;
+	public Profile(String name, String gender) {
+		this.name = name;
+		this.gender = gender;
+	}
+
+	public Profile(String name, String gender, String profileName, List<Age> ages) {
+		this.name = name;
+		this.gender = gender;
+		this.profileName = profileName;
+		this.ages = ages;
 	}
 
 	public ProfileListItem toProfileListItem() {
-		return new ProfileListItem(info);
+		return new ProfileListItem(this.name, getGender(), this.ages);
 	}
 
+	public String getName() {
+		return this.name;
+	}
 	public String getProfileName() {
-		return info.get("profileName");
+		return this.profileName;
 	}
-
-	public HashMap<String, String> getInfo() {
-		return info;
+	public List<Age> getAges() {
+		return this.ages;
 	}
-	
+	public String getGenderString() {
+		return this.gender;
+	}
 	public String getGender() {
-		if (info.get("gender").equals("male")) {
+		if (this.gender.equals("male")) {
 			return "男";
-		} else if (info.get("gender").equals("female")) {
+		} else if (this.gender.equals("female")) {
 			return "女";
 		}
 		return null;
@@ -42,24 +54,17 @@ public class Profile {
 	public ArrayList<GrammarResult> getGrammarResults() {
 		if (grammarResults == null) {
 			this.grammarResults = new ArrayList<>();
-			this.grammarResults = ProfileReader.readGrammarResultsFromXML(info.get("profileName"));
+			this.grammarResults = ProfileReader.readGrammarResultsFromXML(this.profileName);
 		}
 		return grammarResults;
-	}
-
-	public void setGrammarResults(ArrayList<GrammarResult> grammarResults) {
-		this.grammarResults = grammarResults;
 	}
 
 	public ArrayList<PronunResult> getPronunResults() {
 		if (pronunResults == null) {
 			this.pronunResults = new ArrayList<>();
-			this.pronunResults = ProfileReader.readPronunResultsFromXML(info.get("profileName"));
+			this.pronunResults = ProfileReader.readPronunResultsFromXML(this.profileName);
 		}
 		return pronunResults;
 	}
 
-	public void setPronunResults(ArrayList<PronunResult> pronunResults) {
-		this.pronunResults = pronunResults;
-	}
 }

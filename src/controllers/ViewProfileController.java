@@ -1,9 +1,11 @@
 package controllers;
 
+import application.PropertyManager;
 import com.jfoenix.controls.JFXButton;
 
 import com.jfoenix.controls.JFXListCell;
 import com.jfoenix.controls.JFXListView;
+import controllers.items.BaseSummaryController;
 import controllers.items.GrammarSummaryController;
 import controllers.items.ItemController;
 import controllers.items.PronunSummaryController;
@@ -55,7 +57,8 @@ public class ViewProfileController {
 					setGraphic(item);
 					setOnMouseClicked(mouseClickedEvent -> {
 						if (mouseClickedEvent.getButton().equals(MouseButton.PRIMARY) && mouseClickedEvent.getClickCount() == 2) {
-							Map.Entry<Region, ItemController> entry = ViewManager.getInstance().getItemFromFXML(ViewManager.ITEM_GRAMMARSUMMARY);
+							Map.Entry<Region, BaseSummaryController> entry = ViewManager.getInstance().getItemFromFXML(
+									PropertyManager.getResourceProperty("grammarsum"));
 							summary = entry.getKey();
 							summary.setLayoutY(90);
 							GrammarSummaryController controller = (GrammarSummaryController) entry.getValue();
@@ -79,7 +82,8 @@ public class ViewProfileController {
 					setGraphic(item);
 					setOnMouseClicked(mouseClickedEvent -> {
 						if (mouseClickedEvent.getButton().equals(MouseButton.PRIMARY) && mouseClickedEvent.getClickCount() == 2) {
-							Map.Entry<Region, ItemController> entry = ViewManager.getInstance().getItemFromFXML(ViewManager.ITEM_PRONUNSUMMARY);
+							Map.Entry<Region, BaseSummaryController> entry = ViewManager.getInstance().getItemFromFXML(
+									PropertyManager.getResourceProperty("pronunsum"));
 							summary = entry.getKey();
 							summary.setLayoutY(90);
 							PronunSummaryController controller = (PronunSummaryController) entry.getValue();
@@ -105,18 +109,18 @@ public class ViewProfileController {
 	
 	@FXML
 	void onClickBack(ActionEvent event) {
-		ViewManager.getInstance().switchScene(ViewManager.PATH_PROFILE);
+		ViewManager.getInstance().switchScene(PropertyManager.getResourceProperty("profile"));
 	}
 
 	private void setBackBtnBehavior() {
 		btnBack.setOnAction(e -> {
 			root.getChildren().remove(summary);
-			btnBack.setOnAction(event -> ViewManager.getInstance().switchScene(ViewManager.PATH_PROFILE));
+			btnBack.setOnAction(event -> ViewManager.getInstance().switchScene(PropertyManager.getResourceProperty("profile")));
 		});
 	}
 
 	private void initProfileInfo(Profile profile) {
-		labelName.setText(profile.getInfo().get("name"));
+		labelName.setText(profile.getName());
 		labelGender.setText(profile.getGender());
 		Collections.sort(profile.getGrammarResults());
 		if (profile.getGrammarResults().size() == 0 || profile.getPronunResults().size() == 0) {

@@ -1,10 +1,12 @@
 package models.test;
 
 import controllers.BaseTestController;
+import controllers.items.BaseSummaryController;
 import controllers.items.GrammarSummaryController;
 import controllers.items.ItemController;
 import javafx.scene.image.Image;
 import javafx.scene.layout.Region;
+import models.profiles.Age;
 import models.profiles.Profile;
 import models.test.grammar.GrammarTest;
 import models.test.pronun.PronunTest;
@@ -16,7 +18,7 @@ public class AssessmentManager {
 	private static AssessmentManager instance;
 	private Assessment assessment;
 	private BaseTestController controller;
-	private String testAge;
+	private Age testAge;
 	private Queue<String> testQueue;
 	private Question question;
 	
@@ -40,7 +42,7 @@ public class AssessmentManager {
 			assessment.setTarget(question.getTarget());
 		} else {
 			assessment.saveResult();
-			Map.Entry<Region, ItemController> entry = assessment.end();
+			Map.Entry<Region, BaseSummaryController> entry = assessment.end();
 			entry.getValue().setOnAfterTest(controller);
 			entry.getValue().setResult(assessment.getResult());
 			controller.setSummary(entry.getKey());
@@ -58,11 +60,20 @@ public class AssessmentManager {
 		this.assessment = new PronunTest();
 	}
 
-	public String getTestAge() {
+	public void clearAll() {
+		profile = null;
+		assessment = null;
+		controller = null;
+		testAge = null;
+		testQueue = null;
+		question = null;
+	}
+
+	public Age getTestAge() {
 		return testAge;
 	}
 
-	public void setTestAge(String testAge) {
+	public void setTestAge(Age testAge) {
 		this.testAge = testAge;
 	}
 

@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
+import application.PropertyManager;
 import views.items.ProfileListItem;
 
 public class ProfileLoader {
@@ -15,7 +16,7 @@ public class ProfileLoader {
 	
 	public void refreshProfileList() {
 		profiles = new HashMap<>();
-		for (File file : new File(ProfileReader.PROFILE_PATH).listFiles()) {
+		for (File file : new File(PropertyManager.getResourceProperty("profile_path")).listFiles()) {
 			Profile profile = ProfileReader.readProfileFromXML(file);
 			profiles.put(profile.toProfileListItem(), profile);
 		}
@@ -24,7 +25,7 @@ public class ProfileLoader {
 	public static void deleteProfiles() {
 		for (ProfileListItem item : profiles.keySet()) {
 			if (item.isSelectedForDelete) {
-				new File(ProfileReader.PROFILE_PATH + profiles.get(item).getProfileName()).delete();
+				new File(PropertyManager.getResourceProperty("profile_path") + profiles.get(item).getProfileName()).delete();
 			}
 		}
 	}

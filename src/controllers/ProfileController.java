@@ -2,6 +2,7 @@ package controllers;
 
 import java.util.Set;
 
+import application.PropertyManager;
 import com.intellij.refactoring.changeClassSignature.TypeParameterInfo;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXDialogLayout;
@@ -15,6 +16,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
+import models.profiles.Age;
 import models.profiles.Profile;
 import models.profiles.ProfileLoader;
 import models.test.AssessmentManager;
@@ -82,12 +84,12 @@ public class ProfileController implements DialogControl {
 	
 	@FXML
 	void onClickBack(ActionEvent event) {
-		ViewManager.getInstance().switchScene(ViewManager.PATH_MAIN);
+		ViewManager.getInstance().switchScene(PropertyManager.getResourceProperty("mainmenu"));
 	}
 	
 	@FXML
 	void onClickNew(ActionEvent event) {
-		ViewManager.getInstance().switchScene(ViewManager.PATH_NEWPROFILE);
+		ViewManager.getInstance().switchScene(PropertyManager.getResourceProperty("newprofile"));
 	}
 
 	@FXML
@@ -148,9 +150,8 @@ public class ProfileController implements DialogControl {
 
 	@Override
 	public void onClickYesDialog() {
-		AssessmentManager.getInstance().setTestAge(ageDialog.getText());
-		ViewManager.getInstance().switchScene(ViewManager.PATH_TESTMENU);
+		AssessmentManager.getInstance().setTestAge(new Age(ageDialog.getText()));
+		ViewManager.getInstance().switchScene(PropertyManager.getResourceProperty("testmenu"));
 	}
-
 
 }

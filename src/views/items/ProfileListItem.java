@@ -18,13 +18,13 @@ import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
+import models.profiles.Age;
 import models.profiles.ProfileLoader;
 import views.ViewManager;
 
 public class ProfileListItem extends HBox {
 	private JFXButton selButton;
 	private JFXCheckBox selDelete;
-	private HashMap<String, String> profileInfo;
 	private Label name;
 	private Label age;
 	private Label gender;
@@ -32,17 +32,16 @@ public class ProfileListItem extends HBox {
 	private Boolean isDeleteMode = false;
 	public Boolean isSelectedForDelete = false;
 
-	public ProfileListItem(HashMap<String, String> info) {
+	public ProfileListItem(String nameStr, String genderStr, List<Age> agesList) {
 		this.getStylesheets().add(ProfileListItem.class.getResource("/resources/styles/profileListItemStyle.css").toString());
-		this.profileInfo = info;
 		this.setId("item");
 		this.setAlignment(Pos.CENTER_LEFT);
-		initializeItemContent();
+		initializeItemContent(nameStr, genderStr, agesList);
 		this.getChildren().addAll(name, gender, age, ageContainer);
 	}
 	
-	private void initializeItemContent() {
-		name = new Label("姓名: " + profileInfo.get("name"));
+	private void initializeItemContent(String nameStr, String genderStr, List<Age> agesList) {
+		name = new Label("姓名: " + nameStr);
 		name.setPrefSize(150, 50);
 		name.setTranslateX(50);
 		name.setFont(Font.font("System", 20));
@@ -52,31 +51,29 @@ public class ProfileListItem extends HBox {
 		age.setTranslateX(200);
 		age.setFont(Font.font("System", 20));
 
-		String[] ages = profileInfo.get("ages").split(",");
 		ageContainer = new HBox();
 		ageContainer.setPrefSize(400, 50);
 		ageContainer.setTranslateX(200);
 		ageContainer.setSpacing(10);
 		ageContainer.setId("age_container");
 		ageContainer.setAlignment(Pos.CENTER_LEFT);
-		if (ages[0].equalsIgnoreCase("")) {
+		if (agesList.size() == 0) {
 			Label label = new Label("暂无");
 			label.setPrefSize(40, 30);
 			label.setFont(Font.font("System", 15));
 			label.setAlignment(Pos.CENTER);
 			ageContainer.getChildren().add(label);
 		} else {
-			for (String age : ages) {
-				Label label = new Label(age);
+			for (Age age : agesList) {
+				Label label = new Label(age.toString());
 				label.setPrefSize(40, 30);
 				label.setFont(Font.font("System", 15));
 				label.setAlignment(Pos.CENTER);
 				ageContainer.getChildren().add(label);
 			}
 		}
-		
-		String genderString = profileInfo.get("gender").equals("male") ? "男" : "女";
-		gender = new Label("性别: " + genderString);
+
+		gender = new Label("性别: " + genderStr);
 		gender.setPrefSize(200, 50);
 		gender.setTranslateX(200);
 		gender.setFont(Font.font("System", 20));
