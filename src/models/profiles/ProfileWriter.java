@@ -25,14 +25,14 @@ public class ProfileWriter {
     public static void writeNewProfileToXML(Profile profile) {
         Document profileXML = DocumentHelper.createDocument();
         Element root = profileXML.addElement("profile");
-        root.addAttribute("name", profile.getInfo().get("name"));
-        root.addAttribute("gender", profile.getInfo().get("gender"));
+        root.addAttribute("name", profile.getName());
+        root.addAttribute("gender", profile.getGenderString());
         root.addElement("grammar");
         root.addElement("pronun");
 
         try {
             OutputFormat format = OutputFormat.createPrettyPrint();
-            File file = new File(PROFILE_PATH + profile.getInfo().get("name") + "_" + LocalDate.now() + ".xml");
+            File file = new File(PROFILE_PATH + profile.getName() + "_" + LocalDate.now() + ".xml");
             XMLWriter writer = new XMLWriter(new FileOutputStream(file), format);
             writer.write(profileXML);
             writer.close();
@@ -58,7 +58,7 @@ public class ProfileWriter {
                     // check if there is a new result
                     ArrayList<GrammarResult> results = profile.getGrammarResults();
                     GrammarResult newResult = results.get(results.size()-1);
-                    if (!isNewResult(rootElement, newResult))
+                    if (isOldResult(rootElement, newResult))
                         break;
 
                     System.out.println("update grammar result");
@@ -66,7 +66,7 @@ public class ProfileWriter {
                     Element test = rootElement.addElement("test");
                     // attributes
                     test.addAttribute("time", newResult.getTestTime());
-                    test.addAttribute("age", newResult.testAge);
+                    test.addAttribute("age", newResult.testAge.toString());
                     test.addAttribute("score", String.valueOf(newResult.score));
 
                     // stage results
@@ -97,7 +97,7 @@ public class ProfileWriter {
                     // check if there is a new result
                     ArrayList<PronunResult> results = profile.getPronunResults();
                     PronunResult newResult = results.get(results.size()-1);
-                    if (!isNewResult(rootElement, newResult))
+                    if (isOldResult(rootElement, newResult))
                         break;
 
                     System.out.println("update pronun result");
@@ -105,7 +105,7 @@ public class ProfileWriter {
                     Element test = rootElement.addElement("test");
                     // attributes
                     test.addAttribute("time", newResult.getTestTime());
-                    test.addAttribute("age", newResult.testAge);
+                    test.addAttribute("age", newResult.testAge.toString());
                     test.addAttribute("pcc", String.valueOf(newResult.pcc));
 
                     // syllables
@@ -128,7 +128,7 @@ public class ProfileWriter {
                 }
             }
 
-            String filename = profile.getInfo().get("name") + "_" + LocalDate.now();
+            String filename = profile.getName() + "_" + LocalDate.now();
             File file = new File(PROFILE_PATH + filename + ".xml");
             XMLWriter writer = new XMLWriter(new FileOutputStream(file), format);
             writer.write(document);
@@ -147,14 +147,14 @@ public class ProfileWriter {
         }
     }
 
-    private static boolean isNewResult(@NotNull Element rootElement, BaseResult newResult) {
+    private static boolean isOldResult(@NotNull Element rootElement, BaseResult newResult) {
         Iterator testElements = rootElement.elementIterator();
         while (testElements.hasNext()) {
             Element test = (Element) testElements.next();
             if (test.attribute("time").getValue().equals(newResult.testTime.toString())) {
-                return false;
+                return true;
             }
         }
-        return true;
+        return false;
     }
 }

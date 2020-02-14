@@ -3,7 +3,6 @@ package controllers.items;
 import com.jfoenix.controls.*;
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
 import controllers.BaseTestController;
-import controllers.DialogControl;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -12,23 +11,26 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeTableColumn;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.GridPane;
 import models.profiles.ProfileWriter;
 import models.test.AssessmentManager;
-import models.test.grammar.Utterance;
 import models.test.pronun.Syllable;
 import models.test.results.*;
 import org.jetbrains.annotations.NotNull;
 import views.ResultDisplayer;
-import views.ViewManager;
 import views.items.ConfirmDialog;
 
-public class PronunSummaryController extends ItemController implements DialogControl {
+import java.util.Map;
+
+public class PronunSummaryController extends BaseSummaryController {
     @FXML
     private AnchorPane pane;
     @FXML
-    private StackPane stackPane;
+    private AnchorPane subpane;
+    @FXML
+    private AnchorPane hintPane;
+    @FXML
+    private GridPane inventoryGrid;
     @FXML
     private JFXComboBox<Label> resultComboBox;
     @FXML
@@ -41,10 +43,11 @@ public class PronunSummaryController extends ItemController implements DialogCon
     private Label labelTime;
 
     private PronunResult result;
-    private BaseTestController testController;
-    private ConfirmDialog confirmDialog;
+    private ResultDisplayer displayer;
 
     public void initialize() {
+        this.displayer = new ResultDisplayer();
+        subpane.getChildren().clear();
         pane.setLayoutY(90);
         pane.getChildren().removeAll(btnDiscard, btnSave);
     }
@@ -52,7 +55,7 @@ public class PronunSummaryController extends ItemController implements DialogCon
     @Override
     public void setResult(BaseResult result) {
         this.result = (PronunResult) result;
-        this.labelAge.setText(this.result.testAge);
+        this.labelAge.setText(this.result.testAge.toString());
         this.labelTime.setText(this.result.getTestTime());
         setResultComboBox();
         resultComboBox.setValue(resultComboBox.getItems().get(0));
@@ -61,7 +64,6 @@ public class PronunSummaryController extends ItemController implements DialogCon
 
     @Override
     public void setOnAfterTest(BaseTestController controller) {
-        this.testController = controller;
         pane.getChildren().addAll(btnDiscard, btnSave);
     }
 
@@ -100,24 +102,11 @@ public class PronunSummaryController extends ItemController implements DialogCon
                 setSyllableTable();
                 break;
             case "发音量表":
+                setInventoryTable("75");
                 break;
             default:
                 break;
         }
-    }
-
-    @Override
-    public void onClickNoDialog() {
-        ViewManager.getInstance().switchScene(ViewManager.PATH_TESTMENU);
-    }
-
-    @Override
-    public void onClickYesDialog() {
-        if (confirmDialog.isSingleAction) {
-            ViewManager.getInstance().switchScene(ViewManager.PATH_TESTMENU);
-        }
-        confirmDialog.close();
-        stackPane.toBack();
     }
 
     private void setSyllableTable() {
@@ -142,7 +131,7 @@ public class PronunSummaryController extends ItemController implements DialogCon
                 return responseColumn.getComputedValue(param);
         });
 
-        JFXTreeTableColumn<Syllable, String> presentColumn = new JFXTreeTableColumn<>("正确辅音");
+        JFXTreeTableColumn<Syllable, String> presentColumn = new JFXTreeTableColumn<>("正确音");
         presentColumn.setPrefWidth(150);
         presentColumn.setCellValueFactory((TreeTableColumn.CellDataFeatures<Syllable, String> param) ->{
             if (presentColumn.validateValue(param))
@@ -165,15 +154,25 @@ public class PronunSummaryController extends ItemController implements DialogCon
         addTableToPane(table);
     }
 
-    private void setInventoryTable() {
+    private void setInventoryTable(String type) {
+        if (type.equalsIgnoreCase("75")) {
+            plotComparedInventoryMap(result.comparedMap75);
+        } else if (type.equalsIgnoreCase("90")) {
+            plotComparedInventoryMap(result.comparedMap90);
+        }
+    }
 
+    private void plotComparedInventoryMap(Map<String, String> comparedMap) {
+        subpane.getChildren().clear();
+        subpane.getChildren().addAll(inventoryGrid, hintPane);
+        displayer.displayConsonantInventory(comparedMap, inventoryGrid);
     }
 
     private void addTableToPane(@NotNull JFXTreeTableView table) {
-        table.setLayoutX(450);
-        table.setLayoutY(80);
         table.setPrefHeight(500);
         table.setShowRoot(false);
-        pane.getChildren().add(table);
+        subpane.getChildren().clear();
+        subpane.getChildren().add(table);
     }
+
 }

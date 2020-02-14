@@ -1,5 +1,6 @@
 package controllers;
 
+import application.PropertyManager;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXDialogLayout;
 import javafx.event.ActionEvent;
@@ -30,14 +31,14 @@ public class TestMenuController implements DialogControl {
 	public void initialize() {
 		assessmentManager = AssessmentManager.getInstance();
 		profile = AssessmentManager.profile;
-		labelName.setText(profile.getInfo().get("name"));
-		labelAge.setText(assessmentManager.getTestAge());
+		labelName.setText(profile.getName());
+		labelAge.setText(assessmentManager.getTestAge().toString());
 		labelGender.setText(profile.getGender());
 	}
 	
 	@FXML
 	void onClickBack(ActionEvent event) {
-		ViewManager.getInstance().switchScene(ViewManager.PATH_MAIN);
+		ViewManager.getInstance().switchScene(PropertyManager.getResourceProperty("mainmenu"));
 	}
 	
 	@FXML
@@ -54,7 +55,7 @@ public class TestMenuController implements DialogControl {
 	
 	@FXML
 	void onClickPronunTest(ActionEvent event) {
-		ViewManager.getInstance().switchScene(ViewManager.PATH_PRONUNTEST);
+		ViewManager.getInstance().switchScene(PropertyManager.getResourceProperty("pronuntest"));
 	}
 
 	@Override
@@ -66,6 +67,6 @@ public class TestMenuController implements DialogControl {
 	@Override
 	public void onClickYesDialog() {
 		assessmentManager.setTestQueue(dialog.getSelections());
-		ViewManager.getInstance().switchScene(ViewManager.PATH_GRAMMARTEST);
+		ViewManager.getInstance().switchScene(PropertyManager.getResourceProperty("grammartest"));
 	}
 }

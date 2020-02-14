@@ -6,6 +6,7 @@ import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
+import application.PropertyManager;
 import models.test.grammar.Utterance;
 import models.test.pronun.Syllable;
 import models.test.results.GrammarResult;
@@ -19,7 +20,6 @@ import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 
 public class ProfileReader {
-	public final static String PROFILE_PATH = "./src/resources/profiles/";
 
 	public static Profile readProfileFromXML(File xml) {
 		HashMap<String, String> info = new HashMap<>();
@@ -51,14 +51,20 @@ public class ProfileReader {
 		} catch (DocumentException e) {
 			e.printStackTrace();
 		}
-		return new Profile(info);
+
+		List<Age> ages = new LinkedList<>();
+		for (String age : testAges) {
+			ages.add(new Age(age));
+		}
+		Collections.sort(ages);
+		return new Profile(info.get("name"), info.get("gender"), info.get("profileName"), ages);
 	}
 
 	public static ArrayList<GrammarResult> readGrammarResultsFromXML(String filename) {
 		ArrayList<GrammarResult> results = new ArrayList<>();
 		SAXReader reader = new SAXReader();
 		try {
-			File xml = new File(PROFILE_PATH + filename + ".xml");
+			File xml = new File(PropertyManager.getResourceProperty("profile_path") + filename + ".xml");
 
 			Document document = reader.read(xml);
 			Element root = document.getRootElement();
@@ -113,7 +119,7 @@ public class ProfileReader {
 							}
 							stageResults.add(grammarStage);
 						}
-						results.add(new GrammarResult(stageResults, f.parse(testTime, new ParsePosition(0)), testAge, testScore));
+						results.add(new GrammarResult(stageResults, f.parse(testTime, new ParsePosition(0)), new Age(testAge), testScore));
 					}
 				}
 			}
@@ -127,7 +133,7 @@ public class ProfileReader {
 		ArrayList<PronunResult> results = new ArrayList<>();
 		SAXReader reader = new SAXReader();
 		try {
-			File xml = new File(PROFILE_PATH + filename + ".xml");
+			File xml = new File(PropertyManager.getResourceProperty("profile_path") + filename + ".xml");
 
 			Document document = reader.read(xml);
 			Element root = document.getRootElement();
@@ -172,7 +178,7 @@ public class ProfileReader {
 								presentConsonants = Arrays.asList(result.getStringValue().split(","));
 							}
 						}
-						results.add(new PronunResult(testAge, f.parse(testTime, new ParsePosition(0)), testScore, syllables, presentConsonants));
+						results.add(new PronunResult(new Age(testAge), f.parse(testTime, new ParsePosition(0)), testScore, syllables, presentConsonants));
 					}
 				}
 			}

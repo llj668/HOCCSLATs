@@ -1,6 +1,7 @@
 package models.test;
 
 import controllers.BaseTestController;
+import controllers.items.BaseSummaryController;
 import controllers.items.ItemController;
 import javafx.scene.layout.Region;
 import models.test.results.BaseResult;
@@ -25,7 +26,7 @@ public abstract class Assessment {
     public abstract void getQuestionList();
     public abstract void writeResult(BaseTestController controller, Question question);
     public abstract void saveResult();
-    public abstract Map.Entry<Region, ItemController> end();
+    public abstract Map.Entry<Region, BaseSummaryController> end();
     public abstract BaseResult getResult();
     public void setTarget(String target) {
         this.target = target;

@@ -3,7 +3,7 @@
 <profile name="浮士德" gender="male"> 
   <grammar/>  
   <pronun>
-    <test time="2020-02-09 14:02:25" age="1;3" pcc="0.0">
+    <test time="2020-02-09 14:02:25" age="1;7" pcc="0.0">
       <syllables>
         <item>
           <target>鼻子</target>

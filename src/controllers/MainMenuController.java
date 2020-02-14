@@ -1,5 +1,6 @@
 package controllers;
 
+import application.PropertyManager;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXDialogLayout;
 
@@ -32,7 +33,7 @@ public class MainMenuController implements DialogControl {
 	
 	@FXML
 	void onClickProfile(ActionEvent event) {
-		ViewManager.getInstance().switchScene(ViewManager.PATH_PROFILE);
+		ViewManager.getInstance().switchScene(PropertyManager.getResourceProperty("profile"));
 	}
 	
 	@FXML

@@ -30,13 +30,11 @@ import views.items.ConfirmDialog;
 
 import javax.swing.text.View;
 
-public class GrammarSummaryController extends ItemController implements DialogControl {
+public class GrammarSummaryController extends BaseSummaryController {
     @FXML
     private AnchorPane pane;
     @FXML
     private VBox responseBox;
-    @FXML
-    private StackPane stackPane;
     @FXML
     private JFXComboBox<Label> stageComboBox;
     @FXML
@@ -51,8 +49,6 @@ public class GrammarSummaryController extends ItemController implements DialogCo
     private Label labelScore;
 
     private GrammarResult result;
-    private BaseTestController testController;
-    private ConfirmDialog confirmDialog;
     private ResultDisplayer displayer;
 
     public void initialize() {
@@ -64,7 +60,7 @@ public class GrammarSummaryController extends ItemController implements DialogCo
     @Override
     public void setResult(BaseResult result) {
         this.result = (GrammarResult) result;
-        this.labelAge.setText(this.result.testAge);
+        this.labelAge.setText(this.result.testAge.toString());
         this.labelTime.setText(this.result.getTestTime());
         this.labelScore.setText(String.valueOf(this.result.score));
         setStageComboBox();
@@ -74,7 +70,6 @@ public class GrammarSummaryController extends ItemController implements DialogCo
 
     @Override
     public void setOnAfterTest(BaseTestController controller) {
-        this.testController = controller;
         pane.getChildren().addAll(btnDiscard, btnSave);
     }
 
@@ -179,19 +174,5 @@ public class GrammarSummaryController extends ItemController implements DialogCo
             displayer.displayGrammarResult(response, responseBox);
         });
         pane.getChildren().add(table);
-    }
-
-    @Override
-    public void onClickNoDialog() {
-        ViewManager.getInstance().switchScene(ViewManager.PATH_TESTMENU);
-    }
-
-    @Override
-    public void onClickYesDialog() {
-        if (confirmDialog.isSingleAction) {
-            ViewManager.getInstance().switchScene(ViewManager.PATH_TESTMENU);
-        }
-        confirmDialog.close();
-        stackPane.toBack();
     }
 }

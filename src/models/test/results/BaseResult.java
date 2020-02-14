@@ -1,5 +1,6 @@
 package models.test.results;
 
+import models.profiles.Age;
 import org.jetbrains.annotations.NotNull;
 import views.items.ResultItem;
 
@@ -8,9 +9,9 @@ import java.util.Date;
 
 public abstract class BaseResult implements Comparable<BaseResult> {
     public Date testTime;
-    public String testAge;
+    public Age testAge;
 
-    public BaseResult(String testAge) {
+    public BaseResult(Age testAge) {
         this.testAge = testAge;
     }
 

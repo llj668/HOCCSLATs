@@ -139,15 +139,4 @@ public class GrammarTestController extends BaseTestController {
 	public void setSummary(Region summary) {
 		root.getChildren().add(summary);
 	}
-
-	@Override
-	public void onClickNoDialog() {
-		ViewManager.getInstance().switchScene(ViewManager.PATH_TESTMENU);
-	}
-
-	@Override
-	public void onClickYesDialog() {
-		confirmDialog.close();
-		stackPane.toBack();
-	}
 }

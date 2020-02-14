@@ -1,5 +1,5 @@
 package application;
-	
+
 import javafx.application.Application;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -9,12 +9,13 @@ import views.ViewManager;
 public class Main extends Application {
 	@Override
 	public void start(Stage primaryStage) {
+		new PropertyManager();
 		try {
 			primaryStage.initStyle(StageStyle.TRANSPARENT);
 			primaryStage.setResizable(false);
 			
 			ViewManager viewManager = ViewManager.getInstance(primaryStage);
-			viewManager.switchScene(ViewManager.PATH_MAIN);
+			viewManager.switchScene(PropertyManager.getResourceProperty("mainmenu"));
 			primaryStage.show();
 		} catch(Exception e) {
 			e.printStackTrace();

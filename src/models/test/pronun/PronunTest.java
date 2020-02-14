@@ -1,6 +1,8 @@
 package models.test.pronun;
 
+import application.PropertyManager;
 import controllers.BaseTestController;
+import controllers.items.BaseSummaryController;
 import controllers.items.ItemController;
 import javafx.scene.layout.Region;
 import models.services.jpinyin.PinyinException;
@@ -20,7 +22,6 @@ import java.io.File;
 import java.util.Map;
 
 public class PronunTest extends Assessment {
-	final static String PRONUN_QUESTION_PATH = "./src/resources/questions/pronun/";
 	private PronunResult results;
 	private Syllable syllable;
 
@@ -40,7 +41,7 @@ public class PronunTest extends Assessment {
 
 	@Override
 	public void getQuestionList() {
-		File[] files = new File(PRONUN_QUESTION_PATH).listFiles();
+		File[] files = new File(PropertyManager.getResourceProperty("pronun_question")).listFiles();
 		assert files != null;
 		for (File file : files) {
 			String[] str = StringUtils.substringBefore(file.getName(), ".").split("-");
@@ -61,8 +62,8 @@ public class PronunTest extends Assessment {
 	}
 
 	@Override
-	public Map.Entry<Region, ItemController> end() {
-		return ViewManager.getInstance().getItemFromFXML(ViewManager.ITEM_PRONUNSUMMARY);
+	public Map.Entry<Region, BaseSummaryController> end() {
+		return ViewManager.getInstance().getItemFromFXML(PropertyManager.getResourceProperty("pronunsum"));
 	}
 
 	@Override

@@ -16,7 +16,7 @@ public class PronunResultItem extends ResultItem {
     }
 
     private void initializeItemContent() {
-        age = new Label("测试年龄：" + pronunResult.testAge);
+        age = new Label("测试年龄：" + pronunResult.testAge.toString());
         age.setPrefSize(100, 30);
         age.setFont(Font.font("System", 15));
 

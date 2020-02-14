@@ -1,9 +1,11 @@
 package models.test.grammar;
 
+import application.PropertyManager;
 import com.hankcs.hanlp.corpus.document.sentence.Sentence;
 import com.hankcs.hanlp.corpus.document.sentence.word.IWord;
 import com.hankcs.hanlp.model.crf.CRFLexicalAnalyzer;
 import controllers.BaseTestController;
+import controllers.items.BaseSummaryController;
 import controllers.items.ItemController;
 import javafx.application.Platform;
 import javafx.scene.layout.AnchorPane;
@@ -24,7 +26,6 @@ import java.io.*;
 import java.util.*;
 
 public class GrammarTest extends Assessment {
-	final static String GRAMMAR_QUESTION_PATH = "./src/resources/questions/grammar/";
 	final static String TEMP_ANALYZE_FILE = "./src/models/services/temp/nlp_temp.xml";
 	private GrammarResult results;
 	private Queue<String> testQueue;
@@ -60,7 +61,7 @@ public class GrammarTest extends Assessment {
 
 	@Override
 	public void getQuestionList() {
-		File[] files = new File(GRAMMAR_QUESTION_PATH).listFiles();
+		File[] files = new File(PropertyManager.getResourceProperty("grammar_question")).listFiles();
 		for (File file : files) {
 			String[] str = StringUtils.substringBefore(file.getName(), ".").split("-");
 			if (testQueue.contains(str[0]))
@@ -88,8 +89,8 @@ public class GrammarTest extends Assessment {
 	}
 
 	@Override
-	public Map.Entry<Region, ItemController> end() {
-		return ViewManager.getInstance().getItemFromFXML(ViewManager.ITEM_GRAMMARSUMMARY);
+	public Map.Entry<Region, BaseSummaryController> end() {
+		return ViewManager.getInstance().getItemFromFXML(PropertyManager.getResourceProperty("grammarsum"));
 	}
 
 	@Override

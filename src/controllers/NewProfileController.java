@@ -1,5 +1,6 @@
 package controllers;
 
+import application.PropertyManager;
 import com.jfoenix.controls.JFXDialogLayout;
 import com.jfoenix.controls.JFXRadioButton;
 import com.jfoenix.controls.JFXTextField;
@@ -45,21 +46,17 @@ public class NewProfileController implements DialogControl {
 			confirmDialog.setText(ConfirmDialog.TEXT_NEWPROFILE);
 			confirmDialog.show();
 		} else {
-			ViewManager.getInstance().switchScene(ViewManager.PATH_PROFILE);
+			ViewManager.getInstance().switchScene(PropertyManager.getResourceProperty("profile"));
 		}
 	}
 	
 	@FXML
 	void onClickSave(ActionEvent event) {
-		HashMap<String, String> info = new HashMap<>();
-		info.put("name", textName.getText());
 		if (selGenderMale.isSelected()) {
-			info.put("gender", "male");
+			ProfileWriter.writeNewProfileToXML(new Profile(textName.getText(), "male"));
 		} else if (selGenderFemale.isSelected()) {
-			info.put("gender", "female");
+			ProfileWriter.writeNewProfileToXML(new Profile(textName.getText(), "female"));
 		}
-		ProfileWriter.writeNewProfileToXML(new Profile(info));
-		goBack();
 	}
 	
 	private void listenContentChange() {
@@ -71,7 +68,7 @@ public class NewProfileController implements DialogControl {
 		if (isBeforeAssessment) {
 			ViewManager.getInstance().switchProfileSelectScene();
 		} else {
-			ViewManager.getInstance().switchScene(ViewManager.PATH_PROFILE);
+			ViewManager.getInstance().switchScene(PropertyManager.getResourceProperty("profile"));
 		}
 	}
 

@@ -5,8 +5,10 @@ import java.util.AbstractMap;
 import java.util.HashMap;
 import java.util.Map;
 
+import application.PropertyManager;
 import controllers.ProfileController;
 import controllers.ViewProfileController;
+import controllers.items.BaseSummaryController;
 import controllers.items.GrammarSummaryController;
 import controllers.items.ItemController;
 import javafx.application.Platform;
@@ -24,16 +26,6 @@ import javafx.stage.Stage;
 import models.profiles.Profile;
 
 public class ViewManager {
-	public final static String PATH_MAIN = "/views/MainMenu.fxml";
-	public final static String PATH_PROFILE = "/views/Profile.fxml";
-	public final static String PATH_NEWPROFILE = "/views/NewProfile.fxml";
-	public final static String PATH_VIEWPROFILE = "/views/ViewProfile.fxml";
-	public final static String PATH_TESTMENU = "/views/TestMenu.fxml";
-    public final static String PATH_GRAMMARTEST = "/views/GrammarTest.fxml";
-    public final static String PATH_PRONUNTEST = "/views/PronunTest.fxml";
-
-    public final static String ITEM_GRAMMARSUMMARY = "/views/items/GrammarSummary.fxml";
-    public final static String ITEM_PRONUNSUMMARY = "/views/items/PronunSummary.fxml";
 	final int initWidth = 1280;
 	final int initHeight = 720;
 	
@@ -70,7 +62,7 @@ public class ViewManager {
 	public void switchProfileSelectScene() {
 		FXMLLoader loader = new FXMLLoader();
         try {
-            loader.setLocation(getClass().getResource(PATH_PROFILE));
+            loader.setLocation(getClass().getResource(PropertyManager.getResourceProperty("profile")));
             AnchorPane root = loader.load();
             ProfileController controller = loader.getController();
             controller.updateControllerBeforeAssessment();
@@ -85,7 +77,7 @@ public class ViewManager {
 	public void switchProfileViewScene(Profile profile) {
 		FXMLLoader loader = new FXMLLoader();
         try {
-            loader.setLocation(getClass().getResource(PATH_VIEWPROFILE));
+            loader.setLocation(getClass().getResource(PropertyManager.getResourceProperty("viewprofile")));
             AnchorPane root = loader.load();
             ViewProfileController controller = loader.getController();
             controller.displayProfile(profile);
@@ -97,12 +89,12 @@ public class ViewManager {
         }
 	}
 
-	public Map.Entry<Region, ItemController> getItemFromFXML(String path) {
+	public Map.Entry<Region, BaseSummaryController> getItemFromFXML(String path) {
         FXMLLoader loader = new FXMLLoader();
         try {
             loader.setLocation(getClass().getResource(path));
             AnchorPane root = loader.load();
-            ItemController controller = loader.getController();
+            BaseSummaryController controller = loader.getController();
 
             return new AbstractMap.SimpleEntry<>(root, controller);
         } catch (IOException e) {
@@ -113,7 +105,7 @@ public class ViewManager {
 
 	private Scene setDecoratedScene(AnchorPane root) {
         VBox sceneRoot = new VBox();
-        sceneRoot.getStylesheets().add(ViewManager.class.getResource("/resources/styles/stageStyle.css").toString());
+        sceneRoot.getStylesheets().add(ViewManager.class.getResource(PropertyManager.getResourceProperty("stage_css")).toString());
         sceneRoot.setId("scene_root");
 
         VBox top = new VBox();
@@ -125,9 +117,9 @@ public class ViewManager {
         close.setWidth(40);
         close.setHeight(40);
         close.setId("win_close");
-        close.setFill(new ImagePattern(new Image("/resources/icons/win_close.png")));
-        close.setOnMouseEntered(event -> close.setFill(new ImagePattern(new Image("/resources/icons/win_close_pressed.png"))));
-        close.setOnMouseExited(event -> close.setFill(new ImagePattern(new Image("/resources/icons/win_close.png"))));
+        close.setFill(new ImagePattern(new Image(PropertyManager.getResourceProperty("winclose_img"))));
+        close.setOnMouseEntered(event -> close.setFill(new ImagePattern(new Image(PropertyManager.getResourceProperty("winclosepress_img")))));
+        close.setOnMouseExited(event -> close.setFill(new ImagePattern(new Image(PropertyManager.getResourceProperty("winclose_img")))));
         close.setOnMouseClicked(event -> Platform.exit());
         title.getChildren().add(close);
         AnchorPane.setRightAnchor(close, 10.0);

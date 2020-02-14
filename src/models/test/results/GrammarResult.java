@@ -1,5 +1,6 @@
 package models.test.results;
 
+import models.profiles.Age;
 import models.test.grammar.Utterance;
 import org.jetbrains.annotations.NotNull;
 import views.items.GrammarResultItem;
@@ -13,12 +14,12 @@ public class GrammarResult extends BaseResult {
 	public double score;
 	public List<GrammarStage> stageResults;
 
-	public GrammarResult(String testAge) {
+	public GrammarResult(Age testAge) {
 		super(testAge);
 		stageResults = new LinkedList<>();
 	}
 	
-	public GrammarResult(List<GrammarStage> stageResults, Date testTime, String testAge, String testScore) {
+	public GrammarResult(List<GrammarStage> stageResults, Date testTime, Age testAge, String testScore) {
 		super(testAge);
 		this.stageResults = stageResults;
 		this.testTime = testTime;

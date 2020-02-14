@@ -89,17 +89,6 @@ public class PronunTestController extends BaseTestController {
 		root.getChildren().add(summary);
 	}
 
-	@Override
-	public void onClickNoDialog() {
-		ViewManager.getInstance().switchScene(ViewManager.PATH_TESTMENU);
-	}
-
-	@Override
-	public void onClickYesDialog() {
-		confirmDialog.close();
-		stackPane.toBack();
-	}
-
 	private void initTextFieldListener() {
 		btnNext.setDisable(true);
 		textTranscribe.textProperty().addListener((observable, oldValue, newValue) -> {
