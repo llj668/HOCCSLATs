@@ -57,6 +57,7 @@ public class NewProfileController implements DialogControl {
 		} else if (selGenderFemale.isSelected()) {
 			ProfileWriter.writeNewProfileToXML(new Profile(textName.getText(), "female"));
 		}
+		goBack();
 	}
 	
 	private void listenContentChange() {

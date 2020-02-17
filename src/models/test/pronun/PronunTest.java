@@ -3,7 +3,6 @@ package models.test.pronun;
 import application.PropertyManager;
 import controllers.BaseTestController;
 import controllers.items.BaseSummaryController;
-import controllers.items.ItemController;
 import javafx.scene.layout.Region;
 import models.services.jpinyin.PinyinException;
 import models.services.jpinyin.PinyinFormat;
@@ -13,7 +12,6 @@ import models.test.AssessmentManager;
 import models.test.Question;
 import models.test.Response;
 import models.test.results.BaseResult;
-import models.test.results.GrammarResult;
 import models.test.results.PronunResult;
 import org.apache.commons.lang3.StringUtils;
 import views.ViewManager;
@@ -33,9 +31,13 @@ public class PronunTest extends Assessment {
 
 	@Override
 	public Response analyzeResponse(String response) {
-		syllable = new Syllable(target, response);
-		syllable.identifyConsonantsCorrect();
-		syllable.identifyErrorPatterns();
+		try {
+			syllable = new Syllable(PinyinHelper.convertToPinyinString(target, ",", PinyinFormat.WITH_TONE_NUMBER), response);
+			syllable.identifyPhonemesCorrect();
+			syllable.identifyErrorPatterns();
+		} catch (PinyinException e) {
+			e.printStackTrace();
+		}
 		return syllable;
 	}
 

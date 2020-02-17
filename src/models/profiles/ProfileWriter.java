@@ -112,10 +112,12 @@ public class ProfileWriter {
                     Element syllables = test.addElement("syllables");
                     for (Syllable syllable : newResult.syllables) {
                         Element item = syllables.addElement("item");
+                        Element pcc = item.addElement("pcc");
                         Element target = item.addElement("target");
                         Element response = item.addElement("response");
                         Element presentConsonant = item.addElement("present_consonant");
                         Element errorPattern = item.addElement("error_pattern");
+                        pcc.setText(String.valueOf(syllable.getPcc()));
                         target.setText(syllable.getTarget());
                         response.setText(syllable.getResponse());
                         presentConsonant.setText(syllable.getConsonantsCorrectAsString());

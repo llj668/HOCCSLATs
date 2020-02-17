@@ -1,5 +1,7 @@
 package models.services;
 
+import application.PropertyManager;
+
 import javax.sound.sampled.*;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -7,7 +9,7 @@ import java.io.File;
 import java.io.IOException;
 
 public class Recorder {
-    String filePath = "./src/models/services/temp/voice.wav";
+    String filePath = PropertyManager.getResourceProperty("temp_sound_path");
     int weight = 3; // threshold of sound
     int downSumMax = 20;
 

@@ -6,10 +6,30 @@ public class PronunItems {
     public static String[] targets = {
             "鼻子", "耳朵", "嘴"
     };
-    public static List<String> consonants = Arrays.asList(
-            "b", "c", "ch", "d", "f", "g", "h", "j", "k", "l", "m", "n", "ng", "p", "q", "r", "s", "sh", "t", "w",
-            "x", "y", "z", "zh"
+
+    public static List<String> priority_phoneme = Collections.singletonList(
+            "er"
     );
+    public static List<String> consonants = Arrays.asList(
+            "b", "c", "d", "f", "g", "h", "j", "k", "l", "m", "n", "p", "q", "r", "s", "t",
+            "x", "z"
+    );
+    public static List<String> double_consonants = Arrays.asList(
+            "zh", "ch", "ng", "sh"
+    );
+    public static List<String> vowels = Arrays.asList(
+            "i", "u", "v", "o", "e", "a", "y", "w"
+    );
+    public static List<String> double_vowels = Arrays.asList(
+            "ao", "au", "ai", "ua", "uo", "ia", "iu", "ui", "ei", "ou"
+    );
+    public static List<String> triple_vowels = Arrays.asList(
+            "yue", "iao", "uai"
+    );
+    public static List<List<String>> phonemes = Arrays.asList(
+            priority_phoneme, double_consonants, consonants, triple_vowels, double_vowels, vowels
+    );
+
     public static Map<String, String> consonantType = new HashMap<String, String>(){{
         put("d", "plosive");
         put("t", "plosive");

@@ -53,7 +53,7 @@ public class ResultDisplayer {
 
     public void displayPronunResult(Syllable syllable, VBox container) {
         container.getChildren().clear();
-        Label presentLabel = new Label("正确辅音：" + syllable.getConsonantsCorrectAsString());
+        Label presentLabel = new Label("正确音：" + syllable.getConsonantsCorrectAsString());
         Label errorLabel = new Label("错误模式：");
         presentLabel.setFont(this.font);
         errorLabel.setFont(this.font);
@@ -68,6 +68,7 @@ public class ResultDisplayer {
     }
 
     public void displayConsonantInventory(Map<String, String> comparedMap, GridPane container) {
+        clearInventoryGrid(container);
         container.getStylesheets().add(ResultDisplayer.class.getResource(PropertyManager.getResourceProperty("inventory_css")).toString());
 
         for (String consonant : comparedMap.keySet()) {
@@ -149,6 +150,9 @@ public class ResultDisplayer {
     }
 
     private void clearInventoryGrid(GridPane gridPane) {
-
+        for (Node node : gridPane.getChildren()) {
+            if (node instanceof HBox)
+                ((HBox) node).getChildren().clear();
+        }
     }
 }
