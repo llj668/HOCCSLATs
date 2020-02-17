@@ -6,7 +6,6 @@ import com.hankcs.hanlp.corpus.document.sentence.word.IWord;
 import com.hankcs.hanlp.model.crf.CRFLexicalAnalyzer;
 import controllers.BaseTestController;
 import controllers.items.BaseSummaryController;
-import controllers.items.ItemController;
 import javafx.application.Platform;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Region;

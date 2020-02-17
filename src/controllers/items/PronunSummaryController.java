@@ -3,13 +3,13 @@ package controllers.items;
 import com.jfoenix.controls.*;
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
 import controllers.BaseTestController;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Label;
-import javafx.scene.control.TreeItem;
-import javafx.scene.control.TreeTableColumn;
+import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import models.profiles.ProfileWriter;
@@ -30,6 +30,8 @@ public class PronunSummaryController extends BaseSummaryController {
     @FXML
     private AnchorPane hintPane;
     @FXML
+    private AnchorPane controlPane;
+    @FXML
     private GridPane inventoryGrid;
     @FXML
     private JFXComboBox<Label> resultComboBox;
@@ -41,13 +43,21 @@ public class PronunSummaryController extends BaseSummaryController {
     private Label labelAge;
     @FXML
     private Label labelTime;
+    @FXML
+    private Label labelPcc;
+    @FXML
+    private JFXToggleButton toggle75pc;
+    @FXML
+    private JFXToggleButton toggle90pc;
 
     private PronunResult result;
     private ResultDisplayer displayer;
 
     public void initialize() {
         this.displayer = new ResultDisplayer();
+        setToggleButtons();
         subpane.getChildren().clear();
+        controlPane.getChildren().clear();
         pane.setLayoutY(90);
         pane.getChildren().removeAll(btnDiscard, btnSave);
     }
@@ -100,9 +110,15 @@ public class PronunSummaryController extends BaseSummaryController {
         switch (type) {
             case "音节":
                 setSyllableTable();
+                labelPcc.setText("总pcc：" + result.pcc);
+                controlPane.getChildren().clear();
+                controlPane.getChildren().add(labelPcc);
                 break;
             case "发音量表":
                 setInventoryTable("75");
+                controlPane.getChildren().clear();
+                controlPane.getChildren().addAll(toggle75pc, toggle90pc);
+                toggle75pc.setSelected(true);
                 break;
             default:
                 break;
@@ -173,6 +189,18 @@ public class PronunSummaryController extends BaseSummaryController {
         table.setShowRoot(false);
         subpane.getChildren().clear();
         subpane.getChildren().add(table);
+    }
+
+    private void setToggleButtons() {
+        final ToggleGroup toggleGroup = new ToggleGroup();
+        toggle75pc.setToggleGroup(toggleGroup);
+        toggle75pc.setUserData("75");
+        toggle90pc.setToggleGroup(toggleGroup);
+        toggle90pc.setUserData("90");
+
+        toggleGroup.selectedToggleProperty().addListener((observable, oldValue, newValue) -> {
+            setInventoryTable((String) toggleGroup.getSelectedToggle().getUserData());
+        });
     }
 
 }

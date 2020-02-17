@@ -44,11 +44,13 @@ public class PronunTestController extends BaseTestController {
 	@FXML
 	void onClickRecord(ActionEvent event) {
 		btnStopRecord.toFront();
+		recorder.startRecord();
 	}
 
 	@FXML
 	void onClickStopRecord(ActionEvent event) {
 		btnStopRecord.toBack();
+		recorder.stopRecord();
 	}
 
 	@FXML

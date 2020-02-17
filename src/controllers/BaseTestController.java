@@ -12,10 +12,19 @@ import models.test.AssessmentManager;
 import views.ViewManager;
 import views.items.ConfirmDialog;
 
+import java.io.IOException;
+import java.nio.file.FileSystem;
+import java.nio.file.FileSystems;
+import java.nio.file.WatchService;
+
 public abstract class BaseTestController implements DialogControl {
     public AssessmentManager manager;
     public Recorder recorder;
     public ConfirmDialog confirmDialog;
+    public String tempSoundFile = PropertyManager.getResourceProperty("temp_sound_path");
+    String tempFilePath = PropertyManager.getResourceProperty("temp_file_path");
+    Runnable watcherThread;
+    WatchService watchService;
 
     @FXML
     public AnchorPane root;
@@ -25,6 +34,19 @@ public abstract class BaseTestController implements DialogControl {
     public StackPane stackPane;
     @FXML
     public JFXButton btnNext;
+
+    public void initWatchService() {
+        watcherThread = new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    watchService = FileSystems.getDefault().newWatchService();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+    }
 
     @Override
     public void onClickNoDialog() {

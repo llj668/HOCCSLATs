@@ -7,11 +7,10 @@ import models.test.pronun.Inventory;
 import models.test.pronun.PronunItems;
 import models.test.pronun.Syllable;
 import models.test.reader.InventoryReader;
-import views.items.GrammarResultItem;
 import views.items.PronunResultItem;
 import views.items.ResultItem;
 
-import java.text.SimpleDateFormat;
+import java.text.DecimalFormat;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -50,6 +49,10 @@ public class PronunResult extends BaseResult {
             if (!presentConsonants.contains(consonant))
                 absent.add(consonant);
         }
+        for (String consonant : PronunItems.double_consonants) {
+            if (!presentConsonants.contains(consonant))
+                absent.add(consonant);
+        }
         return absent;
     }
 
@@ -62,11 +65,16 @@ public class PronunResult extends BaseResult {
     }
 
     private List<String> getPresentsFromSyllable() {
+        List<String> phonemes = new LinkedList<>();
         List<String> presents = new LinkedList<>();
         for (Syllable syllable : syllables) {
-            presents.addAll(syllable.getConsonantsCorrect());
+            phonemes.addAll(syllable.getPhonemesCorrect());
         }
-        return presents.stream().distinct().collect(Collectors.toList());
+        for (String phoneme: phonemes.stream().distinct().collect(Collectors.toList())) {
+            if (PronunItems.double_consonants.contains(phoneme) || PronunItems.consonants.contains(phoneme))
+                presents.add(phoneme);
+        }
+        return presents;
     }
 
     public String getPresentConsonantsAsString() {
@@ -76,12 +84,18 @@ public class PronunResult extends BaseResult {
     @Override
     public void conclude() {
         testTime = new Date();
-        this.pcc = 0;
         this.presentConsonants = getPresentsFromSyllable();
         this.absentConsonants = getAbsentFromPresent();
         this.errors = getErrorsFromSyllable();
         this.comparedMap75 = compareToInventory("75");
         this.comparedMap90 = compareToInventory("90");
+
+        DecimalFormat df = new DecimalFormat("#.00");
+        this.pcc = 0;
+        for (Syllable syllable : syllables) {
+            pcc += syllable.getPcc();
+        }
+        this.pcc = Double.parseDouble(df.format(pcc / syllables.size()));
     }
 
     private Map<String, String> compareToInventory(String type) {

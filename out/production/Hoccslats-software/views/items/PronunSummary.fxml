@@ -114,6 +114,47 @@
                   <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="10.0" GridPane.columnIndex="2" GridPane.rowIndex="6" />
                </children>
             </GridPane>
+            <AnchorPane fx:id="hintPane" layoutY="458.0" prefHeight="83.0" prefWidth="727.0">
+               <children>
+                  <Label layoutX="76.0" layoutY="27.0" prefHeight="30.0" prefWidth="77.0" text="绿色" textFill="#009933">
+                     <font>
+                        <Font size="17.5" />
+                     </font>
+                     <graphic>
+                        <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#009933" height="25.0" stroke="BLACK" strokeType="INSIDE" width="25.0" />
+                     </graphic>
+                  </Label>
+                  <Label layoutX="414.0" layoutY="27.0" prefHeight="30.0" prefWidth="77.0" text="红色" textFill="#cc0000">
+                     <graphic>
+                        <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#cc0000" height="25.0" stroke="BLACK" strokeType="INSIDE" width="25.0" />
+                     </graphic>
+                     <font>
+                        <Font size="17.5" />
+                     </font>
+                  </Label>
+                  <Label layoutX="491.0" layoutY="27.0" prefHeight="30.0" prefWidth="175.0" text="相比同年龄段未掌握">
+                     <font>
+                        <Font size="17.5" />
+                     </font>
+                  </Label>
+                  <Label layoutX="153.0" layoutY="27.0" prefHeight="30.0" prefWidth="175.0" text="相比同年龄段已掌握">
+                     <font>
+                        <Font size="17.5" />
+                     </font>
+                  </Label>
+               </children>
+            </AnchorPane>
          </children></AnchorPane>
+      <AnchorPane fx:id="controlPane" layoutX="592.0" layoutY="39.0" prefHeight="50.0" prefWidth="668.0">
+         <children>
+            <JFXToggleButton fx:id="toggle75pc" layoutX="49.0" layoutY="3.0" size="7.0" text="75%" />
+            <JFXToggleButton fx:id="toggle90pc" layoutX="165.0" layoutY="3.0" size="7.0" text="90%" />
+            <Label fx:id="labelPcc" layoutX="49.0" layoutY="9.0" prefHeight="33.0" prefWidth="147.0" text="总pcc：">
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </Label>
+         </children>
+      </AnchorPane>
    </children>
 </AnchorPane>
