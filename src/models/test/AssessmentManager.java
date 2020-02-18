@@ -2,8 +2,6 @@ package models.test;
 
 import controllers.BaseTestController;
 import controllers.items.BaseSummaryController;
-import controllers.items.GrammarSummaryController;
-import controllers.items.ItemController;
 import javafx.scene.image.Image;
 import javafx.scene.layout.Region;
 import models.profiles.Age;
@@ -51,7 +49,7 @@ public class AssessmentManager {
 
     public void startGrammarAssessment(BaseTestController controller) {
 		this.controller = controller;
-		this.assessment = new GrammarTest(controller.root, testQueue);
+		this.assessment = new GrammarTest(controller, testQueue);
 
 	}
 
@@ -61,7 +59,6 @@ public class AssessmentManager {
 	}
 
 	public void clearAll() {
-		profile = null;
 		assessment = null;
 		controller = null;
 		testAge = null;
@@ -87,5 +84,9 @@ public class AssessmentManager {
 
 	public Question getQuestion() {
     	return question;
+	}
+
+	public BaseTestController getController() {
+    	return controller;
 	}
 }

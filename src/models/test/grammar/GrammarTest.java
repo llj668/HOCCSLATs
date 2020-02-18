@@ -9,17 +9,15 @@ import controllers.items.BaseSummaryController;
 import javafx.application.Platform;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Region;
-import models.test.Assessment;
-import models.test.AssessmentManager;
-import models.test.Question;
-import models.test.Response;
+import javafx.scene.layout.VBox;
+import models.test.*;
 import models.test.results.BaseResult;
 import models.test.results.GrammarResult;
 import models.test.results.GrammarStage;
 import models.test.results.GrammarStructure;
 import org.apache.commons.lang3.StringUtils;
 import views.ViewManager;
-import views.items.InitializePane;
+import views.items.ProcessingOverlay;
 
 import java.io.*;
 import java.util.*;
@@ -31,31 +29,43 @@ public class GrammarTest extends Assessment {
 	private GrammarStage stage;
 	private Utterance utterance;
 	private String prevStage = "-1";
+	private BaseTestController controller;
 
-	public GrammarTest(AnchorPane root, Queue<String> testQueue) {
+	public GrammarTest(BaseTestController controller, Queue<String> testQueue) {
 		super();
 		this.testQueue = testQueue;
+		this.controller = controller;
 		this.results = new GrammarResult(AssessmentManager.getInstance().getTestAge());
 		this.getQuestionList();
-		this.initializePipeline(root);
 	}
 
 	@Override
 	public Response analyzeResponse(String response) {
-		this.utterance = new Utterance(response);
-		try {
-			CRFLexicalAnalyzer analyzer = new CRFLexicalAnalyzer();
-			Sentence sentence = analyzer.analyze(response);
-			List<Map.Entry<String, String>> analyzed = new LinkedList<>();
-			for (IWord word : sentence.wordList) {
-				analyzed.add(new AbstractMap.SimpleEntry<>(word.getValue(), word.getLabel()));
+		utterance = new Utterance(response);
+
+		ProcessingOverlay overlay = new ProcessingOverlay();
+		controller.resultBox.getChildren().add(overlay);
+		controller.btnAnalyze.setDisable(true);
+		new Thread(() -> {
+			try {
+				CRFLexicalAnalyzer analyzer = new CRFLexicalAnalyzer();
+				Sentence sentence = analyzer.analyze(response);
+				List<Map.Entry<String, String>> analyzed = new LinkedList<>();
+				for (IWord word : sentence.wordList) {
+					analyzed.add(new AbstractMap.SimpleEntry<>(word.getValue(), word.getLabel()));
+				}
+				utterance.setAnalyzedUtterance(analyzed);
+			} catch (IOException e) {
+				e.printStackTrace();
 			}
-			utterance.setAnalyzedUtterance(analyzed);
-			return utterance;
-		} catch (IOException e) {
-			e.printStackTrace();
-			return null;
-		}
+			Platform.runLater(() -> {
+				controller.btnAnalyze.setDisable(false);
+				controller.btnNext.setDisable(false);
+				controller.resultBox.getChildren().remove(overlay);
+				controller.displayer.displayGrammarResult(utterance, controller.resultBox);
+			});
+		}).start();
+		return utterance;
 	}
 
 	@Override
@@ -95,16 +105,6 @@ public class GrammarTest extends Assessment {
 	@Override
 	public BaseResult getResult() {
 		return results;
-	}
-
-	private void initializePipeline(AnchorPane root) {
-		InitializePane initializePane = new InitializePane();
-		root.getChildren().add(initializePane);
-		new Thread(() -> {
-
-			System.out.println("NLP initialization complete");
-			Platform.runLater(() -> root.getChildren().remove(initializePane));
-		}).start();
 	}
 
 	public GrammarResult getResults() {

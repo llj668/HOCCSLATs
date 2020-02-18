@@ -1,6 +1,7 @@
 package models.services;
 
 import application.PropertyManager;
+import models.test.AssessmentManager;
 
 import javax.sound.sampled.*;
 import java.io.ByteArrayInputStream;
@@ -10,7 +11,7 @@ import java.io.IOException;
 
 public class Recorder {
     String filePath = PropertyManager.getResourceProperty("temp_sound_path");
-    int weight = 3; // threshold of sound
+    double weight = 1; // threshold of sound
     int downSumMax = 20;
 
     AudioFormat audioFormat;
@@ -53,6 +54,7 @@ public class Recorder {
         flag = false;
         targetDataLine.stop();
         targetDataLine.close();
+        AssessmentManager.getInstance().getController().showStopRecording();
     }
 
     class CaptureThread extends Thread {
@@ -71,25 +73,24 @@ public class Recorder {
                 byte[] fragment = new byte[1024];
 
                 ais = new AudioInputStream(targetDataLine);
+                AssessmentManager.getInstance().getController().showOnRecording();
                 while (flag) {
 
                     targetDataLine.read(fragment, 0, fragment.length);
                     // 当数组末位大于weight时开始存储字节（有声音传入），一旦开始不再需要判断末位
                     if (Math.abs(fragment[fragment.length-1]) > weight || baos.size() > 0) {
                         baos.write(fragment);
-                        System.out.println("守卫："+fragment[0]+",末尾："+fragment[fragment.length-1]+",lenght"+fragment.length);
-                        // 判断语音是否停止
-                        if (Math.abs(fragment[fragment.length-1])<=weight) {
-                            downSum++;
-                        } else {
-                            System.out.println("重置奇数");
-                            downSum=0;
-                        }
-                        // 计数超过20说明此段时间没有声音传入(值也可更改)
-                        if(downSum>downSumMax){
-                            System.out.println("停止录入");
-                            break;
-                        }
+//                        // 判断语音是否停止
+//                        if (Math.abs(fragment[fragment.length-1])<=weight) {
+//                            downSum++;
+//                        } else {
+//                            downSum=0;
+//                        }
+//                        // 计数超过20说明此段时间没有声音传入(值也可更改)
+//                        if(downSum>downSumMax){
+//                            System.out.println("停止录入");
+//                            break;
+//                        }
 
                     }
                 }

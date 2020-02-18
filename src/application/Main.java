@@ -3,10 +3,13 @@ package application;
 import javafx.application.Application;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import models.services.TempMonitor;
 import views.ViewManager;
 
 
 public class Main extends Application {
+	public static TempMonitor monitor;
+
 	@Override
 	public void start(Stage primaryStage) {
 		new PropertyManager();
