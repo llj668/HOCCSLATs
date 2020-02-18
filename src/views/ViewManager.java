@@ -5,6 +5,7 @@ import java.util.AbstractMap;
 import java.util.HashMap;
 import java.util.Map;
 
+import application.Main;
 import application.PropertyManager;
 import controllers.ProfileController;
 import controllers.ViewProfileController;
@@ -24,6 +25,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.transform.Scale;
 import javafx.stage.Stage;
 import models.profiles.Profile;
+import models.services.TempMonitor;
 
 public class ViewManager {
 	final int initWidth = 1280;
@@ -120,7 +122,10 @@ public class ViewManager {
         close.setFill(new ImagePattern(new Image(PropertyManager.getResourceProperty("winclose_img"))));
         close.setOnMouseEntered(event -> close.setFill(new ImagePattern(new Image(PropertyManager.getResourceProperty("winclosepress_img")))));
         close.setOnMouseExited(event -> close.setFill(new ImagePattern(new Image(PropertyManager.getResourceProperty("winclose_img")))));
-        close.setOnMouseClicked(event -> Platform.exit());
+        close.setOnMouseClicked(event -> {
+            TempMonitor.getInstance().stop();
+            Platform.exit();
+        });
         title.getChildren().add(close);
         AnchorPane.setRightAnchor(close, 10.0);
         AnchorPane.setTopAnchor(close, 5.0);

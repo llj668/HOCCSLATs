@@ -8,20 +8,18 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 
-public class InitializePane extends VBox {
+public class ProcessingOverlay extends VBox {
 
-    public InitializePane() {
-        setPrefWidth(1280);
-        setPrefHeight(630);
-        setTranslateX(0);
-        setTranslateY(90);
-        setSpacing(20);
+    public ProcessingOverlay() {
+        setPrefWidth(425);
+        setPrefHeight(190);
+        setSpacing(10);
         setBackground(new Background(new BackgroundFill(Color.WHITE, CornerRadii.EMPTY, Insets.EMPTY)));
         setOpacity(0.85);
 
         JFXSpinner spinner = new JFXSpinner();
-        Label label = new Label("正在初始化...");
-        label.setFont(Font.font("System", 20));
+        Label label = new Label("正在分析...");
+        label.setFont(Font.font("System", 15));
         this.getChildren().addAll(spinner, label);
         this.setAlignment(Pos.CENTER);
     }

@@ -1,6 +1,10 @@
 package models.services;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import com.jfoenix.controls.JFXTextArea;
+import com.jfoenix.controls.JFXTextField;
+import javafx.scene.control.TextArea;
+import models.test.AssessmentManager;
 import okhttp3.*;
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
@@ -11,6 +15,8 @@ import java.net.URL;
 import java.nio.charset.Charset;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * 语音听写流式 WebAPI 接口调用示例 接口文档（必看）：https://doc.xfyun.cn/rest_api/语音听写（流式版）.html
@@ -24,33 +30,23 @@ import java.util.*;
  */
 
 public class WebSpeechToText extends WebSocketListener {
-    private static final String hostUrl = "https://iat-api.xfyun.cn/v2/iat"; //中英文，http url 不支持解析 ws/wss schema
-    private static final String apiKey = "52a68a9b3af53d7e6a6421f6c744e78b"; //在控制台-我的应用-语音听写（流式版）获取
-    private static final String apiSecret = "4a804ae8812745e99645f02f877d6395"; //在控制台-我的应用-语音听写（流式版）获取
     private static final String appid = "5e071c44"; //在控制台-我的应用获取
-    private static final String file = "./src/models/services/temp/voice.wav"; // 中文
     public static final int StatusFirstFrame = 0;
     public static final int StatusContinueFrame = 1;
     public static final int StatusLastFrame = 2;
     public static final Gson json = new Gson();
     Decoder decoder = new Decoder();
+    String file;
+    Pattern pattern;
     // 开始时间
     private static Date dateBegin = new Date();
     // 结束时间
     private static Date dateEnd = new Date();
     private static final SimpleDateFormat sdf = new SimpleDateFormat("yyy-MM-dd HH:mm:ss.SSS");
 
-    public static void main(String[] args) throws Exception {
-        // 构建鉴权url
-        String authUrl = getAuthUrl(hostUrl, apiKey, apiSecret);
-        OkHttpClient client = new OkHttpClient.Builder().build();
-        //将url中的 schema http://和https://分别替换为ws:// 和 wss://
-        String url = authUrl.toString().replace("http://", "ws://").replace("https://", "wss://");
-        //System.out.println(url);
-        Request request = new Request.Builder().url(url).build();
-        // System.out.println(client.newCall(request).execute());
-        //System.out.println("url===>" + url);
-        WebSocket webSocket = client.newWebSocket(request, new WebSpeechToText());
+    public WebSpeechToText(String file) {
+        this.file = file;
+        pattern = Pattern.compile("。");
     }
 
     @Override
@@ -168,6 +164,8 @@ public class WebSpeechToText extends WebSocketListener {
                     System.out.println("耗时:" + (dateEnd.getTime() - dateBegin.getTime()) + "ms");
                     System.out.println("最终识别结果 ==》" + decoder.toString());
                     System.out.println("本次识别sid ==》" + resp.getSid());
+                    Matcher matcher = pattern.matcher(decoder.toString());
+                    AssessmentManager.getInstance().getController().finishSpeechToText(matcher.replaceAll(""));
                     decoder.discard();
                     webSocket.close(1000, "");
                 } else {

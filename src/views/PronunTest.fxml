@@ -78,5 +78,10 @@
          <padding>
             <Insets left="10.0" top="10.0" />
          </padding></VBox>
+      <Label fx:id="recordLabel" layoutX="954.0" layoutY="119.0" prefHeight="29.0" prefWidth="103.0" text=" 录音中">
+         <graphic>
+            <Circle fill="RED" radius="7.0" stroke="TRANSPARENT" strokeType="INSIDE" />
+         </graphic>
+      </Label>
    </children>
 </AnchorPane>

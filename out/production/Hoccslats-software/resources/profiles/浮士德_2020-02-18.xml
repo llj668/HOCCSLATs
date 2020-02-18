@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<profile name="浮士德" gender="male"> 
+  <grammar/>  
+  <pronun> 
+    <test time="2020-02-17 13:40:47" age="1;9" pcc="0.92"> 
+      <syllables> 
+        <item> 
+          <pcc>0.75</pcc>  
+          <target>bi2,zi3</target>  
+          <response>ba1,zi3</response>  
+          <present_consonant>b,z,i</present_consonant>  
+          <error_pattern>AFFRICATION</error_pattern> 
+        </item>  
+        <item> 
+          <pcc>1.0</pcc>  
+          <target>er3,duo3</target>  
+          <response>er3,duo3</response>  
+          <present_consonant>er,d,uo</present_consonant>  
+          <error_pattern>AFFRICATION</error_pattern> 
+        </item>  
+        <item> 
+          <pcc>1.0</pcc>  
+          <target>zui3</target>  
+          <response>zui3,ba1</response>  
+          <present_consonant>z,ui</present_consonant>  
+          <error_pattern>AFFRICATION</error_pattern> 
+        </item> 
+      </syllables>  
+      <pronounced_consonants>b,z,d</pronounced_consonants> 
+    </test>  
+    <test time="2020-02-18 18:28:48" age="3;4" pcc="1.0">
+      <syllables>
+        <item>
+          <pcc>1.0</pcc>
+          <target>bi2,zi3</target>
+          <response>bi2,zi3</response>
+          <present_consonant>b,i,z,i</present_consonant>
+          <error_pattern>AFFRICATION</error_pattern>
+        </item>
+        <item>
+          <pcc>1.0</pcc>
+          <target>er3,duo3</target>
+          <response>er3,duo3</response>
+          <present_consonant>er,d,uo</present_consonant>
+          <error_pattern>AFFRICATION</error_pattern>
+        </item>
+        <item>
+          <pcc>1.0</pcc>
+          <target>zui3</target>
+          <response>zui4,chang2</response>
+          <present_consonant>z,ui</present_consonant>
+          <error_pattern>AFFRICATION</error_pattern>
+        </item>
+        <item>
+          <pcc>1.0</pcc>
+          <target>shou3,zhi3</target>
+          <response>shou3,zhi3</response>
+          <present_consonant>sh,ou,zh,i</present_consonant>
+          <error_pattern>AFFRICATION</error_pattern>
+        </item>
+      </syllables>
+      <pronounced_consonants>b,z,d,sh,zh</pronounced_consonants>
+    </test>
+  </pronun> 
+</profile>

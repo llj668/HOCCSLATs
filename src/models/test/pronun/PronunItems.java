@@ -3,10 +3,6 @@ package models.test.pronun;
 import java.util.*;
 
 public class PronunItems {
-    public static String[] targets = {
-            "鼻子", "耳朵", "嘴"
-    };
-
     public static List<String> priority_phoneme = Collections.singletonList(
             "er"
     );

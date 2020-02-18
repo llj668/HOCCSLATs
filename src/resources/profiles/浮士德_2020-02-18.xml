@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<profile name="浮士德" gender="male"> 
+  <grammar>
+    <test time="2020-02-18 18:48:39" age="2;3" score="1.25">
+      <stage stage_no="2" stage_score="1.0">
+        <question name="SVO" score="1">
+          <response utterance="兔子和乌龟赛跑">
+            <structure value="n">兔子</structure>
+            <structure value="c">和</structure>
+            <structure value="n">乌龟赛</structure>
+            <structure value="v">跑</structure>
+          </response>
+        </question>
+        <question name="ENDO" score="1">
+          <response utterance="他去了北京">
+            <structure value="r">他</structure>
+            <structure value="v">去</structure>
+            <structure value="u">了</structure>
+            <structure value="ns">北京</structure>
+          </response>
+        </question>
+      </stage>
+      <stage stage_no="3" stage_score="1.5">
+        <question name="Cv_COMP" score="2">
+          <response utterance="他在哪？">
+            <structure value="r">他</structure>
+            <structure value="p">在</structure>
+            <structure value="r">哪</structure>
+            <structure value="w">？</structure>
+          </response>
+        </question>
+        <question name="SVCvO" score="1">
+          <response utterance="他坐在大树下">
+            <structure value="r">他</structure>
+            <structure value="v">坐在</structure>
+            <structure value="l">大树下</structure>
+          </response>
+        </question>
+      </stage>
+    </test>
+  </grammar>  
+  <pronun> 
+    <test time="2020-02-17 13:40:47" age="1;9" pcc="0.92"> 
+      <syllables> 
+        <item> 
+          <pcc>0.75</pcc>  
+          <target>bi2,zi3</target>  
+          <response>ba1,zi3</response>  
+          <present_consonant>b,z,i</present_consonant>  
+          <error_pattern>AFFRICATION</error_pattern> 
+        </item>  
+        <item> 
+          <pcc>1.0</pcc>  
+          <target>er3,duo3</target>  
+          <response>er3,duo3</response>  
+          <present_consonant>er,d,uo</present_consonant>  
+          <error_pattern>AFFRICATION</error_pattern> 
+        </item>  
+        <item> 
+          <pcc>1.0</pcc>  
+          <target>zui3</target>  
+          <response>zui3,ba1</response>  
+          <present_consonant>z,ui</present_consonant>  
+          <error_pattern>AFFRICATION</error_pattern> 
+        </item> 
+      </syllables>  
+      <pronounced_consonants>b,z,d</pronounced_consonants> 
+    </test>  
+    <test time="2020-02-18 18:28:48" age="3;4" pcc="1.0"> 
+      <syllables> 
+        <item> 
+          <pcc>1.0</pcc>  
+          <target>bi2,zi3</target>  
+          <response>bi2,zi3</response>  
+          <present_consonant>b,i,z,i</present_consonant>  
+          <error_pattern>AFFRICATION</error_pattern> 
+        </item>  
+        <item> 
+          <pcc>1.0</pcc>  
+          <target>er3,duo3</target>  
+          <response>er3,duo3</response>  
+          <present_consonant>er,d,uo</present_consonant>  
+          <error_pattern>AFFRICATION</error_pattern> 
+        </item>  
+        <item> 
+          <pcc>1.0</pcc>  
+          <target>zui3</target>  
+          <response>zui4,chang2</response>  
+          <present_consonant>z,ui</present_consonant>  
+          <error_pattern>AFFRICATION</error_pattern> 
+        </item>  
+        <item> 
+          <pcc>1.0</pcc>  
+          <target>shou3,zhi3</target>  
+          <response>shou3,zhi3</response>  
+          <present_consonant>sh,ou,zh,i</present_consonant>  
+          <error_pattern>AFFRICATION</error_pattern> 
+        </item> 
+      </syllables>  
+      <pronounced_consonants>b,z,d,sh,zh</pronounced_consonants> 
+    </test> 
+  </pronun> 
+</profile>

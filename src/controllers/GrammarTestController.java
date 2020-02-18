@@ -20,6 +20,7 @@ import models.profiles.Profile;
 import models.services.Recorder;
 import models.test.AssessmentManager;
 import models.test.Question;
+import models.test.WebCommunicator;
 import models.test.grammar.Utterance;
 import models.test.results.GrammarResult;
 import views.ResultDisplayer;
@@ -30,18 +31,11 @@ import java.util.Map;
 
 public class GrammarTestController extends BaseTestController {
 	public static final String[] scoreTexts = {"无声或“不知道”", "语义错误，结构错误", "部分或全部重复", "语义错误，结构正确", "语义正确，结构错误", "语义正确，结构正确"};
-	private ResultDisplayer displayer;
 
-	@FXML
-	private JFXButton btnStopRecord;
-	@FXML
-	private JFXTextArea textTranscribe;
 	@FXML
 	private JFXTextField textScore;
 	@FXML
 	private JFXSlider sliderScore;
-	@FXML
-	private VBox resultBox;
 	@FXML
 	private Label labelScore;
 	@FXML
@@ -55,8 +49,10 @@ public class GrammarTestController extends BaseTestController {
 		manager = AssessmentManager.getInstance();
 		manager.startGrammarAssessment(this);
 		manager.nextQuestion();
+		root.getChildren().remove(recordLabel);
 		initScoreDisplay();
 		initButtonListener();
+		initFileMonitor();
 	}
 
 	@FXML
@@ -73,9 +69,7 @@ public class GrammarTestController extends BaseTestController {
 
 	@FXML
 	void onClickAnalyze(ActionEvent event) {
-		Utterance utterance = (Utterance) manager.getAssessment().analyzeResponse(textTranscribe.getText());
-		displayer.displayGrammarResult(utterance, resultBox);
-		btnNext.setDisable(false);
+		manager.getAssessment().analyzeResponse(textTranscribe.getText());
 	}
 	
 	@FXML
@@ -125,6 +119,12 @@ public class GrammarTestController extends BaseTestController {
 	}
 
 	@Override
+	public void onFileChanged(String fileName) {
+		if (fileName.equalsIgnoreCase("temp_sound.wav"))
+			callSpeechToText();
+	}
+
+	@Override
 	public void updateLabels(String struct, String stage) {
 		labelTarget.setText(struct);
 		labelStage.setText(stage);
@@ -137,6 +137,7 @@ public class GrammarTestController extends BaseTestController {
 
 	@Override
 	public void setSummary(Region summary) {
+		monitor.stop();
 		root.getChildren().add(summary);
 	}
 }

@@ -47,7 +47,7 @@ public class PronunTest extends Assessment {
 		assert files != null;
 		for (File file : files) {
 			String[] str = StringUtils.substringBefore(file.getName(), ".").split("-");
-			questionList.add(new Question(file.getPath(), PronunItems.targets[Integer.parseInt(str[0])]));
+			questionList.add(new Question(file.getPath(), str[1]));
 		}
 	}
 

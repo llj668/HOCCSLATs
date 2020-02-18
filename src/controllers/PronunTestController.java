@@ -4,41 +4,32 @@ import com.jfoenix.controls.*;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
-import javafx.scene.control.ToggleGroup;
-import javafx.scene.image.Image;
 import javafx.scene.layout.Region;
-import javafx.scene.layout.VBox;
+import models.services.Recorder;
 import models.services.jpinyin.PinyinException;
 import models.services.jpinyin.PinyinFormat;
 import models.services.jpinyin.PinyinHelper;
 import models.test.AssessmentManager;
 import models.test.pronun.Syllable;
 import views.ResultDisplayer;
-import views.ViewManager;
 import views.items.ConfirmDialog;
 
 public class PronunTestController extends BaseTestController {
-	private ResultDisplayer displayer;
 
 	@FXML
-	private JFXButton btnStopRecord;
-	@FXML
-	private JFXButton btnNext;
-	@FXML
-	private JFXTextArea textTranscribe;
-	@FXML
 	private JFXTextArea textPinyin;
-	@FXML
-	private VBox resultBox;
 	@FXML
 	private Label labelTarget;
 	
 	public void initialize() {
+		recorder = new Recorder();
 		displayer = new ResultDisplayer();
 		manager = AssessmentManager.getInstance();
 		manager.startPronunAssessment(this);
 		manager.nextQuestion();
+		root.getChildren().remove(recordLabel);
 		initTextFieldListener();
+		initFileMonitor();
 	}
 
 	@FXML
@@ -77,6 +68,12 @@ public class PronunTestController extends BaseTestController {
 	}
 
 	@Override
+	public void onFileChanged(String fileName) {
+		if (fileName.equalsIgnoreCase("temp_sound.wav"))
+			callSpeechToText();
+	}
+
+	@Override
 	public void updateLabels(String struct, String stage) {
 		labelTarget.setText(struct);
 	}
@@ -88,6 +85,7 @@ public class PronunTestController extends BaseTestController {
 
 	@Override
 	public void setSummary(Region summary) {
+		monitor.stop();
 		root.getChildren().add(summary);
 	}
 
