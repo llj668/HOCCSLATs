@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<inventory name="75_pc">
+  <age period="1;6-2;0">
+    <plosive name="Plosive">
+      <present>b,p,d,t,g</present>
+      <absent>k</absent>
+    </plosive>
+    <nasal name="Nasal">
+      <present>m,n,ng</present>
+      <absent/>
+    </nasal>
+    <affricate name="Affricate">
+      <present>j,q</present>
+      <absent>z,c,zh,ch</absent>
+    </affricate>
+    <fricative name="Fricative">
+      <present>x,h,f,s</present>
+      <absent>sh</absent>
+    </fricative>
+    <approxi name="Approximant">
+      <present/>
+      <absent>r</absent>
+    </approxi>
+    <l_approxi name="Lateral approxi.">
+      <present/>
+      <absent>l</absent>
+    </l_approxi>
+  </age>
+  <age period="2;1-2;6">
+    <plosive name="Plosive">
+      <present>b,p,d,t,g,k</present>
+      <absent/>
+    </plosive>
+    <nasal name="Nasal">
+      <present>m,n,ng</present>
+      <absent/>
+    </nasal>
+    <affricate name="Affricate">
+      <present>j,q,c,ch</present>
+      <absent>z,zh</absent>
+    </affricate>
+    <fricative name="Fricative">
+      <present>x,h,f,s,sh</present>
+      <absent/>
+    </fricative>
+    <approxi name="Approximant">
+      <present/>
+      <absent>r</absent>
+    </approxi>
+    <l_approxi name="Lateral approxi.">
+      <present/>
+      <absent>l</absent>
+    </l_approxi>
+  </age>
+  <age period="2;7-3;0">
+    <plosive name="Plosive">
+      <present>b,p,d,t,g,k</present>
+      <absent/>
+    </plosive>
+    <nasal name="Nasal">
+      <present>m,n,ng</present>
+      <absent/>
+    </nasal>
+    <affricate name="Affricate">
+      <present>j,q,c,ch,z</present>
+      <absent>zh</absent>
+    </affricate>
+    <fricative name="Fricative">
+      <present>x,h,f,s,sh</present>
+      <absent/>
+    </fricative>
+    <approxi name="Approximant">
+      <present/>
+      <absent>r</absent>
+    </approxi>
+    <l_approxi name="Lateral approxi.">
+      <present>l</present>
+      <absent/>
+    </l_approxi>
+  </age>
+  <age period="3;1-3;6">
+    <plosive name="Plosive">
+      <present>b,p,d,t,g,k</present>
+      <absent/>
+    </plosive>
+    <nasal name="Nasal">
+      <present>m,n,ng</present>
+      <absent/>
+    </nasal>
+    <affricate name="Affricate">
+      <present>j,q,c,ch,z,zh</present>
+      <absent/>
+    </affricate>
+    <fricative name="Fricative">
+      <present>x,h,f,s,sh</present>
+      <absent/>
+    </fricative>
+    <approxi name="Approximant">
+      <present>r</present>
+      <absent/>
+    </approxi>
+    <l_approxi name="Lateral approxi.">
+      <present>l</present>
+      <absent/>
+    </l_approxi>
+  </age>
+  <age period="3;7-4;0">
+    <plosive name="Plosive">
+      <present>b,p,d,t,g,k</present>
+      <absent/>
+    </plosive>
+    <nasal name="Nasal">
+      <present>m,n,ng</present>
+      <absent/>
+    </nasal>
+    <affricate name="Affricate">
+      <present>j,q,c,ch,z,zh</present>
+      <absent/>
+    </affricate>
+    <fricative name="Fricative">
+      <present>x,h,f,s,sh</present>
+      <absent/>
+    </fricative>
+    <approxi name="Approximant">
+      <present>r</present>
+      <absent/>
+    </approxi>
+    <l_approxi name="Lateral approxi.">
+      <present>l</present>
+      <absent/>
+    </l_approxi>
+  </age>
+  <age period="4;1-4;6">
+    <plosive name="Plosive">
+      <present>b,p,d,t,g,k</present>
+      <absent/>
+    </plosive>
+    <nasal name="Nasal">
+      <present>m,n,ng</present>
+      <absent/>
+    </nasal>
+    <affricate name="Affricate">
+      <present>j,q,c,ch,z,zh</present>
+      <absent/>
+    </affricate>
+    <fricative name="Fricative">
+      <present>x,h,f,s,sh</present>
+      <absent/>
+    </fricative>
+    <approxi name="Approximant">
+      <present>r</present>
+      <absent/>
+    </approxi>
+    <l_approxi name="Lateral approxi.">
+      <present>l</present>
+      <absent/>
+    </l_approxi>
+  </age>
+</inventory>

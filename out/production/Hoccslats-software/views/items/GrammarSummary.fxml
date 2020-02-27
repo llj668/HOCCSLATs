@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.image.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.control.*?>
+<?import com.jfoenix.controls.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane fx:id="pane" prefHeight="630.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.items.GrammarSummaryController">
+   <children>
+      <StackPane fx:id="stackPane" prefHeight="630.0" prefWidth="1280.0" />
+      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="630.0" opacity="0.95" stroke="TRANSPARENT" strokeType="INSIDE" width="1280.0" />
+      <Label layoutX="87.0" layoutY="44.0" text="测试结果">
+         <font>
+            <Font size="30.0" />
+         </font>
+      </Label>
+      <Label layoutX="87.0" layoutY="199.0" text="测试时间">
+         <font>
+            <Font size="25.0" />
+         </font>
+      </Label>
+      <Label layoutX="87.0" layoutY="134.0" text="测试年龄">
+         <font>
+            <Font size="25.0" />
+         </font>
+      </Label>
+      <Label layoutX="87.0" layoutY="264.0" text="平均得分">
+         <font>
+            <Font size="25.0" />
+         </font>
+      </Label>
+      <Label fx:id="labelAge" layoutX="207.0" layoutY="134.0" prefHeight="33.0" prefWidth="77.0" text="age">
+         <font>
+            <Font size="25.0" />
+         </font>
+      </Label>
+      <Label fx:id="labelTime" layoutX="207.0" layoutY="199.0" prefHeight="33.0" prefWidth="221.0" text="time">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Label>
+      <Label fx:id="labelScore" layoutX="207.0" layoutY="264.0" prefHeight="33.0" prefWidth="77.0" text="score">
+         <font>
+            <Font size="25.0" />
+         </font>
+      </Label>
+      <JFXComboBox fx:id="stageComboBox" layoutX="450.0" layoutY="49.0" prefHeight="30.0" prefWidth="131.0" />
+      <JFXButton fx:id="btnDiscard" buttonType="RAISED" layoutX="87.0" layoutY="392.0" onAction="#onClickDiscard" prefHeight="52.0" prefWidth="181.0" ripplerFill="RED" style="-fx-background-color: #ff7373;" text="丢弃" />
+      <JFXButton fx:id="btnSave" buttonType="RAISED" layoutX="87.0" layoutY="469.0" onAction="#onClickSave" prefHeight="52.0" prefWidth="181.0" ripplerFill="#1a81ff" style="-fx-background-color: #8ec1ff;" text="保存结果" />
+      <VBox fx:id="responseBox" layoutX="450.0" layoutY="475.0" prefHeight="125.0" prefWidth="800.0" style="-fx-border-width: 1px; -fx-border-color: #000000;">
+         <padding>
+            <Insets left="10.0" top="10.0" />
+         </padding></VBox>
+      <Label layoutX="450.0" layoutY="442.0" text="回应：">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Label>
+      <Label layoutX="587.0" layoutY="442.0" prefHeight="27.0" prefWidth="106.0" text="MCUS 评分">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Label>
+      <JFXSlider fx:id="sliderScore" blockIncrement="1.0" layoutX="707.0" layoutY="442.0" majorTickUnit="1.0" max="5.0" minorTickCount="5" prefHeight="27.0" prefWidth="241.0" />
+      <Label fx:id="labelEva" layoutX="975.0" layoutY="444.0" prefHeight="23.0" prefWidth="275.0" text="ScoreLabel" textFill="#005eff" />
+   </children>
+</AnchorPane>
