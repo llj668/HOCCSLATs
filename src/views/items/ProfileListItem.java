@@ -23,13 +23,11 @@ import models.profiles.ProfileLoader;
 import views.ViewManager;
 
 public class ProfileListItem extends HBox {
-	private JFXButton selButton;
 	private JFXCheckBox selDelete;
 	private Label name;
 	private Label age;
 	private Label gender;
 	private HBox ageContainer;
-	private Boolean isDeleteMode = false;
 	public Boolean isSelectedForDelete = false;
 
 	public ProfileListItem(String nameStr, String genderStr, List<Age> agesList) {
@@ -77,52 +75,20 @@ public class ProfileListItem extends HBox {
 		gender.setPrefSize(200, 50);
 		gender.setTranslateX(200);
 		gender.setFont(Font.font("System", 20));
-
-		selButton = new JFXButton("选择");
-		selButton.setTranslateX(200);
-		selButton.setPrefSize(100, 50);
-		selButton.setTextFill(Color.AZURE);
-		selButton.setFont(Font.font("System", 20));
-		selButton.setOnAction(event -> ViewManager.getInstance().switchProfileViewScene(ProfileLoader.profiles.get(this)));
 		
 		selDelete = new JFXCheckBox("删除");
 		selDelete.setTranslateX(200);
 		selDelete.setPrefSize(USE_COMPUTED_SIZE, 50);
 		selDelete.setFont(Font.font("System", 20));
 		selDelete.setCheckedColor(Color.CRIMSON);
-		selDelete.selectedProperty().addListener(new ChangeListener<Boolean>() {
-			@Override
-			public void changed(ObservableValue<? extends Boolean> arg0, Boolean oldValue, Boolean newValue) {
-                isSelectedForDelete = newValue;
-            }
-		});
-	}
-
-	public void setHandleSelectForAssessment(ProfileController controller) {
-		selButton.setOnAction(event -> {
-			controller.onSelectProfileForAssessment(ProfileLoader.profiles.get(this));
-		});
-	}
-	
-	public void onSelectForView() {
-		if (!isDeleteMode) {
-			this.getChildren().add(selButton);
-		}
-	}
-	
-	public void onLoseFocus() {
-		if (!isDeleteMode) {
-			this.getChildren().remove(selButton);
-		}
+		selDelete.selectedProperty().addListener((arg0, oldValue, newValue) -> isSelectedForDelete = newValue);
 	}
 	
 	public void displayDeleteCheckbox() {
-		isDeleteMode = true;
 		this.getChildren().add(selDelete);
 	}
 	
 	public void hideDeleteCheckbox() {
-		isDeleteMode = false;
 		this.getChildren().remove(selDelete);
 	}
 	

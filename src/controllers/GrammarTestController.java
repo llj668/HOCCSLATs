@@ -30,18 +30,12 @@ import views.items.ConfirmDialog;
 import java.util.Map;
 
 public class GrammarTestController extends BaseTestController {
-	public static final String[] scoreTexts = {"无声或“不知道”", "语义错误，结构错误", "部分或全部重复", "语义错误，结构正确", "语义正确，结构错误", "语义正确，结构正确"};
-
-	@FXML
-	private JFXTextField textScore;
-	@FXML
-	private JFXSlider sliderScore;
-	@FXML
-	private Label labelScore;
 	@FXML
 	private Label labelTarget;
 	@FXML
 	private Label labelStage;
+
+	private boolean isAnalyzed = false;
 	
 	public void initialize() {
 		recorder = new Recorder();
@@ -50,8 +44,6 @@ public class GrammarTestController extends BaseTestController {
 		manager.startGrammarAssessment(this);
 		manager.nextQuestion();
 		root.getChildren().remove(recordLabel);
-		initScoreDisplay();
-		initButtonListener();
 		initFileMonitor();
 	}
 
@@ -69,7 +61,8 @@ public class GrammarTestController extends BaseTestController {
 
 	@FXML
 	void onClickAnalyze(ActionEvent event) {
-		manager.getAssessment().analyzeResponse(textTranscribe.getText());
+		manager.getAssessment().analyzeResponse(textTranscribe.getText(), true);
+		isAnalyzed = true;
 	}
 	
 	@FXML
@@ -82,40 +75,14 @@ public class GrammarTestController extends BaseTestController {
 
 	@FXML
 	void onClickNext(ActionEvent event) {
+		if (!isAnalyzed) {
+			manager.getAssessment().analyzeResponse(textTranscribe.getText(), false);
+			isAnalyzed = true;
+		}
 		manager.nextQuestion();
-		sliderScore.setValue(0);
-		labelScore.setText("");
 		textTranscribe.setText("");
-		btnNext.setDisable(true);
 		resultBox.getChildren().clear();
-	}
-
-	private void initScoreDisplay() {
-		textScore.setText("0");
-		sliderScore.valueProperty().addListener((observable, oldValue, newValue) -> {
-			sliderScore.setValue((int) Math.round(newValue.doubleValue()));
-			labelScore.setText(scoreTexts[(int) sliderScore.getValue()]);
-		});
-		Bindings.bindBidirectional(textScore.textProperty(), sliderScore.valueProperty(), new StringConverter<Number>() {
-			@Override
-			public String toString(Number object) {
-				return object.toString();
-			}
-
-			@Override
-			public Integer fromString(String string) {
-				return Integer.parseInt(string);
-			}
-		});
-		sliderScore.setValue(0);
-		labelScore.setText("");
-	}
-
-	private void initButtonListener() {
-		btnNext.setDisable(true);
-		textTranscribe.textProperty().addListener((observable, oldValue, newValue) -> {
-			btnNext.setDisable(true);
-		});
+		isAnalyzed = false;
 	}
 
 	@Override
@@ -128,11 +95,6 @@ public class GrammarTestController extends BaseTestController {
 	public void updateLabels(String struct, String stage) {
 		labelTarget.setText(struct);
 		labelStage.setText(stage);
-	}
-
-	@Override
-	public String getScore() {
-		return String.valueOf(Math.round(Double.parseDouble(textScore.getText())));
 	}
 
 	@Override

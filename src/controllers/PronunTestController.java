@@ -20,6 +20,8 @@ public class PronunTestController extends BaseTestController {
 	private JFXTextArea textPinyin;
 	@FXML
 	private Label labelTarget;
+
+	private boolean isNext = false;
 	
 	public void initialize() {
 		recorder = new Recorder();
@@ -43,13 +45,6 @@ public class PronunTestController extends BaseTestController {
 		btnStopRecord.toBack();
 		recorder.stopRecord();
 	}
-
-	@FXML
-	void onClickAnalyze(ActionEvent event) {
-		Syllable syllable = (Syllable) manager.getAssessment().analyzeResponse(textPinyin.getText());
-		displayer.displayPronunResult(syllable, resultBox);
-		btnNext.setDisable(false);
-	}
 	
 	@FXML
 	void onClickBack(ActionEvent event) {
@@ -61,10 +56,13 @@ public class PronunTestController extends BaseTestController {
 
 	@FXML
 	void onClickNext(ActionEvent event) {
+		isNext = true;
 		manager.nextQuestion();
 		textTranscribe.setText("");
+		textPinyin.setText("");
 		btnNext.setDisable(true);
 		resultBox.getChildren().clear();
+		isNext = false;
 	}
 
 	@Override
@@ -79,11 +77,6 @@ public class PronunTestController extends BaseTestController {
 	}
 
 	@Override
-	public String getScore() {
-		return null;
-	}
-
-	@Override
 	public void setSummary(Region summary) {
 		monitor.stop();
 		root.getChildren().add(summary);
@@ -92,11 +85,20 @@ public class PronunTestController extends BaseTestController {
 	private void initTextFieldListener() {
 		btnNext.setDisable(true);
 		textTranscribe.textProperty().addListener((observable, oldValue, newValue) -> {
-			btnNext.setDisable(true);
-			try {
-				textPinyin.setText(PinyinHelper.convertToPinyinString(newValue, ",", PinyinFormat.WITH_TONE_NUMBER));
-			} catch (PinyinException e) {
-				e.printStackTrace();
+			if (!isNext) {
+				btnNext.setDisable(true);
+				try {
+					textPinyin.setText(PinyinHelper.convertToPinyinString(newValue, ",", PinyinFormat.WITH_TONE_NUMBER));
+				} catch (PinyinException e) {
+					e.printStackTrace();
+				}
+			}
+		});
+		textPinyin.textProperty().addListener((observable, oldValue, newValue) -> {
+			if (!isNext) {
+				Syllable syllable = (Syllable) manager.getAssessment().analyzeResponse(textPinyin.getText(), true);
+				displayer.displayPronunResult(syllable, resultBox);
+				btnNext.setDisable(false);
 			}
 		});
 	}

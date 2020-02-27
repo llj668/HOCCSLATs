@@ -25,7 +25,7 @@ public class ProfileLoader {
 	public static void deleteProfiles() {
 		for (ProfileListItem item : profiles.keySet()) {
 			if (item.isSelectedForDelete) {
-				new File(PropertyManager.getResourceProperty("profile_path") + profiles.get(item).getProfileName()).delete();
+				new File(ProfileWriter.PROFILE_PATH + profiles.get(item).getProfileName() + ".xml").delete();
 			}
 		}
 	}

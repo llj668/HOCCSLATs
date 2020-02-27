@@ -1,6 +1,8 @@
 package models.test.reader;
 
 import application.PropertyManager;
+import models.profiles.Age;
+import models.test.pronun.ErrorPattern;
 import models.test.pronun.Inventory;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
@@ -51,6 +53,34 @@ public class InventoryReader {
             e.printStackTrace();
         }
         return inventories;
+    }
+
+    public static Map<ErrorPattern, Boolean> readErrorPatternInventory(String inventoryPath, Age age) {
+        Map<ErrorPattern, Boolean> inventory = new LinkedHashMap<>();
+        SAXReader reader = new SAXReader();
+        try {
+            File xml = new File(inventoryPath);
+            Document document = reader.read(xml);
+            Element root = document.getRootElement();
+
+            Iterator rootElements = root.elementIterator();
+            while (rootElements.hasNext()) {
+                Element rootElement = (Element) rootElements.next();
+
+                if (age.isInAgePeriod(rootElement.attribute("period").getValue())) {
+
+                    Iterator errorElements = rootElement.elementIterator();
+                    while (errorElements.hasNext()) {
+                        Element error = (Element) errorElements.next();
+
+                        inventory.put(ErrorPattern.valueOf(error.getName()), Boolean.valueOf(error.attribute("present").getValue()));
+                    }
+                }
+            }
+        } catch (DocumentException e) {
+            e.printStackTrace();
+        }
+        return inventory;
     }
 
 }

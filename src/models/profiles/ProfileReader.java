@@ -1,13 +1,13 @@
 package models.profiles;
 
 import java.io.*;
-import java.lang.reflect.Array;
 import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
 import application.PropertyManager;
 import models.test.grammar.Utterance;
+import models.test.pronun.ErrorPattern;
 import models.test.pronun.Syllable;
 import models.test.results.GrammarResult;
 import models.test.results.GrammarStage;
@@ -83,7 +83,6 @@ public class ProfileReader {
 						SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 						String testTime = test.attribute("time").getValue();
 						String testAge = test.attribute("age").getValue();
-						String testScore = test.attribute("score").getValue();
 
 						Iterator stageElements = test.elementIterator();
 						while (stageElements.hasNext()) {
@@ -119,7 +118,7 @@ public class ProfileReader {
 							}
 							stageResults.add(grammarStage);
 						}
-						results.add(new GrammarResult(stageResults, f.parse(testTime, new ParsePosition(0)), new Age(testAge), testScore));
+						results.add(new GrammarResult(stageResults, f.parse(testTime, new ParsePosition(0)), new Age(testAge)));
 					}
 				}
 			}
@@ -166,13 +165,27 @@ public class ProfileReader {
 									Element syllable = (Element) syllableElements.next();
 
 									HashMap<String, String> syllableData = new HashMap<>();
+									Map<ErrorPattern, Integer> patterns = new LinkedHashMap<>();
 
 									Iterator dataElements = syllable.elementIterator();
 									while (dataElements.hasNext()) {
 										Element data = (Element) dataElements.next();
-										syllableData.put(data.getName(), data.getStringValue());
+
+										if (data.getName().equalsIgnoreCase("error_pattern")) {
+
+											Iterator errorElements = data.elementIterator();
+											while (errorElements.hasNext()) {
+												Element error = (Element) errorElements.next();
+
+												patterns.put(ErrorPattern.valueOf(error.getName()), Integer.parseInt(error.attribute("times").getValue()));
+											}
+										} else {
+											syllableData.put(data.getName(), data.getStringValue());
+										}
 									}
-									syllables.add(new Syllable(syllableData));
+									Syllable s = new Syllable(syllableData);
+									s.setErrorPatterns(patterns);
+									syllables.add(s);
 								}
 							} else if (result.getName().equalsIgnoreCase("pronounced_consonants")) {
 								presentConsonants = Arrays.asList(result.getStringValue().split(","));

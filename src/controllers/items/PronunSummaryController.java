@@ -1,5 +1,6 @@
 package controllers.items;
 
+import application.PropertyManager;
 import com.jfoenix.controls.*;
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
 import controllers.BaseTestController;
@@ -12,33 +13,34 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
+import models.profiles.Profile;
 import models.profiles.ProfileWriter;
 import models.test.AssessmentManager;
+import models.test.pronun.ErrorPattern;
+import models.test.pronun.PronunItems;
 import models.test.pronun.Syllable;
 import models.test.results.*;
 import org.jetbrains.annotations.NotNull;
 import views.ResultDisplayer;
 import views.items.ConfirmDialog;
+import views.items.ResultItem;
 
 import java.util.Map;
 
 public class PronunSummaryController extends BaseSummaryController {
-    @FXML
-    private AnchorPane pane;
+
     @FXML
     private AnchorPane subpane;
     @FXML
     private AnchorPane hintPane;
+    @FXML
+    private AnchorPane hintPane1;
     @FXML
     private AnchorPane controlPane;
     @FXML
     private GridPane inventoryGrid;
     @FXML
     private JFXComboBox<Label> resultComboBox;
-    @FXML
-    private JFXButton btnDiscard;
-    @FXML
-    private JFXButton btnSave;
     @FXML
     private Label labelAge;
     @FXML
@@ -50,6 +52,7 @@ public class PronunSummaryController extends BaseSummaryController {
     @FXML
     private JFXToggleButton toggle90pc;
 
+    private Profile profile;
     private PronunResult result;
     private ResultDisplayer displayer;
 
@@ -63,7 +66,8 @@ public class PronunSummaryController extends BaseSummaryController {
     }
 
     @Override
-    public void setResult(BaseResult result) {
+    public void setResult(BaseResult result, Profile profile) {
+        this.profile = profile;
         this.result = (PronunResult) result;
         this.labelAge.setText(this.result.testAge.toString());
         this.labelTime.setText(this.result.getTestTime());
@@ -87,8 +91,8 @@ public class PronunSummaryController extends BaseSummaryController {
 
     @FXML
     void onClickSave(ActionEvent event) {
-        AssessmentManager.profile.getPronunResults().add(result);
-        ProfileWriter.updateProfileResultToXML(AssessmentManager.profile, "pronun");
+        profile.getPronunResults().add(result);
+        ProfileWriter.updatePronunResultToXML(profile);
         stackPane.toFront();
         confirmDialog = new ConfirmDialog(this, stackPane, new JFXDialogLayout());
         confirmDialog.setText(ConfirmDialog.TEXT_SAVEPROFILE);
@@ -119,6 +123,10 @@ public class PronunSummaryController extends BaseSummaryController {
                 controlPane.getChildren().clear();
                 controlPane.getChildren().addAll(toggle75pc, toggle90pc);
                 toggle75pc.setSelected(true);
+                break;
+            case "错误模式":
+                plotComparedErrorPatternMap(result.comparedMapErrorPattern);
+                controlPane.getChildren().clear();
                 break;
             default:
                 break;
@@ -182,6 +190,23 @@ public class PronunSummaryController extends BaseSummaryController {
         subpane.getChildren().clear();
         subpane.getChildren().addAll(inventoryGrid, hintPane);
         displayer.displayConsonantInventory(comparedMap, inventoryGrid);
+    }
+
+    private void plotComparedErrorPatternMap(Map<ErrorPattern, String> comparedMap) {
+        subpane.getChildren().clear();
+        JFXListView<Label> patternList = new JFXListView<>();
+        patternList.setPrefSize(600, 400);
+        patternList.setLayoutY(10);
+        patternList.getStylesheets().add(PronunSummaryController.class.getResource(PropertyManager.getResourceProperty("inventory_css")).toString());
+        for (Map.Entry<ErrorPattern, String> errors : comparedMap.entrySet()) {
+            Label label = new Label(PronunItems.patternName.get(errors.getKey()));
+            if (errors.getValue().equals("green"))
+                label.setId("green_label");
+            else if (errors.getValue().equals("red"))
+                label.setId("red_label");
+            patternList.getItems().add(label);
+        }
+        subpane.getChildren().addAll(patternList, hintPane1);
     }
 
     private void addTableToPane(@NotNull JFXTreeTableView table) {

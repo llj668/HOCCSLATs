@@ -2,12 +2,12 @@ package models.test.results;
 
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
 import controllers.GrammarTestController;
+import controllers.items.GrammarSummaryController;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
 public class GrammarStructure extends RecursiveTreeObject<GrammarStructure> {
 	public StructureName name;
-	// public StructureLevel level;
 	public int score;
 
 	public GrammarStructure(String name, int score) {
@@ -20,17 +20,23 @@ public class GrammarStructure extends RecursiveTreeObject<GrammarStructure> {
 	}
 
 	public StringProperty getScoreProperty() {
-		return new SimpleStringProperty(String.valueOf(score));
+		if (score == -1)
+			return new SimpleStringProperty("");
+		else
+			return new SimpleStringProperty(String.valueOf(score));
 	}
 
 	public StringProperty getEvaluationProperty() {
-		return new SimpleStringProperty(GrammarTestController.scoreTexts[score]);
+		if (score == -1)
+			return new SimpleStringProperty("");
+		else
+			return new SimpleStringProperty(GrammarSummaryController.scoreTexts[score]);
 	}
-	
+
 	public enum StructureLevel {
 		Clause, Phrase, Word
 	}
-	
+
 	public enum StructureName {
 		OTHER,
 		// stage one and two

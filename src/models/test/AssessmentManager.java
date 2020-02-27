@@ -42,7 +42,7 @@ public class AssessmentManager {
 			assessment.saveResult();
 			Map.Entry<Region, BaseSummaryController> entry = assessment.end();
 			entry.getValue().setOnAfterTest(controller);
-			entry.getValue().setResult(assessment.getResult());
+			entry.getValue().setResult(assessment.getResult(), profile);
 			controller.setSummary(entry.getKey());
 		}
 	}
@@ -61,7 +61,6 @@ public class AssessmentManager {
 	public void clearAll() {
 		assessment = null;
 		controller = null;
-		testAge = null;
 		testQueue = null;
 		question = null;
 	}

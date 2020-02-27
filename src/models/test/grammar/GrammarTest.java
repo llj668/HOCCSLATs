@@ -3,7 +3,9 @@ package models.test.grammar;
 import application.PropertyManager;
 import com.hankcs.hanlp.corpus.document.sentence.Sentence;
 import com.hankcs.hanlp.corpus.document.sentence.word.IWord;
+import com.hankcs.hanlp.dependency.nnparser.NeuralNetworkDependencyParser;
 import com.hankcs.hanlp.model.crf.CRFLexicalAnalyzer;
+import com.intellij.vcs.log.Hash;
 import controllers.BaseTestController;
 import controllers.items.BaseSummaryController;
 import javafx.application.Platform;
@@ -17,19 +19,20 @@ import models.test.results.GrammarStage;
 import models.test.results.GrammarStructure;
 import org.apache.commons.lang3.StringUtils;
 import views.ViewManager;
+import views.items.InitOverlay;
 import views.items.ProcessingOverlay;
 
 import java.io.*;
 import java.util.*;
 
 public class GrammarTest extends Assessment {
-	final static String TEMP_ANALYZE_FILE = "./src/models/services/temp/nlp_temp.xml";
 	private GrammarResult results;
 	private Queue<String> testQueue;
 	private GrammarStage stage;
 	private Utterance utterance;
 	private String prevStage = "-1";
 	private BaseTestController controller;
+	private NeuralNetworkDependencyParser parser;
 
 	public GrammarTest(BaseTestController controller, Queue<String> testQueue) {
 		super();
@@ -37,32 +40,29 @@ public class GrammarTest extends Assessment {
 		this.controller = controller;
 		this.results = new GrammarResult(AssessmentManager.getInstance().getTestAge());
 		this.getQuestionList();
+		this.setInitOverlay(controller);
 	}
 
 	@Override
-	public Response analyzeResponse(String response) {
+	public Response analyzeResponse(String response, boolean showInBox) {
 		utterance = new Utterance(response);
 
 		ProcessingOverlay overlay = new ProcessingOverlay();
-		controller.resultBox.getChildren().add(overlay);
-		controller.btnAnalyze.setDisable(true);
+		if (showInBox) {
+			controller.resultBox.getChildren().add(overlay);
+			controller.btnAnalyze.setDisable(true);
+			controller.btnNext.setDisable(true);
+		}
 		new Thread(() -> {
-			try {
-				CRFLexicalAnalyzer analyzer = new CRFLexicalAnalyzer();
-				Sentence sentence = analyzer.analyze(response);
-				List<Map.Entry<String, String>> analyzed = new LinkedList<>();
-				for (IWord word : sentence.wordList) {
-					analyzed.add(new AbstractMap.SimpleEntry<>(word.getValue(), word.getLabel()));
-				}
-				utterance.setAnalyzedUtterance(analyzed);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+			List<Map.Entry<String, String>> analyzed = UtteranceBuilder.analyzeClause(response, parser);
+			utterance.setAnalyzedUtterance(analyzed);
 			Platform.runLater(() -> {
-				controller.btnAnalyze.setDisable(false);
-				controller.btnNext.setDisable(false);
-				controller.resultBox.getChildren().remove(overlay);
-				controller.displayer.displayGrammarResult(utterance, controller.resultBox);
+				if (showInBox) {
+					controller.btnAnalyze.setDisable(false);
+					controller.btnNext.setDisable(false);
+					controller.resultBox.getChildren().remove(overlay);
+					controller.displayer.displayGrammarResult(utterance, controller.resultBox);
+				}
 			});
 		}).start();
 		return utterance;
@@ -86,7 +86,7 @@ public class GrammarTest extends Assessment {
 					results.stageResults.add(stage);
 				stage = new GrammarStage(Integer.parseInt(question.getStage()));
 			}
-			stage.addRecord(new GrammarStructure(question.getTarget(), Integer.parseInt(controller.getScore())), this.utterance);
+			stage.addRecord(new GrammarStructure(question.getTarget(), -1), this.utterance);
 			prevStage = question.getStage();
 		}
 	}
@@ -100,6 +100,15 @@ public class GrammarTest extends Assessment {
 	@Override
 	public Map.Entry<Region, BaseSummaryController> end() {
 		return ViewManager.getInstance().getItemFromFXML(PropertyManager.getResourceProperty("grammarsum"));
+	}
+
+	private void setInitOverlay(BaseTestController controller) {
+		InitOverlay overlay = new InitOverlay();
+		new Thread(() -> {
+			controller.root.getChildren().add(overlay);
+			parser = new NeuralNetworkDependencyParser();
+			Platform.runLater(() -> controller.root.getChildren().remove(overlay));
+		}).start();
 	}
 
 	@Override

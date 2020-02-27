@@ -5,18 +5,23 @@ import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
 import controllers.BaseTestController;
 import controllers.DialogControl;
 import controllers.GrammarTestController;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeTableColumn;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import models.profiles.Profile;
 import models.profiles.ProfileWriter;
 import models.test.AssessmentManager;
 import models.test.grammar.Utterance;
@@ -29,18 +34,20 @@ import views.ViewManager;
 import views.items.ConfirmDialog;
 
 import javax.swing.text.View;
+import java.util.LinkedList;
+import java.util.List;
 
 public class GrammarSummaryController extends BaseSummaryController {
+    public static final String[] scoreTexts = {"无声或“不知道”", "语义错误，结构错误", "部分或全部重复", "语义错误，结构正确", "语义正确，结构错误", "语义正确，结构正确"};
+
     @FXML
-    private AnchorPane pane;
+    private JFXSlider sliderScore;
+    @FXML
+    private Label labelEva;
     @FXML
     private VBox responseBox;
     @FXML
     private JFXComboBox<Label> stageComboBox;
-    @FXML
-    private JFXButton btnDiscard;
-    @FXML
-    private JFXButton btnSave;
     @FXML
     private Label labelAge;
     @FXML
@@ -48,21 +55,43 @@ public class GrammarSummaryController extends BaseSummaryController {
     @FXML
     private Label labelScore;
 
+    private Profile profile;
     private GrammarResult result;
     private ResultDisplayer displayer;
+    private JFXTreeTableView<GrammarStructure> table;
+    private ChangeListener<Number> sliderListener;
+    private boolean isAfterTest = false;
 
     public void initialize() {
         displayer = new ResultDisplayer();
         pane.setLayoutY(90);
-        pane.getChildren().removeAll(btnDiscard, btnSave);
+        pane.getChildren().remove(btnDiscard);
+        sliderScore.setValue(0);
+        labelEva.setText("");
+
+        sliderListener = (observable, oldValue, newValue) -> {
+            int value = (int) Math.round(newValue.doubleValue());
+            sliderScore.setValue(value);
+            labelEva.setText(scoreTexts[(int) sliderScore.getValue()]);
+            if ((int) Math.round(oldValue.doubleValue()) != value) {
+                table.getSelectionModel().getSelectedItem().getValue().score = value;
+                table.refresh();
+            }
+        };
     }
 
     @Override
-    public void setResult(BaseResult result) {
+    public void setResult(BaseResult result, Profile profile) {
         this.result = (GrammarResult) result;
+        this.profile = profile;
         this.labelAge.setText(this.result.testAge.toString());
         this.labelTime.setText(this.result.getTestTime());
-        this.labelScore.setText(String.valueOf(this.result.score));
+        if (this.result.isAllScored) {
+            this.labelScore.setText(String.valueOf(this.result.score));
+        } else {
+            this.labelScore.setText("N/A");
+        }
+
         setStageComboBox();
         stageComboBox.setValue(stageComboBox.getItems().get(0));
         displayStageResult(this.result.stageResults.get(0));
@@ -70,7 +99,8 @@ public class GrammarSummaryController extends BaseSummaryController {
 
     @Override
     public void setOnAfterTest(BaseTestController controller) {
-        pane.getChildren().addAll(btnDiscard, btnSave);
+        pane.getChildren().add(btnDiscard);
+        isAfterTest = true;
     }
 
     @FXML
@@ -83,8 +113,10 @@ public class GrammarSummaryController extends BaseSummaryController {
 
     @FXML
     void onClickSave(ActionEvent event) {
-        AssessmentManager.profile.getGrammarResults().add(result);
-        ProfileWriter.updateProfileResultToXML(AssessmentManager.profile, "grammar");
+        result.stageResults = removeUnscoredStage();
+        if (!profile.getGrammarResults().contains(result))
+            profile.getGrammarResults().add(result);
+        ProfileWriter.updateGrammarResultToXML(profile, result);
         stackPane.toFront();
         confirmDialog = new ConfirmDialog(this, stackPane, new JFXDialogLayout());
         confirmDialog.setText(ConfirmDialog.TEXT_SAVEPROFILE);
@@ -112,6 +144,10 @@ public class GrammarSummaryController extends BaseSummaryController {
                     labelText = "阶段四";
                     labelId = "4";
                     break;
+                case -1:
+                    labelText = "未打分";
+                    labelId = "-1";
+                    break;
                 default:
                     break;
             }
@@ -132,7 +168,7 @@ public class GrammarSummaryController extends BaseSummaryController {
 
     private void displayStageResult(GrammarStage stage) {
         ObservableList<GrammarStructure> questions = FXCollections.observableArrayList(stage.getRecords().keySet());
-        final TreeItem<GrammarStructure> root = new RecursiveTreeItem<>(questions, RecursiveTreeObject::getChildren);
+        TreeItem<GrammarStructure> root = new RecursiveTreeItem<>(questions, RecursiveTreeObject::getChildren);
 
         JFXTreeTableColumn<GrammarStructure, String> nameColumn = new JFXTreeTableColumn<>("结构");
         nameColumn.setPrefWidth(150);
@@ -152,6 +188,7 @@ public class GrammarSummaryController extends BaseSummaryController {
                 return scoreColumn.getComputedValue(param);
         });
 
+
         JFXTreeTableColumn<GrammarStructure, String> evaluationColumn = new JFXTreeTableColumn<>("评价");
         evaluationColumn.setPrefWidth(250);
         evaluationColumn.setCellValueFactory((TreeTableColumn.CellDataFeatures<GrammarStructure, String> param) ->{
@@ -161,7 +198,8 @@ public class GrammarSummaryController extends BaseSummaryController {
                 return evaluationColumn.getComputedValue(param);
         });
 
-        JFXTreeTableView<GrammarStructure> table = new JFXTreeTableView<>(root);
+        pane.getChildren().remove(table);
+        table = new JFXTreeTableView<>(root);
         table.setLayoutX(450);
         table.setLayoutY(80);
         table.setPrefHeight(350);
@@ -170,9 +208,46 @@ public class GrammarSummaryController extends BaseSummaryController {
 
         table.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             responseBox.getChildren().clear();
+            sliderScore.setDisable(false);
             Utterance response = stage.getRecords().get(newValue.getValue());
             displayer.displayGrammarResult(response, responseBox);
+            if (newValue.getValue().score == -1) {
+                sliderScore.setValue(0);
+                labelEva.setText("");
+            } else {
+                sliderScore.setValue(newValue.getValue().score);
+            }
         });
         pane.getChildren().add(table);
+        resetScoreListener();
+    }
+
+    private List<GrammarStage> removeUnscoredStage() {
+        List<GrammarStage> stages = new LinkedList<>();
+        for (GrammarStage stage : result.stageResults) {
+            if (stage.getStageNo() != -1)
+                stages.add(stage);
+        }
+        return stages;
+    }
+
+    private void resetScoreListener() {
+        sliderScore.valueProperty().removeListener(sliderListener);
+        sliderScore.setValue(0);
+        labelEva.setText("");
+        sliderScore.valueProperty().addListener(sliderListener);
+        sliderScore.setOnMouseReleased(event -> {
+            result.stageResults = removeUnscoredStage();
+            result.unscored = result.unscoredStructures();
+            if (result.isAllScored) {
+                labelScore.setText(String.valueOf(result.score));
+                for (Label label : stageComboBox.getItems()) {
+                    if (label.getId().equals("-1"))
+                        label.setDisable(true);
+                }
+            }
+        });
+        sliderScore.toFront();
+        sliderScore.setDisable(true);
     }
 }

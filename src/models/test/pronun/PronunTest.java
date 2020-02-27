@@ -30,11 +30,10 @@ public class PronunTest extends Assessment {
 	}
 
 	@Override
-	public Response analyzeResponse(String response) {
+	public Response analyzeResponse(String response, boolean showInBox) {
 		try {
 			syllable = new Syllable(PinyinHelper.convertToPinyinString(target, ",", PinyinFormat.WITH_TONE_NUMBER), response);
-			syllable.identifyPhonemesCorrect();
-			syllable.identifyErrorPatterns();
+			syllable.identifyPhonemesAndErrorPatterns();
 		} catch (PinyinException e) {
 			e.printStackTrace();
 		}
