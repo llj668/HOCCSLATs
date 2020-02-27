@@ -1,7 +1,6 @@
 package views;
 
 import application.PropertyManager;
-import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
@@ -59,11 +58,18 @@ public class ResultDisplayer {
         errorLabel.setFont(this.font);
         container.getChildren().addAll(presentLabel, errorLabel);
 
-        for (ErrorPattern error : syllable.getErrorPatterns()) {
-            Label label = new Label(error.name());
+        int errorCount = 0;
+        for (Map.Entry<ErrorPattern, Integer> entry : syllable.getErrorPatterns().entrySet()) {
+            if (entry.getValue() == 0)
+                continue;
+            Label label = new Label(PronunItems.patternName.get(entry.getKey()));
             label.setFont(this.font);
             container.getChildren().add(label);
+            errorCount++;
         }
+
+        if (errorCount == 0)
+            errorLabel.setText("错误模式：无");
         container.setSpacing(verticalSpacing);
     }
 

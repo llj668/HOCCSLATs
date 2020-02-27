@@ -144,6 +144,36 @@
                   </Label>
                </children>
             </AnchorPane>
+            <AnchorPane fx:id="hintPane1" layoutY="458.0" prefHeight="83.0" prefWidth="727.0">
+               <children>
+                  <Label layoutX="76.0" layoutY="27.0" prefHeight="30.0" prefWidth="77.0" text="绿色" textFill="#009933">
+                     <font>
+                        <Font size="17.5" />
+                     </font>
+                     <graphic>
+                        <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#009933" height="25.0" stroke="BLACK" strokeType="INSIDE" width="25.0" />
+                     </graphic>
+                  </Label>
+                  <Label layoutX="414.0" layoutY="27.0" prefHeight="30.0" prefWidth="77.0" text="红色" textFill="#cc0000">
+                     <font>
+                        <Font size="17.5" />
+                     </font>
+                     <graphic>
+                        <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#cc0000" height="25.0" stroke="BLACK" strokeType="INSIDE" width="25.0" />
+                     </graphic>
+                  </Label>
+                  <Label layoutX="491.0" layoutY="27.0" prefHeight="30.0" prefWidth="175.0" text="相比同年龄段发现">
+                     <font>
+                        <Font size="17.5" />
+                     </font>
+                  </Label>
+                  <Label layoutX="153.0" layoutY="27.0" prefHeight="30.0" prefWidth="175.0" text="相比同年龄段未发现">
+                     <font>
+                        <Font size="17.5" />
+                     </font>
+                  </Label>
+               </children>
+            </AnchorPane>
          </children></AnchorPane>
       <AnchorPane fx:id="controlPane" layoutX="592.0" layoutY="39.0" prefHeight="50.0" prefWidth="668.0">
          <children>

@@ -1,5 +1,6 @@
 package controllers;
 
+import java.util.Map;
 import java.util.Set;
 
 import application.PropertyManager;
@@ -9,12 +10,17 @@ import com.jfoenix.controls.JFXDialogLayout;
 import com.jfoenix.controls.JFXListCell;
 import com.jfoenix.controls.JFXListView;
 
+import controllers.items.BaseSummaryController;
+import controllers.items.PronunSummaryController;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
+import javafx.scene.input.MouseButton;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import models.profiles.Age;
 import models.profiles.Profile;
@@ -27,6 +33,7 @@ import views.items.ProfileListItem;
 public class ProfileController implements DialogControl {
 	private Set<ProfileListItem> profileItems;
 	private EnterAgeDialog ageDialog;
+	private boolean isBeforeAssessment = false;
 	
 	@FXML
 	private AnchorPane root;
@@ -58,6 +65,14 @@ public class ProfileController implements DialogControl {
                     setGraphic(null);
                 } else {
                 	setGraphic(item);
+					setOnMouseClicked(mouseClickedEvent -> {
+						if (mouseClickedEvent.getButton().equals(MouseButton.PRIMARY) && mouseClickedEvent.getClickCount() == 2) {
+							if (isBeforeAssessment)
+								onSelectProfileForAssessment(ProfileLoader.profiles.get(item));
+							else
+								ViewManager.getInstance().switchProfileViewScene(ProfileLoader.profiles.get(item));
+						}
+					});
                 }
             }
 		});
@@ -69,17 +84,6 @@ public class ProfileController implements DialogControl {
 		profileItems = ProfileLoader.profiles.keySet();
 		profileList.getItems().clear();
 		profileList.getItems().addAll(profileItems);
-		profileList.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<ProfileListItem>() {
-			@Override
-			public void changed(ObservableValue<? extends ProfileListItem> arg0, ProfileListItem oldValue, ProfileListItem newValue) {
-				if (newValue != null) {
-					newValue.onSelectForView();
-				}
-                if (oldValue != null) {
-                	oldValue.onLoseFocus();
-                }
-            }
-		});
 	}
 	
 	@FXML
@@ -129,9 +133,7 @@ public class ProfileController implements DialogControl {
 		NewProfileController.isBeforeAssessment = true;
 		root.getChildren().removeAll(btnDelete, btnCancel, btnConfirm);
 		header.setText("选择或新建一个档案");
-		for (ProfileListItem item : profileList.getItems()) {
-			item.setHandleSelectForAssessment(this);
-		}
+		isBeforeAssessment = true;
 	}
 	
 	public void onSelectProfileForAssessment(Profile profile) {

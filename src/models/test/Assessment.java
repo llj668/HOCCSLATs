@@ -22,7 +22,7 @@ public abstract class Assessment {
         return questionList.poll();
     }
 
-    public abstract Response analyzeResponse(String response);
+    public abstract Response analyzeResponse(String response, boolean showInBox);
     public abstract void getQuestionList();
     public abstract void writeResult(BaseTestController controller, Question question);
     public abstract void saveResult();

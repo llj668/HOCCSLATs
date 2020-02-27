@@ -70,14 +70,6 @@
             <Font size="20.0" />
          </font>
       </Label>
-      <JFXSlider fx:id="sliderScore" blockIncrement="1.0" layoutX="878.0" layoutY="609.0" majorTickUnit="1.0" max="5.0" minorTickCount="5" prefHeight="32.0" prefWidth="365.0" />
-      <Label layoutX="819.0" layoutY="563.0" prefHeight="46.0" prefWidth="106.0" text="MCUS 评分">
-         <font>
-            <Font size="20.0" />
-         </font>
-      </Label>
-      <JFXTextField fx:id="textScore" alignment="CENTER" layoutX="819.0" layoutY="610.0" prefHeight="30.0" prefWidth="36.0" style="-fx-background-color: #FFF;" />
-      <Label fx:id="labelScore" layoutX="1021.0" layoutY="575.0" prefHeight="23.0" prefWidth="222.0" text="ScoreLabel" textFill="#005eff" />
       <Label fx:id="labelTarget" layoutX="243.0" layoutY="660.0" prefHeight="46.0" prefWidth="179.0" text="structure">
          <font>
             <Font size="25.0" />
@@ -88,7 +80,7 @@
             <Font size="25.0" />
          </font>
       </Label>
-      <VBox fx:id="resultBox" layoutX="819.0" layoutY="361.0" prefHeight="190.0" prefWidth="425.0" style="-fx-background-color: #FFFFFF; -fx-border-color: #DDDDDD; -fx-border-width: 1px;">
+      <VBox fx:id="resultBox" layoutX="819.0" layoutY="361.0" prefHeight="280.0" prefWidth="425.0" style="-fx-background-color: #FFFFFF; -fx-border-color: #DDDDDD; -fx-border-width: 1px;">
          <padding>
             <Insets left="10.0" top="10.0" />
          </padding></VBox>

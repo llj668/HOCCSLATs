@@ -108,6 +108,5 @@ public abstract class BaseTestController implements DialogControl, Observer {
 
     public abstract void onFileChanged(String fileName);
     public abstract void updateLabels(String struct, String stage);
-    public abstract String getScore();
     public abstract void setSummary(Region summary);
 }

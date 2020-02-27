@@ -105,8 +105,8 @@
       <recent name="E:\IdeaProjects\src\views" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
-      <recent name="controllers.items" />
       <recent name="views.items" />
+      <recent name="controllers.items" />
       <recent name="models.test.pronun" />
       <recent name="controllers" />
     </key>
@@ -140,13 +140,13 @@
       <Host>localhost</Host>
       <Port>5050</Port>
     </configuration>
-    <configuration name="CalculatePcc (1)" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="models.test.pronun.CalculatePcc" />
+    <configuration name="CalculatePcc" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.iflytek.voicecloud.lfasr.demo.CalculatePcc" />
       <module name="Hoccslats-software" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="models.test.pronun.*" />
+          <option name="PATTERN" value="com.iflytek.voicecloud.lfasr.demo.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
@@ -155,12 +155,12 @@
       </method>
     </configuration>
     <configuration name="CalculatePcc" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="com.iflytek.voicecloud.lfasr.demo.CalculatePcc" />
+      <option name="MAIN_CLASS_NAME" value="models.test.pronun.CalculatePcc" />
       <module name="Hoccslats-software" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="com.iflytek.voicecloud.lfasr.demo.*" />
+          <option name="PATTERN" value="models.test.pronun.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
@@ -205,6 +205,20 @@
       <extension name="coverage">
         <pattern>
           <option name="PATTERN" value="application.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="UtteranceBuilder" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="models.test.grammar.UtteranceBuilder" />
+      <module name="Hoccslats-software" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="models.test.grammar.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
@@ -268,12 +282,12 @@
       <item itemvalue="Application.WebSpeechToText" />
       <item itemvalue="Application.Main (1)" />
       <item itemvalue="Application.CalculatePcc" />
-      <item itemvalue="Application.CalculatePcc (1)" />
+      <item itemvalue="Application.UtteranceBuilder" />
     </list>
     <recent_temporary>
       <list>
         <item itemvalue="Application.Main (1)" />
-        <item itemvalue="Application.CalculatePcc (1)" />
+        <item itemvalue="Application.UtteranceBuilder" />
         <item itemvalue="Application.CalculatePcc" />
         <item itemvalue="Application.WebSpeechToText" />
       </list>
@@ -339,6 +353,26 @@
       <workItem from="1581961431896" duration="2051000" />
       <workItem from="1582001934537" duration="5611000" />
       <workItem from="1582016953432" duration="6072000" />
+      <workItem from="1582041634548" duration="1695000" />
+      <workItem from="1582087355000" duration="1609000" />
+      <workItem from="1582090039547" duration="12486000" />
+      <workItem from="1582106051609" duration="12939000" />
+      <workItem from="1582174672101" duration="8398000" />
+      <workItem from="1582186109534" duration="1650000" />
+      <workItem from="1582262975270" duration="2581000" />
+      <workItem from="1582268901852" duration="790000" />
+      <workItem from="1582291587085" duration="634000" />
+      <workItem from="1582346053898" duration="10111000" />
+      <workItem from="1582368335689" duration="9527000" />
+      <workItem from="1582386425627" duration="4102000" />
+      <workItem from="1582429942776" duration="7038000" />
+      <workItem from="1582448915121" duration="6303000" />
+      <workItem from="1582475044342" duration="3039000" />
+      <workItem from="1582602465893" duration="3402000" />
+      <workItem from="1582623509104" duration="1380000" />
+      <workItem from="1582631581613" duration="4088000" />
+      <workItem from="1582695749895" duration="6462000" />
+      <workItem from="1582779173962" duration="5991000" />
     </task>
     <servers />
   </component>
@@ -386,22 +420,22 @@
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state x="549" y="168" key="FileChooserDialogImpl/0.0.1536.824@0.0.1536.824" timestamp="1581924575493" />
-    <state width="1493" height="134" key="GridCell.Tab.0.bottom" timestamp="1582023030742">
+    <state width="1493" height="190" key="GridCell.Tab.0.bottom" timestamp="1582793549901">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1493" height="134" key="GridCell.Tab.0.bottom/0.0.1536.824@0.0.1536.824" timestamp="1582023030742" />
-    <state width="1493" height="134" key="GridCell.Tab.0.center" timestamp="1582023030742">
+    <state width="1493" height="190" key="GridCell.Tab.0.bottom/0.0.1536.824@0.0.1536.824" timestamp="1582793549901" />
+    <state width="1493" height="190" key="GridCell.Tab.0.center" timestamp="1582793549901">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1493" height="134" key="GridCell.Tab.0.center/0.0.1536.824@0.0.1536.824" timestamp="1582023030742" />
-    <state width="1493" height="134" key="GridCell.Tab.0.left" timestamp="1582023030742">
+    <state width="1493" height="190" key="GridCell.Tab.0.center/0.0.1536.824@0.0.1536.824" timestamp="1582793549901" />
+    <state width="1493" height="190" key="GridCell.Tab.0.left" timestamp="1582793549901">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1493" height="134" key="GridCell.Tab.0.left/0.0.1536.824@0.0.1536.824" timestamp="1582023030742" />
-    <state width="1493" height="134" key="GridCell.Tab.0.right" timestamp="1582023030742">
+    <state width="1493" height="190" key="GridCell.Tab.0.left/0.0.1536.824@0.0.1536.824" timestamp="1582793549901" />
+    <state width="1493" height="190" key="GridCell.Tab.0.right" timestamp="1582793549901">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1493" height="134" key="GridCell.Tab.0.right/0.0.1536.824@0.0.1536.824" timestamp="1582023030742" />
+    <state width="1493" height="190" key="GridCell.Tab.0.right/0.0.1536.824@0.0.1536.824" timestamp="1582793549901" />
     <state width="1493" height="261" key="GridCell.Tab.1.bottom" timestamp="1581662470549">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
@@ -426,6 +460,10 @@
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state x="454" y="237" key="com.intellij.ide.util.TipDialog/0.0.1536.824@0.0.1536.824" timestamp="1579068656395" />
+    <state x="408" y="27" key="com.intellij.openapi.editor.actions.MultiplePasteAction$ClipboardContentChooser" timestamp="1582790449838">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="408" y="27" key="com.intellij.openapi.editor.actions.MultiplePasteAction$ClipboardContentChooser/0.0.1536.824@0.0.1536.824" timestamp="1582790449838" />
     <state x="470" y="30" key="refactoring.ChangeSignatureDialog" timestamp="1580191447604">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
@@ -434,9 +472,9 @@
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state x="425" y="187" key="run.anything.popup/0.0.1536.824@0.0.1536.824" timestamp="1578635810199" />
-    <state x="431" y="145" width="672" height="678" key="search.everywhere.popup" timestamp="1581842073877">
+    <state x="431" y="145" width="672" height="678" key="search.everywhere.popup" timestamp="1582449787355">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state x="431" y="145" width="672" height="678" key="search.everywhere.popup/0.0.1536.824@0.0.1536.824" timestamp="1581842073877" />
+    <state x="431" y="145" width="672" height="678" key="search.everywhere.popup/0.0.1536.824@0.0.1536.824" timestamp="1582449787355" />
   </component>
 </project>

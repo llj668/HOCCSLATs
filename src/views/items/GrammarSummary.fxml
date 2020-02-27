@@ -52,7 +52,7 @@
       <JFXComboBox fx:id="stageComboBox" layoutX="450.0" layoutY="49.0" prefHeight="30.0" prefWidth="131.0" />
       <JFXButton fx:id="btnDiscard" buttonType="RAISED" layoutX="87.0" layoutY="392.0" onAction="#onClickDiscard" prefHeight="52.0" prefWidth="181.0" ripplerFill="RED" style="-fx-background-color: #ff7373;" text="丢弃" />
       <JFXButton fx:id="btnSave" buttonType="RAISED" layoutX="87.0" layoutY="469.0" onAction="#onClickSave" prefHeight="52.0" prefWidth="181.0" ripplerFill="#1a81ff" style="-fx-background-color: #8ec1ff;" text="保存结果" />
-      <VBox fx:id="responseBox" layoutX="450.0" layoutY="475.0" prefHeight="125.0" prefWidth="700.0" style="-fx-border-width: 1px; -fx-border-color: #000000;">
+      <VBox fx:id="responseBox" layoutX="450.0" layoutY="475.0" prefHeight="125.0" prefWidth="800.0" style="-fx-border-width: 1px; -fx-border-color: #000000;">
          <padding>
             <Insets left="10.0" top="10.0" />
          </padding></VBox>
@@ -61,5 +61,12 @@
             <Font size="20.0" />
          </font>
       </Label>
+      <Label layoutX="587.0" layoutY="442.0" prefHeight="27.0" prefWidth="106.0" text="MCUS 评分">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Label>
+      <JFXSlider fx:id="sliderScore" blockIncrement="1.0" layoutX="707.0" layoutY="442.0" majorTickUnit="1.0" max="5.0" minorTickCount="5" prefHeight="27.0" prefWidth="241.0" />
+      <Label fx:id="labelEva" layoutX="975.0" layoutY="444.0" prefHeight="23.0" prefWidth="275.0" text="ScoreLabel" textFill="#005eff" />
    </children>
 </AnchorPane>

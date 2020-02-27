@@ -13,22 +13,28 @@ import java.util.*;
 public class GrammarResult extends BaseResult {
 	public double score;
 	public List<GrammarStage> stageResults;
+	public HashMap<GrammarStructure, Utterance> unscored;
+	public boolean isAllScored = true;
 
 	public GrammarResult(Age testAge) {
 		super(testAge);
 		stageResults = new LinkedList<>();
 	}
 	
-	public GrammarResult(List<GrammarStage> stageResults, Date testTime, Age testAge, String testScore) {
+	public GrammarResult(List<GrammarStage> stageResults, Date testTime, Age testAge) {
 		super(testAge);
 		this.stageResults = stageResults;
 		this.testTime = testTime;
-		this.score = Double.parseDouble(testScore);
+		this.unscored = unscoredStructures();
 	}
 
 	@Override
 	public void conclude() {
 		testTime = new Date();
+		this.unscored = unscoredStructures();
+	}
+
+	public void calculateScores() {
 		double scoreTotal = 0;
 		DecimalFormat df = new DecimalFormat("#.00");
 		for (GrammarStage stage : stageResults) {
@@ -41,6 +47,25 @@ public class GrammarResult extends BaseResult {
 			scoreTotal += stageScore;
 		}
 		score = Double.parseDouble(df.format(scoreTotal / stageResults.size()));
+	}
+
+	public HashMap<GrammarStructure, Utterance> unscoredStructures() {
+		HashMap<GrammarStructure, Utterance> structures = new HashMap<>();
+		for (GrammarStage stage : stageResults) {
+			for (Map.Entry<GrammarStructure, Utterance> entry : stage.getRecords().entrySet()) {
+				if (entry.getKey().score == -1) {
+					structures.put(entry.getKey(), entry.getValue());
+				}
+			}
+		}
+		if (structures.size() != 0) {
+			stageResults.add(new GrammarStage(structures));
+			isAllScored = false;
+		} else {
+			calculateScores();
+			isAllScored = true;
+		}
+		return structures;
 	}
 
 	@Override

@@ -1,6 +1,7 @@
 package models.profiles;
 
 import models.test.grammar.Utterance;
+import models.test.pronun.ErrorPattern;
 import models.test.pronun.Syllable;
 import models.test.results.*;
 import org.dom4j.Document;
@@ -20,7 +21,7 @@ import java.util.Iterator;
 import java.util.Map;
 
 public class ProfileWriter {
-    final static String PROFILE_PATH = "./src/resources/profiles/";
+    public final static String PROFILE_PATH = "./src/resources/profiles/";
 
     public static void writeNewProfileToXML(Profile profile) {
         Document profileXML = DocumentHelper.createDocument();
@@ -41,7 +42,7 @@ public class ProfileWriter {
         }
     }
 
-    public static void updateProfileResultToXML(Profile profile, String updateType) {
+    public static void updatePronunResultToXML(Profile profile) {
         OutputFormat format = OutputFormat.createPrettyPrint();
         SAXReader reader = new SAXReader();
         String fileDate = profile.getProfileName().split("_")[1];
@@ -52,48 +53,9 @@ public class ProfileWriter {
 
             Iterator rootElements = root.elementIterator();
             while (rootElements.hasNext()) {
-
                 Element rootElement = (Element) rootElements.next();
-                if (rootElement.getName().equalsIgnoreCase("grammar") && updateType.equalsIgnoreCase("grammar")) {
-                    // check if there is a new result
-                    ArrayList<GrammarResult> results = profile.getGrammarResults();
-                    GrammarResult newResult = results.get(results.size()-1);
-                    if (isOldResult(rootElement, newResult))
-                        break;
 
-                    System.out.println("update grammar result");
-                    // add new test result to document
-                    Element test = rootElement.addElement("test");
-                    // attributes
-                    test.addAttribute("time", newResult.getTestTime());
-                    test.addAttribute("age", newResult.testAge.toString());
-                    test.addAttribute("score", String.valueOf(newResult.score));
-
-                    // stage results
-                    Collections.sort(newResult.stageResults);
-                    for (GrammarStage grammarStage : newResult.stageResults) {
-                        Element stage = test.addElement("stage");
-                        // attributes
-                        stage.addAttribute("stage_no", String.valueOf(grammarStage.getStageNo()));
-                        stage.addAttribute("stage_score", String.valueOf(grammarStage.getStageScore()));
-
-                        for (Map.Entry<GrammarStructure, Utterance> entry : grammarStage.getRecords().entrySet()) {
-                            Element question = stage.addElement("question");
-                            Element response = question.addElement("response");
-
-                            for (Map.Entry<String, String> segment : entry.getValue().getAnalyzedUtterance()) {
-                                Element structure = response.addElement("structure");
-                                structure.setText(segment.getKey());
-                                structure.addAttribute("value", segment.getValue());
-                            }
-
-                            GrammarStructure grammar = entry.getKey();
-                            question.addAttribute("name", grammar.name.toString());
-                            question.addAttribute("score", String.valueOf(grammar.score));
-                            response.addAttribute("utterance", entry.getValue().getUtterance());
-                        }
-                    }
-                } else if (rootElement.getName().equalsIgnoreCase("pronun") && updateType.equalsIgnoreCase("pronun")) {
+                if (rootElement.getName().equalsIgnoreCase("pronun")) {
                     // check if there is a new result
                     ArrayList<PronunResult> results = profile.getPronunResults();
                     PronunResult newResult = results.get(results.size()-1);
@@ -121,7 +83,11 @@ public class ProfileWriter {
                         target.setText(syllable.getTarget());
                         response.setText(syllable.getResponse());
                         presentConsonant.setText(syllable.getConsonantsCorrectAsString());
-                        errorPattern.setText(syllable.getErrorPatternsAsString());
+
+                        for (Map.Entry<ErrorPattern, Integer> entry : syllable.getErrorPatterns().entrySet()) {
+                            Element pattern = errorPattern.addElement(entry.getKey().name());
+                            pattern.addAttribute("times", entry.getValue().toString());
+                        }
                     }
 
                     // present consonants
@@ -149,14 +115,122 @@ public class ProfileWriter {
         }
     }
 
+    public static void updateGrammarResultToXML(Profile profile, GrammarResult result) {
+        OutputFormat format = OutputFormat.createPrettyPrint();
+        SAXReader reader = new SAXReader();
+        String fileDate = profile.getProfileName().split("_")[1];
+        try {
+            File xml = new File(PROFILE_PATH + profile.getProfileName() + ".xml");
+            Document document = reader.read(xml);
+            Element root = document.getRootElement();
+
+            Iterator rootElements = root.elementIterator();
+            while (rootElements.hasNext()) {
+                Element rootElement = (Element) rootElements.next();
+
+                if (rootElement.getName().equalsIgnoreCase("grammar")) {
+                    // check if there is a new result
+                    if (isOldResult(rootElement, result)) {
+                        updateOldGrammarResult(rootElement, result);
+                        break;
+                    }
+
+                    System.out.println("update grammar result");
+                    // add new test result to document
+                    Element test = rootElement.addElement("test");
+                    // attributes
+                    test.addAttribute("time", result.getTestTime());
+                    test.addAttribute("age", result.testAge.toString());
+
+                    // stage results
+                    Collections.sort(result.stageResults);
+                    for (GrammarStage grammarStage : result.stageResults) {
+                        Element stage = test.addElement("stage");
+                        // attributes
+                        stage.addAttribute("stage_no", String.valueOf(grammarStage.getStageNo()));
+                        stage.addAttribute("stage_score", String.valueOf(grammarStage.getStageScore()));
+
+                        for (Map.Entry<GrammarStructure, Utterance> entry : grammarStage.getRecords().entrySet()) {
+                            Element question = stage.addElement("question");
+                            Element response = question.addElement("response");
+
+                            for (Map.Entry<String, String> segment : entry.getValue().getAnalyzedUtterance()) {
+                                Element structure = response.addElement("structure");
+                                structure.setText(segment.getKey());
+                                structure.addAttribute("value", segment.getValue());
+                            }
+
+                            GrammarStructure grammar = entry.getKey();
+                            question.addAttribute("name", grammar.name.toString());
+                            question.addAttribute("score", String.valueOf(grammar.score));
+                            response.addAttribute("utterance", entry.getValue().getUtterance());
+                        }
+                    }
+                }
+            }
+
+            String filename = profile.getName() + "_" + LocalDate.now();
+            File file = new File(PROFILE_PATH + filename + ".xml");
+            XMLWriter writer = new XMLWriter(new FileOutputStream(file), format);
+            writer.write(document);
+            writer.close();
+
+            if (!LocalDate.now().toString().equals(fileDate)) {
+                new File(PROFILE_PATH + profile.getProfileName() + ".xml").delete();
+            }
+
+        } catch (DocumentException | FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     private static boolean isOldResult(@NotNull Element rootElement, BaseResult newResult) {
         Iterator testElements = rootElement.elementIterator();
         while (testElements.hasNext()) {
             Element test = (Element) testElements.next();
-            if (test.attribute("time").getValue().equals(newResult.testTime.toString())) {
+            if (test.attribute("time").getValue().equals(newResult.getTestTime())) {
                 return true;
             }
         }
         return false;
+    }
+
+    private static void updateOldGrammarResult(@NotNull Element rootElement, GrammarResult newResult) {
+        Iterator testElements = rootElement.elementIterator();
+        while (testElements.hasNext()) {
+            Element test = (Element) testElements.next();
+
+            if (test.attribute("time").getValue().equals(newResult.getTestTime())) {
+                // stage results
+                Collections.sort(newResult.stageResults);
+
+                Iterator stageElements = test.elementIterator();
+                while (stageElements.hasNext()) {
+                    Element stage = (Element) stageElements.next();
+
+                    String stageNo = stage.attribute("stage_no").getValue();
+                    for (GrammarStage grammarStage : newResult.stageResults) {
+                        if (grammarStage.getStageNo() == Integer.parseInt(stageNo)) {
+                            stage.attribute("stage_score").setValue(String.valueOf(grammarStage.getStageScore()));
+
+                            Iterator questionElements = stage.elementIterator();
+                            while (questionElements.hasNext()) {
+                                Element question = (Element) questionElements.next();
+
+                                String name = question.attribute("name").getValue();
+                                for (Map.Entry<GrammarStructure, Utterance> entry : grammarStage.getRecords().entrySet()) {
+                                    if (entry.getKey().name.toString().equals(name))
+                                        question.attribute("score").setValue(String.valueOf(entry.getKey().score));
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 }

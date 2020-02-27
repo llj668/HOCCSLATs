@@ -17,7 +17,8 @@ public class GrammarResultItem extends ResultItem {
     public GrammarResultItem(GrammarResult result) {
         super(result, null);
         initializeItemContent();
-        addStageResults();
+        if (result.isAllScored)
+            addStageResults();
         this.getChildren().addAll(age, time, score);
     }
 
@@ -31,13 +32,19 @@ public class GrammarResultItem extends ResultItem {
         time.setPrefSize(250, 30);
         time.setFont(Font.font("System", 15));
 
-        score = new Label("总分：" + grammarResult.score);
+        if (grammarResult.isAllScored)
+            score = new Label("总分：" + grammarResult.score);
+        else
+            score = new Label("未打分");
         score.setTranslateY(40);
         score.setPrefSize(100, 30);
         score.setFont(Font.font("System", 15));
     }
 
     private void addStageResults() {
+        int[] labelX = {150, 250, 150, 250};
+        int[] labelY = {40, 40, 70, 70};
+        int index = 0;
         for (GrammarStage stage : grammarResult.stageResults) {
             Label label = new Label();
             label.setPrefSize(100, 30);
@@ -45,28 +52,23 @@ public class GrammarResultItem extends ResultItem {
             switch (stage.getStageNo()) {
                 case 1:
                     label.setText("阶段一：" + stage.getStageScore());
-                    label.setTranslateX(150);
-                    label.setTranslateY(40);
                     break;
                 case 2:
                     label.setText("阶段二：" + stage.getStageScore());
-                    label.setTranslateX(250);
-                    label.setTranslateY(40);
                     break;
                 case 3:
                     label.setText("阶段三：" + stage.getStageScore());
-                    label.setTranslateX(150);
-                    label.setTranslateY(70);
                     break;
                 case 4:
                     label.setText("阶段四：" + stage.getStageScore());
-                    label.setTranslateX(250);
-                    label.setTranslateY(70);
                     break;
                 default:
                     break;
             }
+            label.setTranslateX(labelX[index]);
+            label.setTranslateY(labelY[index]);
             this.getChildren().add(label);
+            index++;
         }
     }
 

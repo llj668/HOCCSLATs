@@ -44,6 +44,7 @@ public class ViewProfileController {
 	private Label labelRecent;
 
 	private Region summary;
+	private Profile profile;
 	
 	public void initialize() {
 		grammarResultList.setCellFactory(lv -> new JFXListCell<ResultItem>() {
@@ -63,7 +64,7 @@ public class ViewProfileController {
 							summary.setLayoutY(90);
 							GrammarSummaryController controller = (GrammarSummaryController) entry.getValue();
 							root.getChildren().add(summary);
-							controller.setResult(item.grammarResult);
+							controller.setResult(item.grammarResult, profile);
 							setBackBtnBehavior();
 						}
 					});
@@ -88,7 +89,7 @@ public class ViewProfileController {
 							summary.setLayoutY(90);
 							PronunSummaryController controller = (PronunSummaryController) entry.getValue();
 							root.getChildren().add(summary);
-							controller.setResult(item.pronunResult);
+							controller.setResult(item.pronunResult, profile);
 							setBackBtnBehavior();
 						}
 					});
@@ -98,7 +99,10 @@ public class ViewProfileController {
 	}
 	
 	public void displayProfile(Profile profile) {
-		initProfileInfo(profile);
+		this.profile = profile;
+		initProfileInfo();
+		grammarResultList.getItems().clear();
+		pronunResultList.getItems().clear();
 		for (GrammarResult result : profile.getGrammarResults()) {
 			grammarResultList.getItems().add(result.toResultItem());
 		}
@@ -115,11 +119,12 @@ public class ViewProfileController {
 	private void setBackBtnBehavior() {
 		btnBack.setOnAction(e -> {
 			root.getChildren().remove(summary);
+			displayProfile(profile);
 			btnBack.setOnAction(event -> ViewManager.getInstance().switchScene(PropertyManager.getResourceProperty("profile")));
 		});
 	}
 
-	private void initProfileInfo(Profile profile) {
+	private void initProfileInfo() {
 		labelName.setText(profile.getName());
 		labelGender.setText(profile.getGender());
 		Collections.sort(profile.getGrammarResults());

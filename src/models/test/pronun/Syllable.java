@@ -8,17 +8,18 @@ import models.test.Response;
 import java.util.*;
 
 public class Syllable extends RecursiveTreeObject<Syllable> implements Response {
+    public static final int error_threshold = 2;
     private double pcc;
     private String response;
     private String target;
     private List<String> phonemesCorrect;
-    private List<ErrorPattern> errorPatterns;
+    private Map<ErrorPattern, Integer> errorPatterns;
 
     public Syllable(String target, String response) {
         this.target = target;
         this.response = response;
         this.phonemesCorrect = new LinkedList<>();
-        this.errorPatterns = new LinkedList<>();
+        this.errorPatterns = new LinkedHashMap<>();
     }
 
     public Syllable(HashMap<String, String> data) {
@@ -26,22 +27,15 @@ public class Syllable extends RecursiveTreeObject<Syllable> implements Response 
         this.target = data.get("target");
         this.response = data.get("response");
         this.phonemesCorrect = Arrays.asList(data.get("present_consonant").split(","));
-        this.errorPatterns = new LinkedList<>();
-        for (String e : data.get("error_pattern").split(",")) {
-            this.errorPatterns.add(ErrorPattern.valueOf(e));
-        }
+        this.errorPatterns = new LinkedHashMap<>();
     }
 
-    public void identifyPhonemesCorrect() {
-        List<Collection<String>> responsePhonemes = PinyinIdentifier.parsePhonemeList(response);
-        List<Collection<String>> targetPhonemes = PinyinIdentifier.parsePhonemeList(target);
-        Map.Entry<List<String>, Double> calculated = PinyinIdentifier.calculatePcc(responsePhonemes, targetPhonemes);
-        this.phonemesCorrect = calculated.getKey();
-        this.pcc = calculated.getValue();
-    }
-
-    public void identifyErrorPatterns() {
-        errorPatterns.add(ErrorPattern.AFFRICATION);
+    public void identifyPhonemesAndErrorPatterns() {
+        PinyinIdentifier identifier = new PinyinIdentifier(response, target);
+        Map.Entry<List<String>, Double> calculated = identifier.calculatePcc();
+        phonemesCorrect = calculated.getKey();
+        pcc = calculated.getValue();
+        errorPatterns = identifier.compareErrorPatterns();
     }
 
     public double getPcc() {
@@ -53,8 +47,11 @@ public class Syllable extends RecursiveTreeObject<Syllable> implements Response 
     public String getTarget() {
         return this.target;
     }
-    public List<ErrorPattern> getErrorPatterns() {
+    public Map<ErrorPattern, Integer> getErrorPatterns() {
         return this.errorPatterns;
+    }
+    public void setErrorPatterns(Map<ErrorPattern, Integer> errorPatterns) {
+        this.errorPatterns = errorPatterns;
     }
     public List<String> getPhonemesCorrect() {
         return this.phonemesCorrect;
@@ -63,9 +60,13 @@ public class Syllable extends RecursiveTreeObject<Syllable> implements Response 
         return String.join(",", this.phonemesCorrect);
     }
     public String getErrorPatternsAsString() {
+        if (errorPatterns.size() == 0)
+            return "NONE";
         List<String> patterns = new LinkedList<>();
-        for (ErrorPattern e : errorPatterns)
-            patterns.add(e.name());
+        for (Map.Entry<ErrorPattern, Integer> entry : errorPatterns.entrySet()) {
+            if (entry.getValue() >= error_threshold)
+                patterns.add(entry.getKey().name());
+        }
         return String.join(",", patterns);
     }
     public StringProperty getTargetProperty() {
