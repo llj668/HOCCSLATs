@@ -100,21 +100,33 @@ public class ProfileReader {
 								String target = question.attribute("name").getValue();
 								String score = question.attribute("score").getValue();
 
+								String utterance = "";
+								List<Map.Entry<String, String>> analyzed_c = new LinkedList<>();
+								List<Map.Entry<String, String>> analyzed_p = new LinkedList<>();
+
 								Iterator responseElements = question.elementIterator();
 								while (responseElements.hasNext()) {
 									Element response = (Element) responseElements.next();
 
-									String utterance = response.attribute("utterance").getValue();
-									List<Map.Entry<String, String>> analyzed = new LinkedList<>();
+									if (response.getName().equals("response_clause")) {
+										utterance = response.attribute("utterance").getValue();
 
-									Iterator structureElements = response.elementIterator();
-									while (structureElements.hasNext()) {
-										Element structure = (Element) structureElements.next();
-										analyzed.add(new AbstractMap.SimpleEntry<>(structure.getStringValue(), structure.attribute("value").getValue()));
+										Iterator structureElements = response.elementIterator();
+										while (structureElements.hasNext()) {
+											Element structure = (Element) structureElements.next();
+											analyzed_c.add(new AbstractMap.SimpleEntry<>(structure.getStringValue(), structure.attribute("value").getValue()));
+										}
+									} else if (response.getName().equals("response_phrase")) {
+
+										Iterator structureElements = response.elementIterator();
+										while (structureElements.hasNext()) {
+											Element structure = (Element) structureElements.next();
+											analyzed_p.add(new AbstractMap.SimpleEntry<>(structure.getStringValue(), structure.attribute("value").getValue()));
+										}
 									}
 
-									grammarStage.addRecord(new GrammarStructure(target, Integer.parseInt(score)), new Utterance(utterance, analyzed));
 								}
+								grammarStage.addRecord(new GrammarStructure(target, Integer.parseInt(score)), new Utterance(utterance, analyzed_c, analyzed_p));
 							}
 							stageResults.add(grammarStage);
 						}

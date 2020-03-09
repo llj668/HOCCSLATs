@@ -95,12 +95,32 @@ public class PinyinIdentifier {
 
     private int isConsonantAssimilation(Map<Collection<String>, Collection<String>> compareList) {
         int times = 0;
-
+        for (Map.Entry<Collection<String>, Collection<String>> pair : compareList.entrySet()) {
+            if (pair.getKey().size() != pair.getValue().size())
+                continue;
+            List<String> key = new LinkedList<>(pair.getKey());
+            List<String> value = new LinkedList<>(pair.getValue());
+            for (int i = 0; i < key.size(); i++) {
+                if (PronunItems.consonants.contains(key.get(i)) || PronunItems.double_consonants.contains(key.get(i))) {
+                    if (PronunItems.consonants.contains(value.get(i)) || PronunItems.double_consonants.contains(value.get(i))) {
+                        if (!key.get(i).equals(value.get(i)) && !key.get(i).equals("n") && !key.get(i).equals("ng"))
+                            times++;
+                    }
+                }
+            }
+        }
         return times;
     }
 
     private int isSyllableInitialDeletion(Map<Collection<String>, Collection<String>> compareList) {
         int times = 0;
+        for (Map.Entry<Collection<String>, Collection<String>> pair : compareList.entrySet()) {
+            List<String> key = new LinkedList<>(pair.getKey());
+            List<String> value = new LinkedList<>(pair.getValue());
+            value.remove(0);
+            if (value.toString().equals(key.toString()))
+                times++;
+        }
 
         return times;
     }
@@ -167,25 +187,51 @@ public class PinyinIdentifier {
 
     private int isStopping_1(Map<Collection<String>, Collection<String>> compareList) {
         int times = 0;
-
+        for (Map.Entry<Collection<String>, Collection<String>> pair : compareList.entrySet()) {
+            if (pair.getValue().contains("z") && pair.getKey().contains("d"))
+                times++;
+        }
         return times;
     }
 
     private int isStopping_2(Map<Collection<String>, Collection<String>> compareList) {
         int times = 0;
-
+        for (Map.Entry<Collection<String>, Collection<String>> pair : compareList.entrySet()) {
+            if (pair.getValue().contains("sh") && pair.getKey().contains("d"))
+                times++;
+        }
         return times;
     }
 
     private int isStopping_3(Map<Collection<String>, Collection<String>> compareList) {
         int times = 0;
-
+        for (Map.Entry<Collection<String>, Collection<String>> pair : compareList.entrySet()) {
+            if (pair.getValue().contains("h") && pair.getKey().contains("g"))
+                times++;
+        }
         return times;
     }
 
     private int isAffrication(Map<Collection<String>, Collection<String>> compareList) {
         int times = 0;
-
+        boolean isStop = false;
+        for (Map.Entry<Collection<String>, Collection<String>> pair : compareList.entrySet()) {
+            for (String phoneme : pair.getValue()) {
+                if (PronunItems.stops.contains(phoneme)) {
+                    isStop = true;
+                    break;
+                }
+            }
+            for (String phoneme : pair.getKey()) {
+                String type = PronunItems.consonantType.get(phoneme);
+                if (type == null)
+                    continue;
+                if (type.equalsIgnoreCase("fricative") || type.equalsIgnoreCase("affricate")) {
+                    if (isStop)
+                        times++;
+                }
+            }
+        }
         return times;
     }
 

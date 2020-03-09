@@ -1,5 +1,6 @@
 package controllers.items;
 
+import application.PropertyManager;
 import com.jfoenix.controls.*;
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
 import controllers.BaseTestController;
@@ -14,9 +15,9 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.scene.control.Label;
-import javafx.scene.control.TreeItem;
-import javafx.scene.control.TreeTableColumn;
+import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
@@ -24,18 +25,23 @@ import javafx.scene.layout.VBox;
 import models.profiles.Profile;
 import models.profiles.ProfileWriter;
 import models.test.AssessmentManager;
+import models.test.Question;
 import models.test.grammar.Utterance;
 import models.test.results.BaseResult;
 import models.test.results.GrammarResult;
 import models.test.results.GrammarStage;
 import models.test.results.GrammarStructure;
+import org.apache.commons.lang3.StringUtils;
 import views.ResultDisplayer;
 import views.ViewManager;
 import views.items.ConfirmDialog;
 
 import javax.swing.text.View;
+import java.io.File;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 public class GrammarSummaryController extends BaseSummaryController {
     public static final String[] scoreTexts = {"无声或“不知道”", "语义错误，结构错误", "部分或全部重复", "语义错误，结构正确", "语义正确，结构错误", "语义正确，结构正确"};
@@ -49,18 +55,28 @@ public class GrammarSummaryController extends BaseSummaryController {
     @FXML
     private JFXComboBox<Label> stageComboBox;
     @FXML
+    private ImageView imageView;
+    @FXML
     private Label labelAge;
     @FXML
     private Label labelTime;
     @FXML
     private Label labelScore;
+    @FXML
+    private JFXToggleButton toggleClause;
+    @FXML
+    private JFXToggleButton togglePhrase;
 
     private Profile profile;
     private GrammarResult result;
     private ResultDisplayer displayer;
     private JFXTreeTableView<GrammarStructure> table;
     private ChangeListener<Number> sliderListener;
+    private ChangeListener<Toggle> toggleListener;
+    private Map<String, Image> questionImages;
+    private Utterance curResponse;
     private boolean isAfterTest = false;
+    final ToggleGroup toggleGroup = new ToggleGroup();
 
     public void initialize() {
         displayer = new ResultDisplayer();
@@ -93,6 +109,8 @@ public class GrammarSummaryController extends BaseSummaryController {
         }
 
         setStageComboBox();
+        setImageList();
+        setToggleButtons();
         stageComboBox.setValue(stageComboBox.getItems().get(0));
         displayStageResult(this.result.stageResults.get(0));
     }
@@ -157,7 +175,9 @@ public class GrammarSummaryController extends BaseSummaryController {
         }
 
         stageComboBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            resetToggle();
             responseBox.getChildren().clear();
+            imageView.setImage(null);
             for (GrammarStage stage : result.stageResults) {
                 if (stage.getStageNo() == Integer.parseInt(newValue.getId())) {
                     displayStageResult(stage);
@@ -209,8 +229,12 @@ public class GrammarSummaryController extends BaseSummaryController {
         table.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             responseBox.getChildren().clear();
             sliderScore.setDisable(false);
-            Utterance response = stage.getRecords().get(newValue.getValue());
-            displayer.displayGrammarResult(response, responseBox);
+            curResponse = stage.getRecords().get(newValue.getValue());
+            toggleClause.setDisable(false);
+            togglePhrase.setDisable(false);
+            toggleClause.setSelected(false);
+            toggleClause.setSelected(true);
+            imageView.setImage(questionImages.get(newValue.getValue().name.name()));
             if (newValue.getValue().score == -1) {
                 sliderScore.setValue(0);
                 labelEva.setText("");
@@ -249,5 +273,50 @@ public class GrammarSummaryController extends BaseSummaryController {
         });
         sliderScore.toFront();
         sliderScore.setDisable(true);
+    }
+
+    private void setImageList() {
+        questionImages = new HashMap<>();
+        File[] files = new File(PropertyManager.getResourceProperty("grammar_question")).listFiles();
+        assert files != null;
+        for (File file : files) {
+            String[] str = StringUtils.substringBefore(file.getName(), ".").split("-");
+            String no = str[0];
+            String target = str[1];
+            for (GrammarStage stage : result.stageResults) {
+                if (no.equals(String.valueOf(stage.getStageNo())))
+                    questionImages.put(target, new Image(StringUtils.substring(file.getPath(),5)));
+            }
+        }
+    }
+
+    private void setToggleButtons() {
+        toggleClause.setToggleGroup(toggleGroup);
+        toggleClause.setUserData("clause");
+        togglePhrase.setToggleGroup(toggleGroup);
+        togglePhrase.setUserData("phrase");
+        toggleClause.setDisable(true);
+        togglePhrase.setDisable(true);
+
+        toggleListener = (observable, oldValue, newValue) -> {
+            if (newValue != null) {
+                String cmd = (String) newValue.getUserData();
+                if (cmd.equals("clause"))
+                    displayer.displayGrammarResult(curResponse.getAnalyzedUtterance(), responseBox);
+                else if (cmd.equals("phrase"))
+                    displayer.displayGrammarResult(curResponse.getAnalyzedPhrase(), responseBox);
+            }
+        };
+
+        toggleGroup.selectedToggleProperty().addListener(toggleListener);
+    }
+
+    private void resetToggle() {
+        toggleGroup.selectedToggleProperty().removeListener(toggleListener);
+        toggleClause.setSelected(false);
+        togglePhrase.setSelected(false);
+        toggleClause.setDisable(true);
+        togglePhrase.setDisable(true);
+        toggleGroup.selectedToggleProperty().addListener(toggleListener);
     }
 }

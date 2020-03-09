@@ -14,6 +14,7 @@ import models.test.pronun.ErrorPattern;
 import models.test.pronun.PronunItems;
 import models.test.pronun.Syllable;
 
+import java.util.List;
 import java.util.Map;
 
 public class ResultDisplayer {
@@ -26,28 +27,30 @@ public class ResultDisplayer {
         font = new Font("System", fontSize);
     }
 
-    public void displayGrammarResult(Utterance utterance, VBox container) {
+    public void displayGrammarResult(List<Map.Entry<String, String>> analyzedList, VBox container) {
         container.getChildren().clear();
-        double containerWidth = container.getWidth();
-        double addedWidth = 0;
-        HBox utteranceLine = new HBox();
-        utteranceLine.setSpacing(horizontalSpacing);
-        for (Map.Entry<String, String> entry : utterance.getAnalyzedUtterance()) {
-            VBox segment = getVBoxSegment(entry);
+        if (analyzedList != null) {
+            double containerWidth = container.getWidth();
+            double addedWidth = 0;
+            HBox utteranceLine = new HBox();
+            utteranceLine.setSpacing(horizontalSpacing);
+            for (Map.Entry<String, String> entry : analyzedList) {
+                VBox segment = getVBoxSegment(entry);
 
-            addedWidth += segment.getPrefWidth() + horizontalSpacing;
-            if (addedWidth > containerWidth) {
-                container.getChildren().add(utteranceLine);
-                utteranceLine = new HBox();
-                utteranceLine.setSpacing(horizontalSpacing);
-                utteranceLine.getChildren().add(segment);
-                addedWidth = segment.getWidth();
-            } else {
-                utteranceLine.getChildren().add(segment);
+                addedWidth += segment.getPrefWidth() + horizontalSpacing;
+                if (addedWidth > containerWidth) {
+                    container.getChildren().add(utteranceLine);
+                    utteranceLine = new HBox();
+                    utteranceLine.setSpacing(horizontalSpacing);
+                    utteranceLine.getChildren().add(segment);
+                    addedWidth = segment.getWidth();
+                } else {
+                    utteranceLine.getChildren().add(segment);
+                }
             }
+            container.getChildren().add(utteranceLine);
+            container.setSpacing(verticalSpacing);
         }
-        container.getChildren().add(utteranceLine);
-        container.setSpacing(verticalSpacing);
     }
 
     public void displayPronunResult(Syllable syllable, VBox container) {

@@ -9,6 +9,7 @@ import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
+import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -34,8 +35,15 @@ public class GrammarTestController extends BaseTestController {
 	private Label labelTarget;
 	@FXML
 	private Label labelStage;
+	@FXML
+	private JFXToggleButton toggleClause;
+	@FXML
+	private JFXToggleButton togglePhrase;
 
+	private ChangeListener<Toggle> toggleListener;
+	private Utterance curResponse;
 	private boolean isAnalyzed = false;
+	final ToggleGroup toggleGroup = new ToggleGroup();
 	
 	public void initialize() {
 		recorder = new Recorder();
@@ -45,6 +53,7 @@ public class GrammarTestController extends BaseTestController {
 		manager.nextQuestion();
 		root.getChildren().remove(recordLabel);
 		initFileMonitor();
+		setToggleButtons();
 	}
 
 	@FXML
@@ -61,7 +70,11 @@ public class GrammarTestController extends BaseTestController {
 
 	@FXML
 	void onClickAnalyze(ActionEvent event) {
-		manager.getAssessment().analyzeResponse(textTranscribe.getText(), true);
+		curResponse = (Utterance) manager.getAssessment().analyzeResponse(textTranscribe.getText(), true);
+		toggleClause.setDisable(false);
+		togglePhrase.setDisable(false);
+		toggleClause.setSelected(true);
+		toggleGroup.selectedToggleProperty().addListener(toggleListener);
 		isAnalyzed = true;
 	}
 	
@@ -78,6 +91,8 @@ public class GrammarTestController extends BaseTestController {
 		if (!isAnalyzed) {
 			manager.getAssessment().analyzeResponse(textTranscribe.getText(), false);
 			isAnalyzed = true;
+		} else {
+			resetToggle();
 		}
 		manager.nextQuestion();
 		textTranscribe.setText("");
@@ -101,5 +116,32 @@ public class GrammarTestController extends BaseTestController {
 	public void setSummary(Region summary) {
 		monitor.stop();
 		root.getChildren().add(summary);
+	}
+
+	private void setToggleButtons() {
+		toggleClause.setToggleGroup(toggleGroup);
+		toggleClause.setUserData("clause");
+		togglePhrase.setToggleGroup(toggleGroup);
+		togglePhrase.setUserData("phrase");
+		toggleClause.setDisable(true);
+		togglePhrase.setDisable(true);
+
+		toggleListener = (observable, oldValue, newValue) -> {
+			if (newValue != null) {
+				String cmd = (String) newValue.getUserData();
+				if (cmd.equals("clause"))
+					displayer.displayGrammarResult(curResponse.getAnalyzedUtterance(), resultBox);
+				else if (cmd.equals("phrase"))
+					displayer.displayGrammarResult(curResponse.getAnalyzedPhrase(), resultBox);
+			}
+		};
+	}
+
+	private void resetToggle() {
+		toggleGroup.selectedToggleProperty().removeListener(toggleListener);
+		toggleClause.setSelected(false);
+		togglePhrase.setSelected(false);
+		toggleClause.setDisable(true);
+		togglePhrase.setDisable(true);
 	}
 }

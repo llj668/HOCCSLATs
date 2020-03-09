@@ -87,7 +87,7 @@
     <property name="aspect.path.notification.shown" value="true" />
     <property name="dynamic.classpath" value="false" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/src/resources/inventory" />
-    <property name="project.structure.last.edited" value="SDKs" />
+    <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
     <property name="recentsLimit" value="5" />
@@ -226,6 +226,20 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="UtteranceMarker" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="models.test.grammar.UtteranceMarker" />
+      <module name="Hoccslats-software" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="models.test.grammar.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="WebSpeechToText" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="models.services.WebSpeechToText" />
       <module name="Hoccslats-software" />
@@ -283,10 +297,12 @@
       <item itemvalue="Application.Main (1)" />
       <item itemvalue="Application.CalculatePcc" />
       <item itemvalue="Application.UtteranceBuilder" />
+      <item itemvalue="Application.UtteranceMarker" />
     </list>
     <recent_temporary>
       <list>
         <item itemvalue="Application.Main (1)" />
+        <item itemvalue="Application.UtteranceMarker" />
         <item itemvalue="Application.UtteranceBuilder" />
         <item itemvalue="Application.CalculatePcc" />
         <item itemvalue="Application.WebSpeechToText" />
@@ -373,6 +389,25 @@
       <workItem from="1582631581613" duration="4088000" />
       <workItem from="1582695749895" duration="6462000" />
       <workItem from="1582779173962" duration="5991000" />
+      <workItem from="1582794120603" duration="154000" />
+      <workItem from="1582818115866" duration="2068000" />
+      <workItem from="1582859375020" duration="12488000" />
+      <workItem from="1582891497627" duration="4649000" />
+      <workItem from="1582948698141" duration="3465000" />
+      <workItem from="1582952188956" duration="2724000" />
+      <workItem from="1583029877403" duration="5311000" />
+      <workItem from="1583054281688" duration="4410000" />
+      <workItem from="1583145412054" duration="2040000" />
+      <workItem from="1583222174352" duration="752000" />
+      <workItem from="1583235268671" duration="9898000" />
+      <workItem from="1583247455762" duration="455000" />
+      <workItem from="1583295621607" duration="7148000" />
+      <workItem from="1583385832723" duration="3241000" />
+      <workItem from="1583556044919" duration="1016000" />
+      <workItem from="1583732501978" duration="1323000" />
+      <workItem from="1583736169414" duration="69000" />
+      <workItem from="1583741118838" duration="1456000" />
+      <workItem from="1583758690513" duration="1378000" />
     </task>
     <servers />
   </component>
@@ -384,14 +419,18 @@
     <option name="INCLUDE_TEXT_INTO_SHELF" value="false" />
   </component>
   <component name="WindowStateProjectService">
+    <state x="499" y="167" key="#com.intellij.codeInsight.editorActions.RestoreReferencesDialog" timestamp="1582952284987">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="499" y="167" key="#com.intellij.codeInsight.editorActions.RestoreReferencesDialog/0.0.1536.824@0.0.1536.824" timestamp="1582952284987" />
     <state x="425" y="116" key="#com.intellij.featureStatistics.actions.ShowFeatureUsageStatisticsDialog" timestamp="1579069261210">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state x="425" y="116" key="#com.intellij.featureStatistics.actions.ShowFeatureUsageStatisticsDialog/0.0.1536.824@0.0.1536.824" timestamp="1579069261210" />
-    <state x="574" y="122" key="#com.intellij.ide.util.MemberChooser" timestamp="1582005439505">
+    <state x="574" y="122" key="#com.intellij.ide.util.MemberChooser" timestamp="1582818859575">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state x="574" y="122" key="#com.intellij.ide.util.MemberChooser/0.0.1536.824@0.0.1536.824" timestamp="1582005439505" />
+    <state x="574" y="122" key="#com.intellij.ide.util.MemberChooser/0.0.1536.824@0.0.1536.824" timestamp="1582818859575" />
     <state x="599" y="124" key="#com.intellij.openapi.roots.ui.configuration.libraryEditor.LibraryEditorDialog" timestamp="1577608422871">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
@@ -420,22 +459,22 @@
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state x="549" y="168" key="FileChooserDialogImpl/0.0.1536.824@0.0.1536.824" timestamp="1581924575493" />
-    <state width="1493" height="190" key="GridCell.Tab.0.bottom" timestamp="1582793549901">
+    <state width="1493" height="190" key="GridCell.Tab.0.bottom" timestamp="1583760069945">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1493" height="190" key="GridCell.Tab.0.bottom/0.0.1536.824@0.0.1536.824" timestamp="1582793549901" />
-    <state width="1493" height="190" key="GridCell.Tab.0.center" timestamp="1582793549901">
+    <state width="1493" height="190" key="GridCell.Tab.0.bottom/0.0.1536.824@0.0.1536.824" timestamp="1583760069945" />
+    <state width="1493" height="190" key="GridCell.Tab.0.center" timestamp="1583760069945">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1493" height="190" key="GridCell.Tab.0.center/0.0.1536.824@0.0.1536.824" timestamp="1582793549901" />
-    <state width="1493" height="190" key="GridCell.Tab.0.left" timestamp="1582793549901">
+    <state width="1493" height="190" key="GridCell.Tab.0.center/0.0.1536.824@0.0.1536.824" timestamp="1583760069945" />
+    <state width="1493" height="190" key="GridCell.Tab.0.left" timestamp="1583760069945">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1493" height="190" key="GridCell.Tab.0.left/0.0.1536.824@0.0.1536.824" timestamp="1582793549901" />
-    <state width="1493" height="190" key="GridCell.Tab.0.right" timestamp="1582793549901">
+    <state width="1493" height="190" key="GridCell.Tab.0.left/0.0.1536.824@0.0.1536.824" timestamp="1583760069945" />
+    <state width="1493" height="190" key="GridCell.Tab.0.right" timestamp="1583760069945">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1493" height="190" key="GridCell.Tab.0.right/0.0.1536.824@0.0.1536.824" timestamp="1582793549901" />
+    <state width="1493" height="190" key="GridCell.Tab.0.right/0.0.1536.824@0.0.1536.824" timestamp="1583760069945" />
     <state width="1493" height="261" key="GridCell.Tab.1.bottom" timestamp="1581662470549">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
@@ -452,10 +491,10 @@
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state width="1493" height="261" key="GridCell.Tab.1.right/0.0.1536.824@0.0.1536.824" timestamp="1581662470548" />
-    <state x="249" y="0" key="SettingsEditor" timestamp="1581925014731">
+    <state x="249" y="0" key="SettingsEditor" timestamp="1583758718978">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state x="249" y="0" key="SettingsEditor/0.0.1536.824@0.0.1536.824" timestamp="1581925014731" />
+    <state x="249" y="0" key="SettingsEditor/0.0.1536.824@0.0.1536.824" timestamp="1583758718978" />
     <state x="454" y="237" key="com.intellij.ide.util.TipDialog" timestamp="1579068656395">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
@@ -464,6 +503,10 @@
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state x="408" y="27" key="com.intellij.openapi.editor.actions.MultiplePasteAction$ClipboardContentChooser/0.0.1536.824@0.0.1536.824" timestamp="1582790449838" />
+    <state x="178" y="113" key="new project wizard" timestamp="1583736223569">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="178" y="113" key="new project wizard/0.0.1536.824@0.0.1536.824" timestamp="1583736223569" />
     <state x="470" y="30" key="refactoring.ChangeSignatureDialog" timestamp="1580191447604">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
@@ -472,9 +515,9 @@
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state x="425" y="187" key="run.anything.popup/0.0.1536.824@0.0.1536.824" timestamp="1578635810199" />
-    <state x="431" y="145" width="672" height="678" key="search.everywhere.popup" timestamp="1582449787355">
+    <state x="431" y="145" width="672" height="678" key="search.everywhere.popup" timestamp="1583056839320">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state x="431" y="145" width="672" height="678" key="search.everywhere.popup/0.0.1536.824@0.0.1536.824" timestamp="1582449787355" />
+    <state x="431" y="145" width="672" height="678" key="search.everywhere.popup/0.0.1536.824@0.0.1536.824" timestamp="1583056839320" />
   </component>
 </project>

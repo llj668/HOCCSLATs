@@ -4,6 +4,8 @@ import application.PropertyManager;
 import com.hankcs.hanlp.corpus.document.sentence.Sentence;
 import com.hankcs.hanlp.corpus.document.sentence.word.IWord;
 import com.hankcs.hanlp.dependency.nnparser.NeuralNetworkDependencyParser;
+import com.hankcs.hanlp.mining.word2vec.DocVectorModel;
+import com.hankcs.hanlp.mining.word2vec.WordVectorModel;
 import com.hankcs.hanlp.model.crf.CRFLexicalAnalyzer;
 import com.intellij.vcs.log.Hash;
 import controllers.BaseTestController;
@@ -33,6 +35,7 @@ public class GrammarTest extends Assessment {
 	private String prevStage = "-1";
 	private BaseTestController controller;
 	private NeuralNetworkDependencyParser parser;
+	private DocVectorModel docVectorModel;
 
 	public GrammarTest(BaseTestController controller, Queue<String> testQueue) {
 		super();
@@ -46,7 +49,6 @@ public class GrammarTest extends Assessment {
 	@Override
 	public Response analyzeResponse(String response, boolean showInBox) {
 		utterance = new Utterance(response);
-
 		ProcessingOverlay overlay = new ProcessingOverlay();
 		if (showInBox) {
 			controller.resultBox.getChildren().add(overlay);
@@ -54,14 +56,24 @@ public class GrammarTest extends Assessment {
 			controller.btnNext.setDisable(true);
 		}
 		new Thread(() -> {
-			List<Map.Entry<String, String>> analyzed = UtteranceBuilder.analyzeClause(response, parser);
-			utterance.setAnalyzedUtterance(analyzed);
+			List<Map.Entry<String, String>> analyzed_c = UtteranceBuilder.analyzeClause(response, parser);
+			List<Map.Entry<String, String>> analyzed_p = UtteranceBuilder.analyzePhrase(response, parser);
+			utterance.setAnalyzedUtterance(analyzed_c);
+			utterance.setAnalyzedPhrase(analyzed_p);
+			for (Map.Entry<String, String> entry : analyzed_c) {
+				System.out.print(entry.getKey() + "（" + entry.getValue() + "）");
+			}
+			System.out.println();
+			for (Map.Entry<String, String> entry : analyzed_p) {
+				System.out.print(entry.getKey() + "（" + entry.getValue() + "）");
+			}
+			System.out.println();
 			Platform.runLater(() -> {
 				if (showInBox) {
 					controller.btnAnalyze.setDisable(false);
 					controller.btnNext.setDisable(false);
 					controller.resultBox.getChildren().remove(overlay);
-					controller.displayer.displayGrammarResult(utterance, controller.resultBox);
+					controller.displayer.displayGrammarResult(utterance.getAnalyzedUtterance(), controller.resultBox);
 				}
 			});
 		}).start();
@@ -86,7 +98,9 @@ public class GrammarTest extends Assessment {
 					results.stageResults.add(stage);
 				stage = new GrammarStage(Integer.parseInt(question.getStage()));
 			}
-			stage.addRecord(new GrammarStructure(question.getTarget(), -1), this.utterance);
+			int score = UtteranceMarker.mark(question, this.utterance, docVectorModel);
+			System.out.println("score: " + score);
+			stage.addRecord(new GrammarStructure(question.getTarget(), score), this.utterance);
 			prevStage = question.getStage();
 		}
 	}
@@ -105,8 +119,13 @@ public class GrammarTest extends Assessment {
 	private void setInitOverlay(BaseTestController controller) {
 		InitOverlay overlay = new InitOverlay();
 		new Thread(() -> {
-			controller.root.getChildren().add(overlay);
-			parser = new NeuralNetworkDependencyParser();
+			try {
+				controller.root.getChildren().add(overlay);
+				parser = new NeuralNetworkDependencyParser();
+				docVectorModel = new DocVectorModel(new WordVectorModel(PropertyManager.getResourceProperty("word2vec_path")));
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 			Platform.runLater(() -> controller.root.getChildren().remove(overlay));
 		}).start();
 	}

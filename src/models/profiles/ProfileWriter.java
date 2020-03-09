@@ -152,10 +152,17 @@ public class ProfileWriter {
 
                         for (Map.Entry<GrammarStructure, Utterance> entry : grammarStage.getRecords().entrySet()) {
                             Element question = stage.addElement("question");
-                            Element response = question.addElement("response");
 
+                            Element response_clause = question.addElement("response_clause");
                             for (Map.Entry<String, String> segment : entry.getValue().getAnalyzedUtterance()) {
-                                Element structure = response.addElement("structure");
+                                Element structure = response_clause.addElement("structure");
+                                structure.setText(segment.getKey());
+                                structure.addAttribute("value", segment.getValue());
+                            }
+
+                            Element response_phrase = question.addElement("response_phrase");
+                            for (Map.Entry<String, String> segment : entry.getValue().getAnalyzedPhrase()) {
+                                Element structure = response_phrase.addElement("structure");
                                 structure.setText(segment.getKey());
                                 structure.addAttribute("value", segment.getValue());
                             }
@@ -163,7 +170,7 @@ public class ProfileWriter {
                             GrammarStructure grammar = entry.getKey();
                             question.addAttribute("name", grammar.name.toString());
                             question.addAttribute("score", String.valueOf(grammar.score));
-                            response.addAttribute("utterance", entry.getValue().getUtterance());
+                            response_clause.addAttribute("utterance", entry.getValue().getUtterance());
                         }
                     }
                 }

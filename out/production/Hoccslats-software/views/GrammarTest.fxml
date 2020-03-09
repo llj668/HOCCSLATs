@@ -80,7 +80,7 @@
             <Font size="25.0" />
          </font>
       </Label>
-      <VBox fx:id="resultBox" layoutX="819.0" layoutY="361.0" prefHeight="280.0" prefWidth="425.0" style="-fx-background-color: #FFFFFF; -fx-border-color: #DDDDDD; -fx-border-width: 1px;">
+      <VBox fx:id="resultBox" layoutX="819.0" layoutY="394.0" prefHeight="247.0" prefWidth="425.0" style="-fx-background-color: #FFFFFF; -fx-border-color: #DDDDDD; -fx-border-width: 1px;">
          <padding>
             <Insets left="10.0" top="10.0" />
          </padding></VBox>
@@ -89,5 +89,7 @@
             <Circle fill="RED" radius="7.0" stroke="TRANSPARENT" strokeType="INSIDE" />
          </graphic>
       </Label>
+      <JFXToggleButton fx:id="toggleClause" layoutX="819.0" layoutY="351.0" size="7.0" text="句法层面" />
+      <JFXToggleButton fx:id="togglePhrase" layoutX="957.0" layoutY="351.0" size="7.0" text="词法层面" />
    </children>
 </AnchorPane>

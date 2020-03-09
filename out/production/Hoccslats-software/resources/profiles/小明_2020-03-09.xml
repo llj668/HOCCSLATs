@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<profile name="小明" gender="male"> 
+  <grammar>
+    <test time="2020-03-09 13:52:43" age="1;1">
+      <stage stage_no="2" stage_score="-1.0">
+        <question name="VO" score="1">
+          <response_clause utterance="来吃饭">
+            <structure value="A">来</structure>
+            <structure value="V">吃饭</structure>
+          </response_clause>
+          <response_phrase>
+            <structure value="vv">来吃饭</structure>
+          </response_phrase>
+        </question>
+        <question name="SVO" score="-1">
+          <response_clause utterance="">
+            <structure value="核心词">a</structure>
+          </response_clause>
+          <response_phrase/>
+        </question>
+        <question name="ENDO" score="-1">
+          <response_clause utterance="">
+            <structure value="核心词">a</structure>
+          </response_clause>
+          <response_phrase/>
+        </question>
+        <question name="VCv" score="1">
+          <response_clause utterance="走了">
+            <structure value="V">走了</structure>
+          </response_clause>
+          <response_phrase/>
+        </question>
+        <question name="VV" score="1">
+          <response_clause utterance="踢足球">
+            <structure value="核心词">踢足球</structure>
+          </response_clause>
+          <response_phrase/>
+        </question>
+        <question name="WhX" score="-1">
+          <response_clause utterance="他是谁">
+            <structure value="S">他</structure>
+            <structure value="V">是</structure>
+            <structure value="Wh">谁</structure>
+          </response_clause>
+          <response_phrase>
+            <structure value="pron p">他</structure>
+            <structure value="pron n">谁</structure>
+          </response_phrase>
+        </question>
+      </stage>
+    </test>
+  </grammar>  
+  <pronun/> 
+</profile>
