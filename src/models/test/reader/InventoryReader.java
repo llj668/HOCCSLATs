@@ -2,6 +2,8 @@ package models.test.reader;
 
 import application.PropertyManager;
 import models.profiles.Age;
+import models.test.Question;
+import models.test.grammar.Utterance;
 import models.test.pronun.ErrorPattern;
 import models.test.pronun.Inventory;
 import org.dom4j.Document;
@@ -81,6 +83,118 @@ public class InventoryReader {
             e.printStackTrace();
         }
         return inventory;
+    }
+
+    public static Question readQuestionFromXML(String filepath, String filename, Age testAge) {
+        SAXReader reader = new SAXReader();
+        try {
+            File xml = new File(PropertyManager.getResourceProperty("grammar_questioninfo") + "question_" + filename + ".xml");
+            Document document = reader.read(xml);
+            Element root = document.getRootElement();
+
+            String text = root.attribute("text").getValue();
+            String stage = root.attribute("stage").getValue();
+            String id = root.attribute("id").getValue();
+            Map<String, Integer> targets = new LinkedHashMap<>();
+
+            Iterator rootElements = root.elementIterator();
+            while (rootElements.hasNext()) {
+                Element period = (Element) rootElements.next();
+
+                if (testAge.isInAgePeriod(period.attribute("period").getValue())) {
+
+                    Iterator targetElements = period.elementIterator();
+                    while (targetElements.hasNext()) {
+                        Element target = (Element) targetElements.next();
+                        targets.put(target.getStringValue(), Integer.parseInt(target.attributeValue("stage")));
+                    }
+                    break;
+                }
+            }
+            return new Question(id, filepath, stage, text, targets);
+        } catch (DocumentException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public static void getSampleAnswersFromXML(Question question) {
+        SAXReader reader = new SAXReader();
+        try {
+            File xml = new File(PropertyManager.getResourceProperty("grammar_sampleanswer") + "answer_" + question.getId() + ".xml");
+            Document document = reader.read(xml);
+            Element root = document.getRootElement();
+            Map<Utterance, Map<String, Integer>> sampleAnswers = new LinkedHashMap<>();
+
+            Iterator rootElements = root.elementIterator();
+            while (rootElements.hasNext()) {
+                Element answer = (Element) rootElements.next();
+
+                String utterance = "";
+                List<Map.Entry<String, String>> analyzedUtterance = new LinkedList<>();
+                List<Map.Entry<String, String>> analyzedPhrase = new LinkedList<>();
+                List<Map.Entry<String, String>> analyzedWord = new LinkedList<>();
+                List<String> presentUtteranceStructures = new LinkedList<>();
+                List<String> presentPhraseStructures = new LinkedList<>();
+                List<String> presentWordStructures = new LinkedList<>();
+                Map<String, Integer> marked = new LinkedHashMap<>();
+
+                Iterator answerElements = answer.elementIterator();
+                while (answerElements.hasNext()) {
+                    Element item = (Element) answerElements.next();
+
+                    if (item.getName().equals("response_clause")) {
+                        utterance = item.attributeValue("utterance");
+                        Iterator clauseElements = item.elementIterator();
+                        while (clauseElements.hasNext()) {
+                            Element structure = (Element) clauseElements.next();
+
+                            analyzedUtterance.add(new AbstractMap.SimpleEntry<>(structure.getStringValue(), structure.attributeValue("value")));
+                        }
+                    } else if (item.getName().equals("response_phrase")) {
+                        Iterator phraseElements = item.elementIterator();
+                        while (phraseElements.hasNext()) {
+                            Element structure = (Element) phraseElements.next();
+
+                            analyzedPhrase.add(new AbstractMap.SimpleEntry<>(structure.getStringValue(), structure.attributeValue("value")));
+                        }
+                    } else if (item.getName().equals("response_word")) {
+                        Iterator wordElements = item.elementIterator();
+                        while (wordElements.hasNext()) {
+                            Element structure = (Element) wordElements.next();
+
+                            analyzedWord.add(new AbstractMap.SimpleEntry<>(structure.getStringValue(), structure.attributeValue("value")));
+                        }
+                    } else if (item.getName().equals("scores")) {
+                        Iterator scoreElements = item.elementIterator();
+                        while (scoreElements.hasNext()) {
+                            Element structure = (Element) scoreElements.next();
+
+                            String target = structure.getStringValue();
+                            if (question.getTargets().containsKey(target)) {
+                                int score = Integer.parseInt(structure.attributeValue("score"));
+                                marked.put(target, score);
+                                if (score == 5 || score == 3) {
+                                    if (structure.attributeValue("type").equals("clause"))
+                                        presentUtteranceStructures.add(target);
+                                    if (structure.attributeValue("type").equals("phrase"))
+                                        presentPhraseStructures.add(target);
+                                    if (structure.attributeValue("type").equals("word"))
+                                        presentWordStructures.add(target);
+                                }
+                            }
+                        }
+                    }
+                }
+
+                Utterance answerUtterance = new Utterance(utterance, analyzedUtterance, analyzedPhrase, analyzedWord,
+                        presentUtteranceStructures, presentPhraseStructures, presentWordStructures);
+                sampleAnswers.put(answerUtterance, marked);
+            }
+            question.setSampleAnswers(sampleAnswers);
+        } catch (DocumentException e) {
+            e.printStackTrace();
+        }
     }
 
 }

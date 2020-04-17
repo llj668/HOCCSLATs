@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<question id="1" text="小熊在走路" stage="2/3">
+  <period period="1;0-1;5">
+    <target stage="2">SV</target>
+  </period>
+  <period period="1;6-1;11">
+    <target stage="2">SV</target>
+    <target stage="2">aux</target>
+  </period>
+  <period period="2;0-2;5">
+    <target stage="2">SV</target>
+    <target stage="2">aux</target>
+    <target stage="3">ing-v</target>
+  </period>
+  <period period="2;6-2;11">
+    <target stage="2">SV</target>
+    <target stage="2">aux</target>
+    <target stage="3">ing-v</target>
+    <target stage="3">pron p</target>
+  </period>
+  <period period="3;0-3;5">
+    <target stage="2">SV</target>
+    <target stage="2">aux</target>
+    <target stage="3">ing-v</target>
+    <target stage="3">pron p</target>
+  </period>
+</question>

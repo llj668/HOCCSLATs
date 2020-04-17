@@ -12,6 +12,7 @@ import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 
 import java.util.regex.Pattern;
@@ -35,11 +36,13 @@ public class EnterAgeDialog extends JFXDialog {
 		yearField.setPromptText("0-9");
 		monthField = new JFXTextField();
 		monthField.setPromptText("0-11");
-		Label yearLabel = new Label("岁");
-		Label monthLabel = new Label("月");
+		yearField.setPrefWidth(110);
+		monthField.setPrefWidth(110);
+		Label yearLabel = new Label("Year");
+		Label monthLabel = new Label("Month");
 
-		buttonNo = new JFXButton("取消");
-		buttonYes = new JFXButton("确认");
+		buttonNo = new JFXButton("Cancel");
+		buttonYes = new JFXButton("Confirm");
 		buttonNo.setOnAction(ActionEvent -> {
 		    controller.onClickNoDialog();
 		});
@@ -48,18 +51,33 @@ public class EnterAgeDialog extends JFXDialog {
 		});
 
 		buttonYes.setDisable(true);
-		ChangeListener<String> textFieldListener = (observable, oldValue, newValue) -> {
-			if (yearField.getText().matches("\\d+") && monthField.getText().matches("\\d+")) {
-				buttonYes.setDisable(false);
+		yearField.textProperty().addListener((observable, oldValue, newValue) -> {
+			if (yearField.getText().matches("\\d+")) {
+				yearField.setFocusColor(new Color(0.251, 0.349, 0.506, 1.0));
+				if (monthField.getText().matches("\\d+")) {
+					buttonYes.setDisable(false);
+				} else {
+					buttonYes.setDisable(true);
+				}
 			} else {
-				buttonYes.setDisable(true);
+				yearField.setFocusColor(new Color(0.906, 0, 0, 1.0));
 			}
-		};
-		yearField.textProperty().addListener(textFieldListener);
-		monthField.textProperty().addListener(textFieldListener);
+		});
+		monthField.textProperty().addListener((observable, oldValue, newValue) -> {
+			if (monthField.getText().matches("\\d+")) {
+				monthField.setFocusColor(new Color(0.251, 0.349, 0.506, 1.0));
+				if (yearField.getText().matches("\\d+")) {
+					buttonYes.setDisable(false);
+				} else {
+					buttonYes.setDisable(true);
+				}
+			} else {
+				monthField.setFocusColor(new Color(0.906, 0, 0, 1.0));
+			}
+		});
 
 		field.getChildren().addAll(yearField, yearLabel, monthField, monthLabel);
-		content.setHeading(new Text("输入年龄"));
+		content.setHeading(new Text("Please enter the age"));
 		content.setBody(field);
 		content.setActions(buttonNo, buttonYes);
 	}

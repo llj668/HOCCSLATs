@@ -25,10 +25,10 @@ public class SelectStageDialog extends JFXDialog {
 
 	public SelectStageDialog(DialogControl controller, StackPane dialogContainer, JFXDialogLayout content) {
 		super(dialogContainer, content, DialogTransition.CENTER, false);
-		content.setHeading(new Text("句法/语法测试：选择需要测试的阶段"));
+		content.setHeading(new Text("Grammar test: choose the test stages"));
 		content.setBody(setSelections());
-		JFXButton buttonNo = new JFXButton("取消");
-		JFXButton buttonYes = new JFXButton("确认");
+		JFXButton buttonNo = new JFXButton("Cancel");
+		JFXButton buttonYes = new JFXButton("Confirm");
 		buttonNo.setOnAction(ActionEvent -> controller.onClickNoDialog());
 		buttonYes.setOnAction(ActionEvent -> controller.onClickYesDialog());
 		content.setActions(buttonNo, buttonYes);
@@ -36,11 +36,11 @@ public class SelectStageDialog extends JFXDialog {
 
 	private VBox setSelections() {
 		VBox selectionBox = new VBox(15);
-		selStage1 = new JFXCheckBox("第一段");
-		selStage2 = new JFXCheckBox("第二段");
-		selStage3 = new JFXCheckBox("第三段");
-		selStage4 = new JFXCheckBox("第四段");
-		selAll = new JFXCheckBox("全选");
+		selStage1 = new JFXCheckBox("Stage I");
+		selStage2 = new JFXCheckBox("Stage II");
+		selStage3 = new JFXCheckBox("Stage III");
+		selStage4 = new JFXCheckBox("Stage IV");
+		selAll = new JFXCheckBox("Select all");
 		boxes = new JFXCheckBox[]{selStage1, selStage2, selStage3, selStage4};
 		decorateSelAll();
 		decorateCheckBox(boxes);

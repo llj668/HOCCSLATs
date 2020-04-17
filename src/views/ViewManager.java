@@ -2,16 +2,12 @@ package views;
 
 import java.io.IOException;
 import java.util.AbstractMap;
-import java.util.HashMap;
 import java.util.Map;
 
-import application.Main;
 import application.PropertyManager;
 import controllers.ProfileController;
 import controllers.ViewProfileController;
 import controllers.items.BaseSummaryController;
-import controllers.items.GrammarSummaryController;
-import controllers.items.ItemController;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;

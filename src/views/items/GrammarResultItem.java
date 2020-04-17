@@ -1,5 +1,7 @@
 package views.items;
 
+import application.PropertyManager;
+import controllers.items.PronunSummaryController;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
@@ -20,24 +22,29 @@ public class GrammarResultItem extends ResultItem {
         if (result.isAllScored)
             addStageResults();
         this.getChildren().addAll(age, time, score);
+        this.getStylesheets().add(GrammarResultItem.class.getResource(PropertyManager.getResourceProperty("resultitem_css")).toString());
     }
 
     private void initializeItemContent() {
-        age = new Label("测试年龄：" + grammarResult.testAge.toString());
+        age = new Label("Test age: " + grammarResult.testAge.toString());
         age.setPrefSize(100, 30);
         age.setFont(Font.font("System", 15));
 
-        time = new Label("测试时间：" + grammarResult.getTestTime());
+        time = new Label("Test time: " + grammarResult.getTestTime());
         time.setTranslateX(150);
         time.setPrefSize(250, 30);
         time.setFont(Font.font("System", 15));
 
-        if (grammarResult.isAllScored)
-            score = new Label("总分：" + grammarResult.score);
-        else
-            score = new Label("未打分");
+        if (grammarResult.isAllScored) {
+            score = new Label("Avg score: " + grammarResult.score);
+            score.setPrefSize(120, 30);
+            score.setId("label_scored");
+        } else {
+            score = new Label("Score incomplete");
+            score.setPrefSize(200, 30);
+            score.setId("label_unscored");
+        }
         score.setTranslateY(40);
-        score.setPrefSize(100, 30);
         score.setFont(Font.font("System", 15));
     }
 
@@ -47,20 +54,20 @@ public class GrammarResultItem extends ResultItem {
         int index = 0;
         for (GrammarStage stage : grammarResult.stageResults) {
             Label label = new Label();
-            label.setPrefSize(100, 30);
+            label.setPrefSize(120, 30);
             label.setFont(Font.font("System", 15));
             switch (stage.getStageNo()) {
                 case 1:
-                    label.setText("阶段一：" + stage.getStageScore());
+                    label.setText("Stage I: " + stage.getStageScore());
                     break;
                 case 2:
-                    label.setText("阶段二：" + stage.getStageScore());
+                    label.setText("Stage II: " + stage.getStageScore());
                     break;
                 case 3:
-                    label.setText("阶段三：" + stage.getStageScore());
+                    label.setText("Stage III: " + stage.getStageScore());
                     break;
                 case 4:
-                    label.setText("阶段四：" + stage.getStageScore());
+                    label.setText("Stage IV: " + stage.getStageScore());
                     break;
                 default:
                     break;

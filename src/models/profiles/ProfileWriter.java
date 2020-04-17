@@ -1,5 +1,6 @@
 package models.profiles;
 
+import models.test.Question;
 import models.test.grammar.Utterance;
 import models.test.pronun.ErrorPattern;
 import models.test.pronun.Syllable;
@@ -11,7 +12,6 @@ import org.dom4j.Element;
 import org.dom4j.io.OutputFormat;
 import org.dom4j.io.SAXReader;
 import org.dom4j.io.XMLWriter;
-import org.jetbrains.annotations.NotNull;
 
 import java.io.*;
 import java.time.LocalDate;
@@ -152,6 +152,9 @@ public class ProfileWriter {
 
                         for (Map.Entry<GrammarStructure, Utterance> entry : grammarStage.getRecords().entrySet()) {
                             Element question = stage.addElement("question");
+                            question.addAttribute("present_clause", String.join("/", entry.getValue().getPresentUtteranceStructures()));
+                            question.addAttribute("present_phrase", String.join("/", entry.getValue().getPresentPhraseStructures()));
+                            question.addAttribute("present_word", String.join("/", entry.getValue().getPresentWordStructures()));
 
                             Element response_clause = question.addElement("response_clause");
                             for (Map.Entry<String, String> segment : entry.getValue().getAnalyzedUtterance()) {
@@ -167,9 +170,22 @@ public class ProfileWriter {
                                 structure.addAttribute("value", segment.getValue());
                             }
 
+                            Element response_word = question.addElement("response_word");
+                            for (Map.Entry<String, String> segment : entry.getValue().getAnalyzedWord()) {
+                                Element structure = response_word.addElement("structure");
+                                structure.setText(segment.getKey());
+                                structure.addAttribute("value", segment.getValue());
+                            }
+
                             GrammarStructure grammar = entry.getKey();
-                            question.addAttribute("name", grammar.name.toString());
+                            question.addAttribute("name", grammar.name);
                             question.addAttribute("score", String.valueOf(grammar.score));
+                            String questionId = "";
+                            for (Question q : result.questions.keySet()) {
+                                if (q.getTargets().containsKey(entry.getKey().name))
+                                    questionId = q.getId();
+                            }
+                            question.addAttribute("id", questionId);
                             response_clause.addAttribute("utterance", entry.getValue().getUtterance());
                         }
                     }
@@ -195,7 +211,7 @@ public class ProfileWriter {
         }
     }
 
-    private static boolean isOldResult(@NotNull Element rootElement, BaseResult newResult) {
+    private static boolean isOldResult(Element rootElement, BaseResult newResult) {
         Iterator testElements = rootElement.elementIterator();
         while (testElements.hasNext()) {
             Element test = (Element) testElements.next();
@@ -206,7 +222,7 @@ public class ProfileWriter {
         return false;
     }
 
-    private static void updateOldGrammarResult(@NotNull Element rootElement, GrammarResult newResult) {
+    private static void updateOldGrammarResult(Element rootElement, GrammarResult newResult) {
         Iterator testElements = rootElement.elementIterator();
         while (testElements.hasNext()) {
             Element test = (Element) testElements.next();
@@ -219,6 +235,9 @@ public class ProfileWriter {
                 while (stageElements.hasNext()) {
                     Element stage = (Element) stageElements.next();
 
+                    if (!stage.getName().equals("stage"))
+                        continue;
+
                     String stageNo = stage.attribute("stage_no").getValue();
                     for (GrammarStage grammarStage : newResult.stageResults) {
                         if (grammarStage.getStageNo() == Integer.parseInt(stageNo)) {
@@ -230,7 +249,7 @@ public class ProfileWriter {
 
                                 String name = question.attribute("name").getValue();
                                 for (Map.Entry<GrammarStructure, Utterance> entry : grammarStage.getRecords().entrySet()) {
-                                    if (entry.getKey().name.toString().equals(name))
+                                    if (entry.getKey().name.equalsIgnoreCase(name))
                                         question.attribute("score").setValue(String.valueOf(entry.getKey().score));
                                 }
                             }

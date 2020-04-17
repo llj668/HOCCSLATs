@@ -13,6 +13,7 @@ import models.test.results.GrammarResult;
 import models.test.results.GrammarStage;
 import models.test.results.GrammarStructure;
 import models.test.results.PronunResult;
+import org.apache.commons.lang3.StringUtils;
 import org.dom4j.Attribute;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
@@ -83,6 +84,7 @@ public class ProfileReader {
 						SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 						String testTime = test.attribute("time").getValue();
 						String testAge = test.attribute("age").getValue();
+						LinkedHashMap<String, Utterance> testQuestions = new LinkedHashMap<>();
 
 						Iterator stageElements = test.elementIterator();
 						while (stageElements.hasNext()) {
@@ -97,12 +99,17 @@ public class ProfileReader {
 							while (questionElements.hasNext()) {
 								Element question = (Element) questionElements.next();
 
+								String id = question.attributeValue("id");
 								String target = question.attribute("name").getValue();
 								String score = question.attribute("score").getValue();
 
 								String utterance = "";
 								List<Map.Entry<String, String>> analyzed_c = new LinkedList<>();
 								List<Map.Entry<String, String>> analyzed_p = new LinkedList<>();
+								List<Map.Entry<String, String>> analyzed_w = new LinkedList<>();
+								List<String> presentClause = Arrays.asList(StringUtils.split(question.attribute("present_clause").getValue(), "/"));
+								List<String> presentPhrase = Arrays.asList(StringUtils.split(question.attribute("present_phrase").getValue(), "/"));
+								List<String> presentWord = Arrays.asList(StringUtils.split(question.attribute("present_word").getValue(), "/"));
 
 								Iterator responseElements = question.elementIterator();
 								while (responseElements.hasNext()) {
@@ -123,14 +130,23 @@ public class ProfileReader {
 											Element structure = (Element) structureElements.next();
 											analyzed_p.add(new AbstractMap.SimpleEntry<>(structure.getStringValue(), structure.attribute("value").getValue()));
 										}
+									} else if (response.getName().equals("response_word")) {
+
+										Iterator structureElements = response.elementIterator();
+										while (structureElements.hasNext()) {
+											Element structure = (Element) structureElements.next();
+											analyzed_w.add(new AbstractMap.SimpleEntry<>(structure.getStringValue(), structure.attribute("value").getValue()));
+										}
 									}
 
 								}
-								grammarStage.addRecord(new GrammarStructure(target, Integer.parseInt(score)), new Utterance(utterance, analyzed_c, analyzed_p));
+								Utterance u = new Utterance(utterance, analyzed_c, analyzed_p, analyzed_w, presentClause, presentPhrase, presentWord);
+								testQuestions.put(id, u);
+								grammarStage.addRecord(new GrammarStructure(target, Integer.parseInt(score)), u);
 							}
 							stageResults.add(grammarStage);
 						}
-						results.add(new GrammarResult(stageResults, f.parse(testTime, new ParsePosition(0)), new Age(testAge)));
+						results.add(new GrammarResult(stageResults, f.parse(testTime, new ParsePosition(0)), new Age(testAge), testQuestions));
 					}
 				}
 			}

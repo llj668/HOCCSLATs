@@ -3,11 +3,13 @@ package models.test.grammar;
 import application.PropertyManager;
 import com.hankcs.hanlp.corpus.document.sentence.Sentence;
 import com.hankcs.hanlp.corpus.document.sentence.word.IWord;
+import com.hankcs.hanlp.dependency.IDependencyParser;
 import com.hankcs.hanlp.dependency.nnparser.NeuralNetworkDependencyParser;
+import com.hankcs.hanlp.dependency.perceptron.parser.KBeamArcEagerDependencyParser;
 import com.hankcs.hanlp.mining.word2vec.DocVectorModel;
 import com.hankcs.hanlp.mining.word2vec.WordVectorModel;
 import com.hankcs.hanlp.model.crf.CRFLexicalAnalyzer;
-import com.intellij.vcs.log.Hash;
+import com.hankcs.hanlp.model.perceptron.PerceptronLexicalAnalyzer;
 import controllers.BaseTestController;
 import controllers.items.BaseSummaryController;
 import javafx.application.Platform;
@@ -15,11 +17,14 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import models.test.*;
+import models.test.reader.InventoryReader;
 import models.test.results.BaseResult;
 import models.test.results.GrammarResult;
 import models.test.results.GrammarStage;
 import models.test.results.GrammarStructure;
+//
 import org.apache.commons.lang3.StringUtils;
+//
 import views.ViewManager;
 import views.items.InitOverlay;
 import views.items.ProcessingOverlay;
@@ -30,12 +35,11 @@ import java.util.*;
 public class GrammarTest extends Assessment {
 	private GrammarResult results;
 	private Queue<String> testQueue;
-	private GrammarStage stage;
 	private Utterance utterance;
-	private String prevStage = "-1";
 	private BaseTestController controller;
-	private NeuralNetworkDependencyParser parser;
-	private DocVectorModel docVectorModel;
+	private IDependencyParser parser = null;
+	private DocVectorModel docVectorModel = null;
+	private Map<String, Integer> marked;
 
 	public GrammarTest(BaseTestController controller, Queue<String> testQueue) {
 		super();
@@ -43,7 +47,20 @@ public class GrammarTest extends Assessment {
 		this.controller = controller;
 		this.results = new GrammarResult(AssessmentManager.getInstance().getTestAge());
 		this.getQuestionList();
+		this.initGrammarStages();
 		this.setInitOverlay(controller);
+	}
+
+	private void initGrammarStages() {
+		for (String str : testQueue)
+			results.stageResults.add(new GrammarStage(Integer.parseInt(str)));
+		for (Question question : questionList) {
+			for (Map.Entry<String, Integer> target : question.getTargets().entrySet()) {
+				if (results.getGrammarStage(target.getValue()) == null)
+					continue;
+				results.getGrammarStage(target.getValue()).addRecord(new GrammarStructure(target.getKey()), null);
+			}
+		}
 	}
 
 	@Override
@@ -58,22 +75,19 @@ public class GrammarTest extends Assessment {
 		new Thread(() -> {
 			List<Map.Entry<String, String>> analyzed_c = UtteranceBuilder.analyzeClause(response, parser);
 			List<Map.Entry<String, String>> analyzed_p = UtteranceBuilder.analyzePhrase(response, parser);
+			List<Map.Entry<String, String>> analyzed_w = UtteranceBuilder.analyzeWord(response, parser);
 			utterance.setAnalyzedUtterance(analyzed_c);
 			utterance.setAnalyzedPhrase(analyzed_p);
-			for (Map.Entry<String, String> entry : analyzed_c) {
-				System.out.print(entry.getKey() + "（" + entry.getValue() + "）");
-			}
-			System.out.println();
-			for (Map.Entry<String, String> entry : analyzed_p) {
-				System.out.print(entry.getKey() + "（" + entry.getValue() + "）");
-			}
-			System.out.println();
+			utterance.setAnalyzedWord(analyzed_w);
+			setMarked(UtteranceMarker.mark(AssessmentManager.getInstance().getQuestion(), this.utterance, docVectorModel));
 			Platform.runLater(() -> {
 				if (showInBox) {
 					controller.btnAnalyze.setDisable(false);
 					controller.btnNext.setDisable(false);
 					controller.resultBox.getChildren().remove(overlay);
-					controller.displayer.displayGrammarResult(utterance.getAnalyzedUtterance(), controller.resultBox);
+					controller.displayer.displayGrammarResult(utterance, AssessmentManager.getInstance().getQuestion(), controller.resultBox);
+				} else {
+					controller.getNextQuestion();
 				}
 			});
 		}).start();
@@ -84,30 +98,30 @@ public class GrammarTest extends Assessment {
 	public void getQuestionList() {
 		File[] files = new File(PropertyManager.getResourceProperty("grammar_question")).listFiles();
 		for (File file : files) {
-			String[] str = StringUtils.substringBefore(file.getName(), ".").split("-");
-			if (testQueue.contains(str[0]))
-				questionList.add(new Question(file.getPath(), str[0], str[1]));
+			if (StringUtils.substringAfter(file.getName(), ".").equals("jpg")) {
+				Question question = InventoryReader.readQuestionFromXML(
+						file.getPath(), StringUtils.substringBefore(file.getName(), "."), results.testAge);
+				if (question == null)
+					continue;
+				for (String stageString : testQueue) {
+					if (question.getStage().contains(stageString)) {
+						questionList.add(question);
+						InventoryReader.getSampleAnswersFromXML(question);
+					}
+				}
+			}
 		}
 	}
 
 	@Override
 	public void writeResult(BaseTestController controller, Question question) {
 		if (question != null) {
-			if (!prevStage.equalsIgnoreCase(question.getStage())) {
-				if (stage != null)
-					results.stageResults.add(stage);
-				stage = new GrammarStage(Integer.parseInt(question.getStage()));
-			}
-			int score = UtteranceMarker.mark(question, this.utterance, docVectorModel);
-			System.out.println("score: " + score);
-			stage.addRecord(new GrammarStructure(question.getTarget(), score), this.utterance);
-			prevStage = question.getStage();
+			results.updateResult(marked, this.utterance, question);
 		}
 	}
 
 	@Override
 	public void saveResult() {
-		results.stageResults.add(stage);
 		results.conclude();
 	}
 
@@ -121,10 +135,20 @@ public class GrammarTest extends Assessment {
 		new Thread(() -> {
 			try {
 				controller.root.getChildren().add(overlay);
+				PerceptronLexicalAnalyzer segment = new PerceptronLexicalAnalyzer();
 				parser = new NeuralNetworkDependencyParser();
 				docVectorModel = new DocVectorModel(new WordVectorModel(PropertyManager.getResourceProperty("word2vec_path")));
+				parser.setSegment(segment);
+				docVectorModel.setSegment(segment);
 			} catch (IOException e) {
 				e.printStackTrace();
+			} finally {
+				controller.isDataFound = false;
+				Platform.runLater(() -> {
+					controller.root.getChildren().remove(overlay);
+					if (!controller.isDataFound)
+						controller.onDataNotFound();
+				});
 			}
 			Platform.runLater(() -> controller.root.getChildren().remove(overlay));
 		}).start();
@@ -137,5 +161,13 @@ public class GrammarTest extends Assessment {
 
 	public GrammarResult getResults() {
 		return results;
+	}
+
+	public void setUtterance(Utterance utterance) {
+		this.utterance = utterance;
+	}
+
+	public void setMarked(Map<String, Integer> marked) {
+		this.marked = marked;
 	}
 }

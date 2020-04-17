@@ -4,33 +4,25 @@ import java.util.Map;
 import java.util.Set;
 
 import application.PropertyManager;
-import com.intellij.refactoring.changeClassSignature.TypeParameterInfo;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXDialogLayout;
 import com.jfoenix.controls.JFXListCell;
 import com.jfoenix.controls.JFXListView;
 
-import controllers.items.BaseSummaryController;
-import controllers.items.PronunSummaryController;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import models.profiles.Age;
 import models.profiles.Profile;
 import models.profiles.ProfileLoader;
 import models.test.AssessmentManager;
-import views.ViewManager;
 import views.items.EnterAgeDialog;
 import views.items.ProfileListItem;
 
-public class ProfileController implements DialogControl {
+public class ProfileController extends BaseController implements DialogControl {
 	private Set<ProfileListItem> profileItems;
 	private EnterAgeDialog ageDialog;
 	private boolean isBeforeAssessment = false;
@@ -70,7 +62,7 @@ public class ProfileController implements DialogControl {
 							if (isBeforeAssessment)
 								onSelectProfileForAssessment(ProfileLoader.profiles.get(item));
 							else
-								ViewManager.getInstance().switchProfileViewScene(ProfileLoader.profiles.get(item));
+								displayProfileScene(ProfileLoader.profiles.get(item));
 						}
 					});
                 }
@@ -88,12 +80,12 @@ public class ProfileController implements DialogControl {
 	
 	@FXML
 	void onClickBack(ActionEvent event) {
-		ViewManager.getInstance().switchScene(PropertyManager.getResourceProperty("mainmenu"));
+		displayScene(PropertyManager.getResourceProperty("mainmenu"));
 	}
 	
 	@FXML
 	void onClickNew(ActionEvent event) {
-		ViewManager.getInstance().switchScene(PropertyManager.getResourceProperty("newprofile"));
+		displayScene(PropertyManager.getResourceProperty("newprofile"));
 	}
 
 	@FXML
@@ -132,7 +124,6 @@ public class ProfileController implements DialogControl {
 	public void updateControllerBeforeAssessment() {
 		NewProfileController.isBeforeAssessment = true;
 		root.getChildren().removeAll(btnDelete, btnCancel, btnConfirm);
-		header.setText("选择或新建一个档案");
 		isBeforeAssessment = true;
 	}
 	
@@ -153,7 +144,7 @@ public class ProfileController implements DialogControl {
 	@Override
 	public void onClickYesDialog() {
 		AssessmentManager.getInstance().setTestAge(new Age(ageDialog.getText()));
-		ViewManager.getInstance().switchScene(PropertyManager.getResourceProperty("testmenu"));
+		displayScene(PropertyManager.getResourceProperty("testmenu"));
 	}
 
 }

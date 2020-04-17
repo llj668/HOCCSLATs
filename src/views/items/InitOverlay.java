@@ -22,7 +22,7 @@ public class InitOverlay extends VBox {
         setOpacity(0.85);
 
         JFXSpinner spinner = new JFXSpinner();
-        Label label = new Label("正在初始化...");
+        Label label = new Label("Initializing...");
         label.setFont(Font.font("System", 20));
         this.getChildren().addAll(spinner, label);
         this.setAlignment(Pos.CENTER);

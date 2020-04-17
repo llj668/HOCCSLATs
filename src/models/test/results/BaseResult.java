@@ -1,7 +1,6 @@
 package models.test.results;
 
 import models.profiles.Age;
-import org.jetbrains.annotations.NotNull;
 import views.items.ResultItem;
 
 import java.text.SimpleDateFormat;
@@ -24,7 +23,7 @@ public abstract class BaseResult implements Comparable<BaseResult> {
     }
 
     @Override
-    public int compareTo(@NotNull BaseResult o) {
+    public int compareTo(BaseResult o) {
         if (o.testTime.getTime() > this.testTime.getTime()) {
             return 1;
         } else {

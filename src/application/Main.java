@@ -6,13 +6,16 @@ import javafx.stage.StageStyle;
 import models.services.TempMonitor;
 import views.ViewManager;
 
-
+/**
+ * Entry class
+ * Starts with main menu
+ */
 public class Main extends Application {
-	public static TempMonitor monitor;
 
 	@Override
 	public void start(Stage primaryStage) {
 		new PropertyManager();
+		new LocalStrings();
 		try {
 			primaryStage.initStyle(StageStyle.TRANSPARENT);
 			primaryStage.setResizable(false);
