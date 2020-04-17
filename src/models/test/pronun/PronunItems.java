@@ -58,6 +58,9 @@ public class PronunItems {
     public static List<String> triple_vowels_for_pattern = Arrays.asList(
             "yue", "iao", "uai", "ui"
     );
+    public static List<String> stops = Arrays.asList(
+            "d", "g"
+    );
     public static List<String> aspiration = Arrays.asList("p","t","k","c","q","ch");
     public static List<String> deaspiration = Arrays.asList("b","d","g","z","j","zh");
     public static Map<ErrorPattern, String> patternName = new HashMap<ErrorPattern, String>(){{

@@ -9,11 +9,13 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
+import models.test.Question;
 import models.test.grammar.Utterance;
 import models.test.pronun.ErrorPattern;
 import models.test.pronun.PronunItems;
 import models.test.pronun.Syllable;
 
+import java.util.List;
 import java.util.Map;
 
 public class ResultDisplayer {
@@ -26,34 +28,61 @@ public class ResultDisplayer {
         font = new Font("System", fontSize);
     }
 
-    public void displayGrammarResult(Utterance utterance, VBox container) {
+    public void displayGrammarResult(Utterance utterance, Question question, VBox container) {
         container.getChildren().clear();
-        double containerWidth = container.getWidth();
-        double addedWidth = 0;
-        HBox utteranceLine = new HBox();
-        utteranceLine.setSpacing(horizontalSpacing);
-        for (Map.Entry<String, String> entry : utterance.getAnalyzedUtterance()) {
-            VBox segment = getVBoxSegment(entry);
-
-            addedWidth += segment.getPrefWidth() + horizontalSpacing;
-            if (addedWidth > containerWidth) {
-                container.getChildren().add(utteranceLine);
-                utteranceLine = new HBox();
-                utteranceLine.setSpacing(horizontalSpacing);
-                utteranceLine.getChildren().add(segment);
-                addedWidth = segment.getWidth();
-            } else {
-                utteranceLine.getChildren().add(segment);
-            }
-        }
-        container.getChildren().add(utteranceLine);
         container.setSpacing(verticalSpacing);
+        if (utterance != null) {
+            // Utterance display
+            double containerWidth = container.getWidth();
+            double addedWidth = 0;
+            HBox utteranceLine = new HBox();
+            utteranceLine.setSpacing(horizontalSpacing);
+            for (Map.Entry<String, String> entry : utterance.getAnalyzedUtterance()) {
+                VBox segment = getVBoxSegment(entry);
+
+                addedWidth += segment.getPrefWidth() + horizontalSpacing;
+                if (addedWidth > containerWidth) {
+                    container.getChildren().add(utteranceLine);
+                    utteranceLine = new HBox();
+                    utteranceLine.setSpacing(horizontalSpacing);
+                    utteranceLine.getChildren().add(segment);
+                    addedWidth = segment.getWidth();
+                } else {
+                    utteranceLine.getChildren().add(segment);
+                }
+            }
+            container.getChildren().add(utteranceLine);
+            container.setSpacing(verticalSpacing);
+
+            // Presented clause level structure display
+            HBox clauseBox = getPresentHBox(new Label("C: "), utterance.getPresentUtteranceStructures());
+            // Presented phrase level structure display
+            HBox phraseBox = getPresentHBox(new Label("P: "), utterance.getPresentPhraseStructures());
+            // Presented word level structure display
+            HBox wordBox = getPresentHBox(new Label("W: "), utterance.getPresentWordStructures());
+            // Absent structure display
+            HBox absentBox = new HBox();
+            if (question != null) {
+                absentBox.setSpacing(horizontalSpacing);
+                absentBox.getChildren().add(new Label("Err: "));
+                for (String structure : question.getTargets().keySet()) {
+                    if (!utterance.getPresentUtteranceStructures().contains(structure) &&
+                            !utterance.getPresentPhraseStructures().contains(structure) &&
+                            !utterance.getPresentWordStructures().contains(structure)) {
+                        Label label = new Label(structure);
+                        label.setId("label_absent");
+                        absentBox.getChildren().add(label);
+                    }
+                }
+            }
+            container.getChildren().addAll(clauseBox, phraseBox, wordBox, absentBox);
+        }
     }
 
     public void displayPronunResult(Syllable syllable, VBox container) {
         container.getChildren().clear();
-        Label presentLabel = new Label("正确音：" + syllable.getConsonantsCorrectAsString());
-        Label errorLabel = new Label("错误模式：");
+        Label presentLabel = new Label("Correct consonants: " + syllable.getConsonantsCorrectAsString());
+        Label errorLabel = new Label("Error patterns: ");
         presentLabel.setFont(this.font);
         errorLabel.setFont(this.font);
         container.getChildren().addAll(presentLabel, errorLabel);
@@ -69,7 +98,7 @@ public class ResultDisplayer {
         }
 
         if (errorCount == 0)
-            errorLabel.setText("错误模式：无");
+            errorLabel.setText("Error pattern: None");
         container.setSpacing(verticalSpacing);
     }
 
@@ -140,8 +169,23 @@ public class ResultDisplayer {
         Separator separator = new Separator();
         separator.setMaxWidth(boxWidth - 10);
 
-        structureBox.getChildren().addAll(segment, separator, value);
+        structureBox.getChildren().add(segment);
+        if (!entry.getValue().equals("标点"))
+            structureBox.getChildren().addAll(separator, value);
         return structureBox;
+    }
+
+    private HBox getPresentHBox(Label title, List<String> present) {
+        System.out.println(present);
+        HBox box = new HBox();
+        box.setSpacing(horizontalSpacing);
+        box.getChildren().add(title);
+        for (String structure : present) {
+            Label label = new Label(structure);
+            label.setId("label_present");
+            box.getChildren().add(label);
+        }
+        return box;
     }
 
     private Node getNodeByRowColumnIndex(final int row, final int column, GridPane gridPane) {

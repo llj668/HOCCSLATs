@@ -15,18 +15,18 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import models.profiles.Profile;
 import models.profiles.ProfileWriter;
-import models.test.AssessmentManager;
 import models.test.pronun.ErrorPattern;
 import models.test.pronun.PronunItems;
 import models.test.pronun.Syllable;
 import models.test.results.*;
-import org.jetbrains.annotations.NotNull;
 import views.ResultDisplayer;
 import views.items.ConfirmDialog;
-import views.items.ResultItem;
 
 import java.util.Map;
 
+/**
+ * Controller of the pronun summary
+ */
 public class PronunSummaryController extends BaseSummaryController {
 
     @FXML
@@ -65,6 +65,11 @@ public class PronunSummaryController extends BaseSummaryController {
         pane.getChildren().removeAll(btnDiscard, btnSave);
     }
 
+    /**
+     * Set a pronun result and display
+     * @param result
+     * @param profile
+     */
     @Override
     public void setResult(BaseResult result, Profile profile) {
         this.profile = profile;
@@ -73,9 +78,13 @@ public class PronunSummaryController extends BaseSummaryController {
         this.labelTime.setText(this.result.getTestTime());
         setResultComboBox();
         resultComboBox.setValue(resultComboBox.getItems().get(0));
-        displayResult("音节");
+        displayResult("Questions");
     }
 
+    /**
+     * Set the page to be after pronun test, can discard pronun result
+     * @param controller
+     */
     @Override
     public void setOnAfterTest(BaseTestController controller) {
         pane.getChildren().addAll(btnDiscard, btnSave);
@@ -89,6 +98,10 @@ public class PronunSummaryController extends BaseSummaryController {
         confirmDialog.show();
     }
 
+    /**
+     * Save the result into profile and prompt
+     * @param event
+     */
     @FXML
     void onClickSave(ActionEvent event) {
         profile.getPronunResults().add(result);
@@ -99,10 +112,13 @@ public class PronunSummaryController extends BaseSummaryController {
         confirmDialog.show();
     }
 
+    /**
+     * Initialize combo box
+     */
     private void setResultComboBox() {
-        Label syllableLabel = new Label("音节");
-        Label inventoryLabel = new Label("发音量表");
-        Label errorLabel = new Label("错误模式");
+        Label syllableLabel = new Label("Questions");
+        Label inventoryLabel = new Label("Present/absent consonants");
+        Label errorLabel = new Label("Error patterns");
         resultComboBox.getItems().addAll(syllableLabel, inventoryLabel, errorLabel);
 
         resultComboBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
@@ -112,19 +128,19 @@ public class PronunSummaryController extends BaseSummaryController {
 
     private void displayResult(String type) {
         switch (type) {
-            case "音节":
+            case "Questions":
                 setSyllableTable();
-                labelPcc.setText("总pcc：" + result.pcc);
+                labelPcc.setText("Overall PCC: " + result.pcc);
                 controlPane.getChildren().clear();
                 controlPane.getChildren().add(labelPcc);
                 break;
-            case "发音量表":
+            case "Present/absent consonants":
                 setInventoryTable("75");
                 controlPane.getChildren().clear();
                 controlPane.getChildren().addAll(toggle75pc, toggle90pc);
                 toggle75pc.setSelected(true);
                 break;
-            case "错误模式":
+            case "Error patterns":
                 plotComparedErrorPatternMap(result.comparedMapErrorPattern);
                 controlPane.getChildren().clear();
                 break;
@@ -133,12 +149,15 @@ public class PronunSummaryController extends BaseSummaryController {
         }
     }
 
+    /**
+     * Displays all questions and their responses in a table
+     */
     private void setSyllableTable() {
         ObservableList<Syllable> syllables = FXCollections.observableArrayList(result.syllables);
         final TreeItem<Syllable> root = new RecursiveTreeItem<>(syllables, RecursiveTreeObject::getChildren);
 
-        JFXTreeTableColumn<Syllable, String> targetColumn = new JFXTreeTableColumn<>("目标音节");
-        targetColumn.setPrefWidth(150);
+        JFXTreeTableColumn<Syllable, String> targetColumn = new JFXTreeTableColumn<>("Target Syllable");
+        targetColumn.setPrefWidth(170);
         targetColumn.setCellValueFactory((TreeTableColumn.CellDataFeatures<Syllable, String> param) ->{
             if (targetColumn.validateValue(param))
                 return param.getValue().getValue().getTargetProperty();
@@ -146,8 +165,8 @@ public class PronunSummaryController extends BaseSummaryController {
                 return targetColumn.getComputedValue(param);
         });
 
-        JFXTreeTableColumn<Syllable, String> responseColumn = new JFXTreeTableColumn<>("发音");
-        responseColumn.setPrefWidth(150);
+        JFXTreeTableColumn<Syllable, String> responseColumn = new JFXTreeTableColumn<>("Pronounced Syllable");
+        responseColumn.setPrefWidth(170);
         responseColumn.setCellValueFactory((TreeTableColumn.CellDataFeatures<Syllable, String> param) ->{
             if (responseColumn.validateValue(param))
                 return param.getValue().getValue().getResponseProperty();
@@ -155,8 +174,8 @@ public class PronunSummaryController extends BaseSummaryController {
                 return responseColumn.getComputedValue(param);
         });
 
-        JFXTreeTableColumn<Syllable, String> presentColumn = new JFXTreeTableColumn<>("正确音");
-        presentColumn.setPrefWidth(150);
+        JFXTreeTableColumn<Syllable, String> presentColumn = new JFXTreeTableColumn<>("Correct Consonants");
+        presentColumn.setPrefWidth(170);
         presentColumn.setCellValueFactory((TreeTableColumn.CellDataFeatures<Syllable, String> param) ->{
             if (presentColumn.validateValue(param))
                 return param.getValue().getValue().getPresentConsonantProperty();
@@ -164,8 +183,8 @@ public class PronunSummaryController extends BaseSummaryController {
                 return presentColumn.getComputedValue(param);
         });
 
-        JFXTreeTableColumn<Syllable, String> errorColumn = new JFXTreeTableColumn<>("错误模式");
-        errorColumn.setPrefWidth(200);
+        JFXTreeTableColumn<Syllable, String> errorColumn = new JFXTreeTableColumn<>("Error Patterns");
+        errorColumn.setPrefWidth(220);
         errorColumn.setCellValueFactory((TreeTableColumn.CellDataFeatures<Syllable, String> param) ->{
             if (errorColumn.validateValue(param))
                 return param.getValue().getValue().getErrorProperty();
@@ -178,6 +197,10 @@ public class PronunSummaryController extends BaseSummaryController {
         addTableToPane(table);
     }
 
+    /**
+     * Set the present and absent consonants table
+     * @param type
+     */
     private void setInventoryTable(String type) {
         if (type.equalsIgnoreCase("75")) {
             plotComparedInventoryMap(result.comparedMap75);
@@ -186,12 +209,20 @@ public class PronunSummaryController extends BaseSummaryController {
         }
     }
 
+    /**
+     * Draw the present and absent consonants table
+     * @param comparedMap
+     */
     private void plotComparedInventoryMap(Map<String, String> comparedMap) {
         subpane.getChildren().clear();
         subpane.getChildren().addAll(inventoryGrid, hintPane);
         displayer.displayConsonantInventory(comparedMap, inventoryGrid);
     }
 
+    /**
+     * Draw the error pattern list
+     * @param comparedMap
+     */
     private void plotComparedErrorPatternMap(Map<ErrorPattern, String> comparedMap) {
         subpane.getChildren().clear();
         JFXListView<Label> patternList = new JFXListView<>();
@@ -209,7 +240,7 @@ public class PronunSummaryController extends BaseSummaryController {
         subpane.getChildren().addAll(patternList, hintPane1);
     }
 
-    private void addTableToPane(@NotNull JFXTreeTableView table) {
+    private void addTableToPane(JFXTreeTableView table) {
         table.setPrefHeight(500);
         table.setShowRoot(false);
         subpane.getChildren().clear();

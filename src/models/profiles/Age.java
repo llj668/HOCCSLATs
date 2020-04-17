@@ -1,18 +1,16 @@
 package models.profiles;
 
-import org.jetbrains.annotations.NotNull;
-
 public class Age implements Comparable<Age> {
     private int year;
     private int month;
 
-    public Age(@NotNull String notation) {
+    public Age(String notation) {
         String[] splitStr = notation.split(";");
         this.year = Integer.parseInt(splitStr[0]);
         this.month = Integer.parseInt(splitStr[1]);
     }
 
-    public boolean isInAgePeriod(@NotNull String agePeriod) {
+    public boolean isInAgePeriod(String agePeriod) {
         String[] splitStr = agePeriod.split("-");
         Age lower = new Age(splitStr[0]);
         Age upper = new Age(splitStr[1]);
@@ -25,7 +23,7 @@ public class Age implements Comparable<Age> {
     }
 
     @Override
-    public int compareTo(@NotNull Age o) {
+    public int compareTo(Age o) {
         if (this.year > o.year) {
             return 1;
         } else if (this.year < o.year) {

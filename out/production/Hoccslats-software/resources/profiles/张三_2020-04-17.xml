@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<profile name="张三" gender="male"> 
+  <grammar> 
+    <test time="2020-04-10 14:36:20" age="2;1"> 
+      <stage stage_no="2" stage_score="5.0"> 
+        <question present_clause="SV" present_phrase="aux" present_word="ing-v" name="aux" score="5" id="1"> 
+          <response_clause utterance="小熊在走路"> 
+            <structure value="S">小熊</structure>  
+            <structure value="V">在走路</structure> 
+          </response_clause>  
+          <response_phrase> 
+            <structure value="pron p">小熊</structure>  
+            <structure value="aux">在</structure> 
+          </response_phrase>  
+          <response_word> 
+            <structure value="-ing">在走路</structure> 
+          </response_word> 
+        </question>  
+        <question present_clause="SV" present_phrase="aux" present_word="ing-v" name="SV" score="5" id="1"> 
+          <response_clause utterance="小熊在走路"> 
+            <structure value="S">小熊</structure>  
+            <structure value="V">在走路</structure> 
+          </response_clause>  
+          <response_phrase> 
+            <structure value="pron p">小熊</structure>  
+            <structure value="aux">在</structure> 
+          </response_phrase>  
+          <response_word> 
+            <structure value="-ing">在走路</structure> 
+          </response_word> 
+        </question> 
+      </stage> 
+    </test>  
+    <test time="2020-04-17 12:09:10" age="2;3">
+      <stage stage_no="2" stage_score="-1.0">
+        <question present_clause="" present_phrase="" present_word="" name="SV" score="-1" id="1">
+          <response_clause utterance="小熊">
+            <structure value="">小熊</structure>
+          </response_clause>
+          <response_phrase/>
+          <response_word/>
+        </question>
+        <question present_clause="" present_phrase="" present_word="" name="aux" score="-1" id="1">
+          <response_clause utterance="小熊">
+            <structure value="">小熊</structure>
+          </response_clause>
+          <response_phrase/>
+          <response_word/>
+        </question>
+      </stage>
+    </test>
+  </grammar>  
+  <pronun> 
+    <test time="2020-04-10 14:29:40" age="2;1" pcc="1.0"> 
+      <syllables> 
+        <item> 
+          <pcc>1.0</pcc>  
+          <target>bi2,zi3</target>  
+          <response>bi2,zi3</response>  
+          <present_consonant>b,i,z,i</present_consonant>  
+          <error_pattern> 
+            <CONSONANT_ASSIMILATION times="0"/>  
+            <SYLLABLE_INITIAL_DELETION times="0"/>  
+            <FRONTING_1 times="0"/>  
+            <FRONTING_2 times="0"/>  
+            <FRONTING_3 times="0"/>  
+            <BACKING times="0"/>  
+            <X_VELARISATION times="0"/>  
+            <STOPPING_1 times="0"/>  
+            <STOPPING_2 times="0"/>  
+            <STOPPING_3 times="0"/>  
+            <AFFRICATION times="0"/>  
+            <DEASPIRATION times="0"/>  
+            <ASPIRATION times="0"/>  
+            <GLIDING times="0"/>  
+            <FINAL_N_DELETION times="0"/>  
+            <BACKING_N times="0"/>  
+            <FINAL_NG_DELETION times="0"/>  
+            <DIPHTHONG_REDUCTION times="0"/>  
+            <TRIPHTHONG_REDUCTION times="0"/> 
+          </error_pattern> 
+        </item>  
+        <item> 
+          <pcc>1.0</pcc>  
+          <target>er3,duo3</target>  
+          <response>er3,duo3</response>  
+          <present_consonant>er,d,uo</present_consonant>  
+          <error_pattern> 
+            <CONSONANT_ASSIMILATION times="0"/>  
+            <SYLLABLE_INITIAL_DELETION times="0"/>  
+            <FRONTING_1 times="0"/>  
+            <FRONTING_2 times="0"/>  
+            <FRONTING_3 times="0"/>  
+            <BACKING times="0"/>  
+            <X_VELARISATION times="0"/>  
+            <STOPPING_1 times="0"/>  
+            <STOPPING_2 times="0"/>  
+            <STOPPING_3 times="0"/>  
+            <AFFRICATION times="0"/>  
+            <DEASPIRATION times="0"/>  
+            <ASPIRATION times="0"/>  
+            <GLIDING times="0"/>  
+            <FINAL_N_DELETION times="0"/>  
+            <BACKING_N times="0"/>  
+            <FINAL_NG_DELETION times="0"/>  
+            <DIPHTHONG_REDUCTION times="0"/>  
+            <TRIPHTHONG_REDUCTION times="0"/> 
+          </error_pattern> 
+        </item>  
+        <item> 
+          <pcc>1.0</pcc>  
+          <target>zui3</target>  
+          <response>zui3,ba1</response>  
+          <present_consonant>z,ui</present_consonant>  
+          <error_pattern> 
+            <CONSONANT_ASSIMILATION times="0"/>  
+            <SYLLABLE_INITIAL_DELETION times="0"/>  
+            <FRONTING_1 times="0"/>  
+            <FRONTING_2 times="0"/>  
+            <FRONTING_3 times="0"/>  
+            <BACKING times="0"/>  
+            <X_VELARISATION times="0"/>  
+            <STOPPING_1 times="0"/>  
+            <STOPPING_2 times="0"/>  
+            <STOPPING_3 times="0"/>  
+            <AFFRICATION times="0"/>  
+            <DEASPIRATION times="0"/>  
+            <ASPIRATION times="0"/>  
+            <GLIDING times="0"/>  
+            <FINAL_N_DELETION times="0"/>  
+            <BACKING_N times="0"/>  
+            <FINAL_NG_DELETION times="0"/>  
+            <DIPHTHONG_REDUCTION times="0"/>  
+            <TRIPHTHONG_REDUCTION times="0"/> 
+          </error_pattern> 
+        </item>  
+        <item> 
+          <pcc>1.0</pcc>  
+          <target>shou3,zhi3</target>  
+          <response>shou3,zhi3</response>  
+          <present_consonant>sh,ou,zh,i</present_consonant>  
+          <error_pattern> 
+            <CONSONANT_ASSIMILATION times="0"/>  
+            <SYLLABLE_INITIAL_DELETION times="0"/>  
+            <FRONTING_1 times="0"/>  
+            <FRONTING_2 times="0"/>  
+            <FRONTING_3 times="0"/>  
+            <BACKING times="0"/>  
+            <X_VELARISATION times="0"/>  
+            <STOPPING_1 times="0"/>  
+            <STOPPING_2 times="0"/>  
+            <STOPPING_3 times="0"/>  
+            <AFFRICATION times="0"/>  
+            <DEASPIRATION times="0"/>  
+            <ASPIRATION times="0"/>  
+            <GLIDING times="0"/>  
+            <FINAL_N_DELETION times="0"/>  
+            <BACKING_N times="0"/>  
+            <FINAL_NG_DELETION times="0"/>  
+            <DIPHTHONG_REDUCTION times="0"/>  
+            <TRIPHTHONG_REDUCTION times="0"/> 
+          </error_pattern> 
+        </item> 
+      </syllables>  
+      <pronounced_consonants>b,z,d,sh,zh</pronounced_consonants> 
+    </test> 
+  </pronun> 
+</profile>

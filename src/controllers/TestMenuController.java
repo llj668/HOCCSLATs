@@ -1,7 +1,6 @@
 package controllers;
 
 import application.PropertyManager;
-import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXDialogLayout;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -9,13 +8,10 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.StackPane;
 import models.profiles.Profile;
 import models.test.AssessmentManager;
-import views.ViewManager;
 import views.items.SelectStageDialog;
 
-import javax.swing.text.View;
-
-public class TestMenuController implements DialogControl {
-	private AssessmentManager assessmentManager;
+public class TestMenuController extends BaseController implements DialogControl {
+	private AssessmentManager manager;
 	private Profile profile;
 	private SelectStageDialog dialog;
 
@@ -29,21 +25,21 @@ public class TestMenuController implements DialogControl {
 	private Label labelGender;
 	
 	public void initialize() {
-		assessmentManager = AssessmentManager.getInstance();
+		manager = AssessmentManager.getInstance();
 		profile = AssessmentManager.profile;
 		labelName.setText(profile.getName());
-		labelAge.setText(assessmentManager.getTestAge().toString());
+		labelAge.setText(manager.getTestAge().toString());
 		labelGender.setText(profile.getGender());
 	}
 	
 	@FXML
 	void onClickBack(ActionEvent event) {
-		ViewManager.getInstance().switchScene(PropertyManager.getResourceProperty("mainmenu"));
+		displayScene(PropertyManager.getResourceProperty("mainmenu"));
 	}
 	
 	@FXML
 	void onClickChangeProfile(ActionEvent event) {
-		ViewManager.getInstance().switchProfileSelectScene();
+		displayProfileSelectScene();
 	}
 	
 	@FXML
@@ -55,7 +51,7 @@ public class TestMenuController implements DialogControl {
 	
 	@FXML
 	void onClickPronunTest(ActionEvent event) {
-		ViewManager.getInstance().switchScene(PropertyManager.getResourceProperty("pronuntest"));
+		displayScene(PropertyManager.getResourceProperty("pronuntest"));
 	}
 
 	@Override
@@ -66,7 +62,7 @@ public class TestMenuController implements DialogControl {
 
 	@Override
 	public void onClickYesDialog() {
-		assessmentManager.setTestQueue(dialog.getSelections());
-		ViewManager.getInstance().switchScene(PropertyManager.getResourceProperty("grammartest"));
+		manager.setTestQueue(dialog.getSelections());
+		displayScene(PropertyManager.getResourceProperty("grammartest"));
 	}
 }

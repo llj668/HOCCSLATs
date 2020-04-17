@@ -2,6 +2,7 @@ package controllers;
 
 import application.PropertyManager;
 import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXDialogLayout;
 import com.jfoenix.controls.JFXTextArea;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -23,7 +24,10 @@ import views.items.TranscribeSpinner;
 import java.util.Observable;
 import java.util.Observer;
 
-public abstract class BaseTestController implements DialogControl, Observer {
+/**
+ * Base test controller of grammar and pronun test pages
+ */
+public abstract class BaseTestController extends BaseController implements DialogControl, Observer {
     public AssessmentManager manager;
     public Recorder recorder;
     public ConfirmDialog confirmDialog;
@@ -31,6 +35,7 @@ public abstract class BaseTestController implements DialogControl, Observer {
     TempMonitor monitor;
     TranscribeSpinner spinner;
     boolean isTranscribing = false;
+    public boolean isDataFound = false;
 
     @FXML
     public AnchorPane root;
@@ -53,12 +58,18 @@ public abstract class BaseTestController implements DialogControl, Observer {
     @FXML
     public Label recordLabel;
 
+    /**
+     * Monitot changes in temp sound file
+     */
     public void initFileMonitor() {
         monitor = TempMonitor.getInstance();
         monitor.addObserver(this);
         new Thread(monitor).start();
     }
 
+    /**
+     * Call STT api
+     */
     public void callSpeechToText() {
         if (!isTranscribing) {
             isTranscribing = true;
@@ -92,7 +103,7 @@ public abstract class BaseTestController implements DialogControl, Observer {
     public void onClickNoDialog() {
         manager.clearAll();
         monitor.stop();
-        ViewManager.getInstance().switchScene(PropertyManager.getResourceProperty("testmenu"));
+        displayScene(PropertyManager.getResourceProperty("testmenu"));
     }
 
     @Override
@@ -101,12 +112,20 @@ public abstract class BaseTestController implements DialogControl, Observer {
         stackPane.toBack();
     }
 
+    public void onDataNotFound() {
+        stackPane.toFront();
+        confirmDialog = new ConfirmDialog(this, stackPane, new JFXDialogLayout());
+        confirmDialog.setText(ConfirmDialog.TEXT_NODATAFILE);
+        confirmDialog.show();
+    }
+
     @Override
     public void update(Observable o, Object arg) {
         Platform.runLater(() -> onFileChanged((String) arg));
     }
 
     public abstract void onFileChanged(String fileName);
-    public abstract void updateLabels(String struct, String stage);
+    public abstract void updateLabels(String struct);
     public abstract void setSummary(Region summary);
+    public abstract void getNextQuestion();
 }

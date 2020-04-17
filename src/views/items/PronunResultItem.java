@@ -16,16 +16,16 @@ public class PronunResultItem extends ResultItem {
     }
 
     private void initializeItemContent() {
-        age = new Label("测试年龄：" + pronunResult.testAge.toString());
+        age = new Label("Test age: " + pronunResult.testAge.toString());
         age.setPrefSize(100, 30);
         age.setFont(Font.font("System", 15));
 
-        time = new Label("测试时间：" + pronunResult.getTestTime());
+        time = new Label("Test time: " + pronunResult.getTestTime());
         time.setTranslateY(35);
         time.setPrefSize(250, 30);
         time.setFont(Font.font("System", 15));
 
-        pcc = new Label("总分：" + pronunResult.pcc);
+        pcc = new Label("PCC: " + pronunResult.pcc);
         pcc.setTranslateY(70);
         pcc.setPrefSize(100, 30);
         pcc.setFont(Font.font("System", 15));

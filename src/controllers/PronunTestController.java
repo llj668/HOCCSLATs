@@ -72,7 +72,7 @@ public class PronunTestController extends BaseTestController {
 	}
 
 	@Override
-	public void updateLabels(String struct, String stage) {
+	public void updateLabels(String struct) {
 		labelTarget.setText(struct);
 	}
 
@@ -80,6 +80,11 @@ public class PronunTestController extends BaseTestController {
 	public void setSummary(Region summary) {
 		monitor.stop();
 		root.getChildren().add(summary);
+	}
+
+	@Override
+	public void getNextQuestion() {
+
 	}
 
 	private void initTextFieldListener() {

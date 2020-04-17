@@ -6,15 +6,17 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
+/**
+ * Manages resources urls
+ * resources.properties
+ */
 public class PropertyManager {
     final static String root = "src/" ;
     final static String resourceFile = "resources.properties";
     static Properties resourceProperties;
-    static Properties stringProperties;
 
     public PropertyManager() {
         resourceProperties = new Properties();
-        stringProperties = new Properties();
         try {
             InputStream resourceStream = new BufferedInputStream(new FileInputStream(root + resourceFile));
             resourceProperties.load(resourceStream);
