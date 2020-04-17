@@ -31,12 +31,12 @@ public class AssessmentManager {
     	testQueue = new LinkedList<>();
     }
 
-    public void nextQuestion() {
+    public Question nextQuestion() {
     	assessment.writeResult(controller, question);
 		question = assessment.getNextQuestion();
 		if (question != null) {
 			controller.imgQuestion.setImage(new Image(question.getPath()));
-			controller.updateLabels(question.getTarget(), question.getStage());
+			controller.updateLabels(question.getTarget());
 			assessment.setTarget(question.getTarget());
 		} else {
 			assessment.saveResult();
@@ -45,6 +45,7 @@ public class AssessmentManager {
 			entry.getValue().setResult(assessment.getResult(), profile);
 			controller.setSummary(entry.getKey());
 		}
+		return question;
 	}
 
     public void startGrammarAssessment(BaseTestController controller) {

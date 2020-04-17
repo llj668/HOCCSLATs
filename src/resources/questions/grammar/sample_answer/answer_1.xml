@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<answer id="1">
+  <item>
+    <response_clause utterance="全部或部分重复">
+    </response_clause>
+    <response_phrase>
+    </response_phrase>
+    <response_word>
+    </response_word>
+    <scores>
+      <structure score="2" type="clause">SV</structure>
+      <structure score="2" type="phrase">pron p</structure>
+      <structure score="2" type="phrase">aux</structure>
+      <structure score="2" type="word">ing-v</structure>
+    </scores>
+  </item>
+  <item>
+    <response_clause utterance="小熊在走路">
+      <structure value="S">小熊</structure>
+      <structure value="V">在走路</structure>
+    </response_clause>
+    <response_phrase>
+      <structure value="pron p">小熊</structure>
+      <structure value="aux">在</structure>
+    </response_phrase>
+    <response_word>
+      <structure value="-ing">在走路</structure>
+    </response_word>
+    <scores>
+      <structure score="5" type="clause">SV</structure>
+      <structure score="5" type="phrase">pron p</structure>
+      <structure score="5" type="phrase">aux</structure>
+      <structure score="5" type="word">ing-v</structure>
+    </scores>
+  </item>
+  <item>
+    <response_clause utterance="在走路">
+      <structure value="V">在走路</structure>
+    </response_clause>
+    <response_phrase>
+      <structure value="aux">在</structure>
+    </response_phrase>
+    <response_word>
+      <structure value="-ing">在走路</structure>
+    </response_word>
+    <scores>
+      <structure score="4" type="clause">SV</structure>
+      <structure score="4" type="phrase">pron p</structure>
+      <structure score="5" type="phrase">aux</structure>
+      <structure score="5" type="word">ing-v</structure>
+    </scores>
+  </item>
+</answer>

@@ -1,7 +1,6 @@
 package models.test.results;
 
 import models.test.grammar.Utterance;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -42,7 +41,7 @@ public class GrammarStage implements Comparable<GrammarStage> {
     }
 
     @Override
-    public int compareTo(@NotNull GrammarStage o) {
+    public int compareTo(GrammarStage o) {
         return this.stageNo - o.stageNo;
     }
 }

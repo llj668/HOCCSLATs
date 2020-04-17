@@ -44,9 +44,9 @@ public class Profile {
 	}
 	public String getGender() {
 		if (this.gender.equals("male")) {
-			return "男";
+			return "Male";
 		} else if (this.gender.equals("female")) {
-			return "女";
+			return "Female";
 		}
 		return null;
 	}

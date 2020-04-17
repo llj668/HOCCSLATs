@@ -14,10 +14,10 @@ public class ConsentDialog extends JFXDialog {
 		super(dialogContainer, content, DialogTransition.CENTER, false);
 //		content.setLayoutX(dialogContainer.getWidth()*0.8);
 //		content.setLayoutY(dialogContainer.getHeight()*0.8);
-		content.setHeading(new Text("同意许可"));
-		content.setBody(new Text("内容"));
-		JFXButton buttonNo = new JFXButton("不同意");
-		JFXButton buttonYes = new JFXButton("同意");
+		content.setHeading(new Text("Agreement"));
+		content.setBody(new Text("Content"));
+		JFXButton buttonNo = new JFXButton("Disagree");
+		JFXButton buttonYes = new JFXButton("Agree");
 		buttonNo.setOnAction(ActionEvent -> {
 		    controller.onClickNoDialog();
 		});

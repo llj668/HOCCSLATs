@@ -4,17 +4,19 @@ import java.util.*;
 
 import com.hankcs.hanlp.corpus.dependency.CoNll.CoNLLSentence;
 import com.hankcs.hanlp.corpus.dependency.CoNll.CoNLLWord;
+import com.hankcs.hanlp.dependency.IDependencyParser;
 import com.hankcs.hanlp.dependency.nnparser.NeuralNetworkDependencyParser;
+import com.hankcs.hanlp.dependency.perceptron.parser.KBeamArcEagerDependencyParser;
 import models.services.util.MapSortUtil;
 import org.apache.commons.lang3.StringUtils;
 
 public class UtteranceBuilder {
-    final static String[] questionWords = {"呢", "吗"};
+    final static String[] questionWords = {"呢", "吗", "怎么"};
     final static String[] whQuestionWords = {"谁", "哪", "什么"};
     final static String[] negWords = {"不", "没"};
     final static String[] auxWords = {"了", "吧", "的"};
     final static String[] pronP = {"我", "你", "他", "她", "它", "我们", "你们", "他们", "她们", "它们"};
-    final static String[] auxVerbs = {"能", "想"};
+    final static String[] auxVerbs = {"能", "想", "在"};
     final static String[] specialWords = {"把", "被", "给"};
 
     public static void main(String[] arg) {
@@ -27,8 +29,11 @@ public class UtteranceBuilder {
         System.out.println();
     }
 
-    public static List<Map.Entry<String, String>> analyzeClause(String input, NeuralNetworkDependencyParser parser){
+    public static List<Map.Entry<String, String>> analyzeClause(String input, IDependencyParser parser){
+        if (input == null || parser == null || input.equals(""))
+            return new LinkedList<>();
         CoNLLSentence sentence = parser.parse(input);
+        System.out.println(sentence);
 
         // 找核心词
         CoNLLWord root = new CoNLLWord(1,"a","b");
@@ -59,7 +64,9 @@ public class UtteranceBuilder {
         return formatOutput(entries);
     }
 
-    public static List<Map.Entry<String, String>> analyzePhrase(String input, NeuralNetworkDependencyParser parser){
+    public static List<Map.Entry<String, String>> analyzePhrase(String input, IDependencyParser parser){
+        if (input == null || parser == null || input.equals(""))
+            return new LinkedList<>();
         CoNLLSentence sentence = parser.parse(input);
 
         // 获取所有词组结构的列表
@@ -112,7 +119,7 @@ public class UtteranceBuilder {
         CoNLLWord prevWord = null;
         for (CoNLLWord word : sentence) {
             if (prevWord != null) {
-                if (word.CPOSTAG.equals("v") && prevWord.CPOSTAG.equals("v"))
+                if (word.CPOSTAG.equals("v") && prevWord.CPOSTAG.equals("v") && !word.DEPREL.equals("动补结构"))
                     wordList.put(new AbstractMap.SimpleEntry<>(prevWord.LEMMA+word.LEMMA, "vv"), indexOfSentence(sentence, prevWord));
             }
             prevWord = word;
@@ -238,6 +245,85 @@ public class UtteranceBuilder {
         return formatOutput(entries);
     }
 
+    public static List<Map.Entry<String, String>> analyzeWord(String input, IDependencyParser parser){
+        if (input == null || parser == null || input.equals(""))
+            return new LinkedList<>();
+        CoNLLSentence sentence = parser.parse(input);
+
+        // 获取所有词前后缀结构的列表
+        // 词列表 <<词@index, 结构名称>, 在句中的索引位置>
+        Map<Map.Entry<String, String>, Integer> wordList = new HashMap<>();
+
+        // suffix-zi
+        for (CoNLLWord word : sentence) {
+            String str = word.LEMMA;
+            if (str.length() > 1 && str.substring(str.length()).equals("子"))
+                wordList.put(new AbstractMap.SimpleEntry<>(str, "suffix-zi"), indexOfSentence(sentence, word));
+        }
+
+        // de-n
+        for (CoNLLWord word : sentence) {
+
+        }
+
+        // de-poss
+
+        // de-emp
+
+        // de-attr
+
+        // de-con
+
+        // de-ly
+
+        // de-Cv
+        for (CoNLLWord word : sentence) {
+
+        }
+
+        // pl
+
+        // tm(ed)
+        CoNLLWord preWord = null;
+        for (CoNLLWord word : sentence) {
+            if (preWord == null) {
+                preWord = word;
+                continue;
+            }
+            if (preWord.CPOSTAG.equals("v") && word.LEMMA.equals("了"))
+                wordList.put(new AbstractMap.SimpleEntry<>(preWord.LEMMA+word.LEMMA, "ed"), indexOfSentence(sentence, word));
+            preWord = word;
+        }
+
+        // tm(ing-v)
+        preWord = null;
+        for (CoNLLWord word : sentence) {
+            if (preWord == null) {
+                preWord = word;
+                continue;
+            }
+            if (word.CPOSTAG.equals("v") && preWord.LEMMA.contains("在"))
+                wordList.put(new AbstractMap.SimpleEntry<>(preWord.LEMMA+word.LEMMA, "ing-v"), indexOfSentence(sentence, word));
+            preWord = word;
+        }
+
+        // pre-fix
+        for (CoNLLWord word : sentence) {
+            if (word.CPOSTAG.equals("m") && word.LEMMA.substring(1).equals("第"))
+                wordList.put(new AbstractMap.SimpleEntry<>(word.LEMMA, "pre-fix"), indexOfSentence(sentence, word));
+        }
+
+        // pre-fix est
+        for (CoNLLWord word : sentence) {
+            if (word.LEMMA.substring(1).equals("最"))
+                wordList.put(new AbstractMap.SimpleEntry<>(word.LEMMA, "pre-fix-est"), indexOfSentence(sentence, word));
+        }
+
+        // 排序
+        Collection<Map.Entry<String, String>> entries = MapSortUtil.sortByValueAsc(wordList).keySet();
+        return formatOutput(entries);
+    }
+
     // 获取HEAD为root的第一层结构
     private static Map<Map.Entry<String, String>, Integer> getDirectStructures(CoNLLWord root, CoNLLSentence sentence, Map.Entry<String, String> coreString) {
         // 词列表 <<词, 结构名称>, 在句中的索引位置>
@@ -343,6 +429,10 @@ public class UtteranceBuilder {
                             tag.add("O");
                         else
                             tag.add("S");
+                        break;
+                    case "左附加结构":
+                    case "右附加结构":
+                        tag.add(getTagByPOS(word.CPOSTAG));
                         break;
                     case "标点符号":
                         tag.add("标点");
@@ -480,23 +570,7 @@ public class UtteranceBuilder {
 
     private static Map.Entry<String, String> buildCoreWord(CoNLLWord core, CoNLLSentence sentence) {
         // 判断核心词类型
-        String tag = "核心词";
-        switch (core.CPOSTAG) {
-            case "v":
-                tag = "V";
-                break;
-            case "a":
-                tag = "adj";
-                break;
-            case "n":
-                tag = "noun";
-                break;
-            case "p":
-                tag = "pron";
-                break;
-            default:
-                break;
-        }
+        String tag = getTagByPOS(core.CPOSTAG);
         // 构建核心词（将左附加与右附加关系对应的词加入核心词）
         Map<String, Integer> coreBuilder = new HashMap<>();
         coreBuilder.put(core.LEMMA, indexOfSentence(sentence, core));
@@ -589,6 +663,29 @@ public class UtteranceBuilder {
         for (String str : words)
             builder.append(str);
         return builder.toString();
+    }
+
+    private static String getTagByPOS(String pos) {
+        String tag;
+        switch (pos) {
+            case "v":
+                tag = "V";
+                break;
+            case "a":
+                tag = "adj";
+                break;
+            case "n":
+            case "nt":
+                tag = "noun";
+                break;
+            case "r":
+                tag = "pron";
+                break;
+            default:
+                tag = "";
+                break;
+        }
+        return tag;
     }
 
     // 判断是哪种词

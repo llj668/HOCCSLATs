@@ -7,7 +7,6 @@ import com.jfoenix.controls.JFXListCell;
 import com.jfoenix.controls.JFXListView;
 import controllers.items.BaseSummaryController;
 import controllers.items.GrammarSummaryController;
-import controllers.items.ItemController;
 import controllers.items.PronunSummaryController;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -19,14 +18,12 @@ import models.profiles.Profile;
 import models.test.results.GrammarResult;
 import models.test.results.PronunResult;
 import views.ViewManager;
-import views.items.GrammarResultItem;
-import views.items.ProfileListItem;
 import views.items.ResultItem;
 
 import java.util.Collections;
 import java.util.Map;
 
-public class ViewProfileController {
+public class ViewProfileController extends BaseController {
 
 	@FXML
 	private AnchorPane root;
@@ -113,14 +110,14 @@ public class ViewProfileController {
 	
 	@FXML
 	void onClickBack(ActionEvent event) {
-		ViewManager.getInstance().switchScene(PropertyManager.getResourceProperty("profile"));
+		displayScene(PropertyManager.getResourceProperty("profile"));
 	}
 
 	private void setBackBtnBehavior() {
 		btnBack.setOnAction(e -> {
 			root.getChildren().remove(summary);
 			displayProfile(profile);
-			btnBack.setOnAction(event -> ViewManager.getInstance().switchScene(PropertyManager.getResourceProperty("profile")));
+			btnBack.setOnAction(event -> displayScene(PropertyManager.getResourceProperty("profile")));
 		});
 	}
 

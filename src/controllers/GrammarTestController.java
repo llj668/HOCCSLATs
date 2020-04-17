@@ -1,59 +1,62 @@
 package controllers;
 
 import com.jfoenix.controls.*;
-import controllers.items.GrammarSummaryController;
-import controllers.items.ItemController;
-import javafx.beans.binding.Bindings;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
-import javafx.scene.control.Toggle;
-import javafx.scene.control.ToggleGroup;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Region;
-import javafx.scene.layout.VBox;
-import javafx.util.StringConverter;
-import models.profiles.Profile;
 import models.services.Recorder;
 import models.test.AssessmentManager;
 import models.test.Question;
-import models.test.WebCommunicator;
+import models.test.grammar.GrammarTest;
 import models.test.grammar.Utterance;
-import models.test.results.GrammarResult;
 import views.ResultDisplayer;
-import views.ViewManager;
 import views.items.ConfirmDialog;
 
-import java.util.Map;
-
+/**
+ * Controller of the grammar test page
+ */
 public class GrammarTestController extends BaseTestController {
 	@FXML
-	private Label labelTarget;
-	@FXML
-	private Label labelStage;
-	@FXML
-	private JFXToggleButton toggleClause;
-	@FXML
-	private JFXToggleButton togglePhrase;
+	private JFXComboBox<Label> quickSelBox;
 
-	private ChangeListener<Toggle> toggleListener;
-	private Utterance curResponse;
 	private boolean isAnalyzed = false;
-	final ToggleGroup toggleGroup = new ToggleGroup();
+	private boolean isQuickSelected = false;
 	
 	public void initialize() {
 		recorder = new Recorder();
 		displayer = new ResultDisplayer();
 		manager = AssessmentManager.getInstance();
 		manager.startGrammarAssessment(this);
-		manager.nextQuestion();
+		setSampleAnswerBox(manager.nextQuestion());
 		root.getChildren().remove(recordLabel);
+		btnAnalyze.setDisable(true);
 		initFileMonitor();
-		setToggleButtons();
+
+		// quick select listener
+		quickSelBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+			if (newValue != null) {
+				Utterance utterance = (Utterance) newValue.getUserData();
+				GrammarTest assessment = (GrammarTest) manager.getAssessment();
+				Question question = manager.getQuestion();
+				assessment.setUtterance(utterance);
+				assessment.setMarked(question.getSampleAnswers().get(utterance));
+				displayer.displayGrammarResult(utterance, question, resultBox);
+				isQuickSelected = true;
+			}
+		});
+
+		// transcription listener
+		textTranscribe.textProperty().addListener((observable, oldValue, newValue) -> {
+			if (!isDataFound || newValue.equals(""))
+				btnAnalyze.setDisable(true);
+			else
+				btnAnalyze.setDisable(false);
+			isQuickSelected = false;
+			isAnalyzed = false;
+			quickSelBox.getSelectionModel().clearSelection();
+			resultBox.getChildren().clear();
+		});
 	}
 
 	@FXML
@@ -70,12 +73,10 @@ public class GrammarTestController extends BaseTestController {
 
 	@FXML
 	void onClickAnalyze(ActionEvent event) {
-		curResponse = (Utterance) manager.getAssessment().analyzeResponse(textTranscribe.getText(), true);
-		toggleClause.setDisable(false);
-		togglePhrase.setDisable(false);
-		toggleClause.setSelected(true);
-		toggleGroup.selectedToggleProperty().addListener(toggleListener);
+		manager.getAssessment().analyzeResponse(textTranscribe.getText(), true);
 		isAnalyzed = true;
+		isQuickSelected = false;
+		quickSelBox.getSelectionModel().clearSelection();
 	}
 	
 	@FXML
@@ -88,16 +89,19 @@ public class GrammarTestController extends BaseTestController {
 
 	@FXML
 	void onClickNext(ActionEvent event) {
-		if (!isAnalyzed) {
+		if (!isAnalyzed && !isQuickSelected) {
 			manager.getAssessment().analyzeResponse(textTranscribe.getText(), false);
 			isAnalyzed = true;
-		} else {
-			resetToggle();
 		}
-		manager.nextQuestion();
+	}
+
+	@Override
+	public void getNextQuestion() {
+		setSampleAnswerBox(manager.nextQuestion());
 		textTranscribe.setText("");
 		resultBox.getChildren().clear();
 		isAnalyzed = false;
+		isQuickSelected = false;
 	}
 
 	@Override
@@ -107,10 +111,7 @@ public class GrammarTestController extends BaseTestController {
 	}
 
 	@Override
-	public void updateLabels(String struct, String stage) {
-		labelTarget.setText(struct);
-		labelStage.setText(stage);
-	}
+	public void updateLabels(String struct) {}
 
 	@Override
 	public void setSummary(Region summary) {
@@ -118,30 +119,14 @@ public class GrammarTestController extends BaseTestController {
 		root.getChildren().add(summary);
 	}
 
-	private void setToggleButtons() {
-		toggleClause.setToggleGroup(toggleGroup);
-		toggleClause.setUserData("clause");
-		togglePhrase.setToggleGroup(toggleGroup);
-		togglePhrase.setUserData("phrase");
-		toggleClause.setDisable(true);
-		togglePhrase.setDisable(true);
-
-		toggleListener = (observable, oldValue, newValue) -> {
-			if (newValue != null) {
-				String cmd = (String) newValue.getUserData();
-				if (cmd.equals("clause"))
-					displayer.displayGrammarResult(curResponse.getAnalyzedUtterance(), resultBox);
-				else if (cmd.equals("phrase"))
-					displayer.displayGrammarResult(curResponse.getAnalyzedPhrase(), resultBox);
+	private void setSampleAnswerBox(Question question) {
+		quickSelBox.getItems().clear();
+		if (question != null) {
+			for (Utterance utterance : question.getSampleAnswers().keySet()) {
+				Label label = new Label(utterance.getUtterance());
+				label.setUserData(utterance);
+				quickSelBox.getItems().add(label);
 			}
-		};
-	}
-
-	private void resetToggle() {
-		toggleGroup.selectedToggleProperty().removeListener(toggleListener);
-		toggleClause.setSelected(false);
-		togglePhrase.setSelected(false);
-		toggleClause.setDisable(true);
-		togglePhrase.setDisable(true);
+		}
 	}
 }

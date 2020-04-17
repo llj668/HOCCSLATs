@@ -2,6 +2,7 @@ package controllers.items;
 
 import application.PropertyManager;
 import com.jfoenix.controls.JFXButton;
+import controllers.BaseController;
 import controllers.BaseTestController;
 import controllers.DialogControl;
 import javafx.fxml.FXML;
@@ -12,7 +13,10 @@ import models.test.results.BaseResult;
 import views.ViewManager;
 import views.items.ConfirmDialog;
 
-public abstract class BaseSummaryController extends ItemController implements DialogControl {
+/**
+ * Base controller of summary pages
+ */
+public abstract class BaseSummaryController extends BaseController implements DialogControl {
     public ConfirmDialog confirmDialog;
 
     @FXML
@@ -26,14 +30,14 @@ public abstract class BaseSummaryController extends ItemController implements Di
 
     @Override
     public void onClickNoDialog() {
-        ViewManager.getInstance().switchScene(PropertyManager.getResourceProperty("testmenu"));
+        displayScene(PropertyManager.getResourceProperty("testmenu"));
     }
 
     @Override
     public void onClickYesDialog() {
         if (confirmDialog.isSingleAction) {
             if (pane.getChildren().contains(btnDiscard) && pane.getChildren().contains(btnSave))
-                ViewManager.getInstance().switchScene(PropertyManager.getResourceProperty("testmenu"));
+                displayScene(PropertyManager.getResourceProperty("testmenu"));
         }
         confirmDialog.close();
         stackPane.toBack();

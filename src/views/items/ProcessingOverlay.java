@@ -18,7 +18,7 @@ public class ProcessingOverlay extends VBox {
         setOpacity(0.85);
 
         JFXSpinner spinner = new JFXSpinner();
-        Label label = new Label("正在分析...");
+        Label label = new Label("Processing...");
         label.setFont(Font.font("System", 15));
         this.getChildren().addAll(spinner, label);
         this.setAlignment(Pos.CENTER);

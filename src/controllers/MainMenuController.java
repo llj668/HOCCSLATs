@@ -12,7 +12,7 @@ import models.test.AssessmentManager;
 import views.ViewManager;
 import views.items.ConsentDialog;
 
-public class MainMenuController implements DialogControl {
+public class MainMenuController extends BaseController implements DialogControl {
 	private ConsentDialog consentDialog;
 	
 	@FXML
@@ -33,7 +33,7 @@ public class MainMenuController implements DialogControl {
 	
 	@FXML
 	void onClickProfile(ActionEvent event) {
-		ViewManager.getInstance().switchScene(PropertyManager.getResourceProperty("profile"));
+		displayScene(PropertyManager.getResourceProperty("profile"));
 	}
 	
 	@FXML
@@ -50,7 +50,7 @@ public class MainMenuController implements DialogControl {
 	@Override
 	public void onClickYesDialog() {
 		AssessmentManager.getInstance();
-		ViewManager.getInstance().switchProfileSelectScene();
+		displayProfileSelectScene();
 	}
 
 }

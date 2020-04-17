@@ -2,7 +2,6 @@ package models.test;
 
 import controllers.BaseTestController;
 import controllers.items.BaseSummaryController;
-import controllers.items.ItemController;
 import javafx.scene.layout.Region;
 import models.test.results.BaseResult;
 

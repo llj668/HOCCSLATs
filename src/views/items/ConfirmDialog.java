@@ -9,9 +9,10 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
 
 public class ConfirmDialog extends JFXDialog {
-	public static final String[] TEXT_NEWPROFILE = {"有未保存的更改", "是否要保存未保存的修改？", "不保存", "保存"};
-	public static final String[] TEXT_BACKINTEST = {"结果未保存", "现在返回将会丢弃所有未保存的测试结果，是否返回？", "返回（丢弃）", "取消"};
-	public static final String[] TEXT_SAVEPROFILE = {"结果已保存", "现在可以在对应的档案中查看此次测试结果", "确定"};
+	public static final String[] TEXT_NEWPROFILE = {"Changes not saved", "Do you want to save all changes?", "No", "Yes"};
+	public static final String[] TEXT_BACKINTEST = {"Result not saved", "If go back now, the test result will be discarded. Proceed?", "Back (discard)", "Cancel"};
+	public static final String[] TEXT_SAVEPROFILE = {"Result saved", "The result of this test can be viewed from the profile now.", "OK"};
+	public static final String[] TEXT_NODATAFILE = {"Data files not found", "The auto-analysis will be disabled.", "OK"};
 	JFXButton buttonNo;
 	JFXButton buttonYes;
 	JFXDialogLayout content;
